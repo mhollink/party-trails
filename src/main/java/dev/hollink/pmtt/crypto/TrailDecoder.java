@@ -3,8 +3,8 @@ package dev.hollink.pmtt.crypto;
 import dev.hollink.pmtt.model.Emote;
 import dev.hollink.pmtt.model.TrailStep;
 import dev.hollink.pmtt.model.TreasureTrail;
-import dev.hollink.pmtt.runetime.steps.CoordsStep;
-import dev.hollink.pmtt.runetime.steps.EmoteStep;
+import dev.hollink.pmtt.runetime.steps.impl.CoordsStep;
+import dev.hollink.pmtt.runetime.steps.impl.EmoteStep;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.coords.WorldPoint;
 

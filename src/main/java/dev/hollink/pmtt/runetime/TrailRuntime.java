@@ -1,14 +1,13 @@
 package dev.hollink.pmtt.runetime;
 
-import dev.hollink.pmtt.model.TrailStep;
 import dev.hollink.pmtt.model.TreasureTrail;
+import dev.hollink.pmtt.runetime.events.AnimationEvent;
+import dev.hollink.pmtt.runetime.events.InteractionEvent;
 import dev.hollink.pmtt.runetime.steps.AnimationStep;
+import dev.hollink.pmtt.runetime.steps.InteractionStep;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.runelite.api.Actor;
-import net.runelite.api.coords.WorldPoint;
-import net.runelite.api.events.AnimationChanged;
 import net.runelite.client.ui.overlay.components.PanelComponent;
 
 import java.awt.Graphics2D;
@@ -30,35 +29,36 @@ public class TrailRuntime {
         return currentStep > trail.getStepCount();
     }
 
-    public void performAnimation(AnimationChanged event) {
+    public void performAnimation(AnimationEvent event) {
         if (isFinished()) {
             return;
         }
 
         trail.getStep(currentStep)
-            .ifPresentOrElse(
-                (step) -> doAnimationStep(step, event),
-                this::logStepNotFound
-            );
+            .filter(step -> step instanceof AnimationStep)
+            .map(step -> (AnimationStep) step)
+            .map(step -> step.isFulfilled(event))
+            .ifPresent(completedCurrentStep -> {
+                if (completedCurrentStep) {
+                    currentStep++;
+                }
+            });
     }
 
-    private void doAnimationStep(TrailStep step, AnimationChanged event) {
-        if (step instanceof AnimationStep animationStep) {
-            Actor player = event.getActor();
-            WorldPoint location = player.getWorldLocation();
-            int animation = player.getAnimation();
-            log.debug("Player performed {} at {}", animation, location);
 
-            if (!animationStep.isFulfilled(location, animation)) {
-                return;
-            }
-
-            currentStep++;
-            log.info("Player correctly performed {} at {}", animation, location);
+    public void performInteractionStep(InteractionEvent event) {
+        if (isFinished()) {
+            return;
         }
-    }
 
-    private void logStepNotFound() {
-        log.warn("No trail step at index {}", currentStep);
+        trail.getStep(currentStep)
+            .filter(step -> step instanceof InteractionStep)
+            .map(step -> (InteractionStep) step)
+            .map(step -> step.isFulfilled(event))
+            .ifPresent(completedCurrentStep -> {
+                if (completedCurrentStep) {
+                    currentStep++;
+                }
+            });
     }
 }

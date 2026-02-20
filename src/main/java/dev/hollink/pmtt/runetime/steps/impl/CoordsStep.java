@@ -1,6 +1,8 @@
-package dev.hollink.pmtt.runetime.steps;
+package dev.hollink.pmtt.runetime.steps.impl;
 
 import dev.hollink.pmtt.model.TrailStep;
+import dev.hollink.pmtt.runetime.events.AnimationEvent;
+import dev.hollink.pmtt.runetime.steps.AnimationStep;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.ui.overlay.components.ComponentConstants;
 import net.runelite.client.ui.overlay.components.LineComponent;
@@ -14,7 +16,7 @@ import java.awt.Graphics2D;
 import static net.runelite.api.gameval.AnimationID.HUMAN_DIG;
 
 // Dig at a location based on the x,y
-public class CoordsStep extends TrailStep implements AnimationStep {
+public class CoordsStep extends AnimationStep {
 
     public CoordsStep(WorldPoint location, String hint) {
         super(location, hint);
@@ -40,9 +42,9 @@ public class CoordsStep extends TrailStep implements AnimationStep {
     }
 
     @Override
-    public boolean isFulfilled(WorldPoint eventLocation, int animationId) {
-        boolean correctAnimation = animationId == HUMAN_DIG;
-        boolean correctLocation = location.distanceTo(eventLocation) <= DEFAULT_LOCATION_DISTANCE;
+    public boolean isFulfilled(AnimationEvent event) {
+        boolean correctAnimation = event.animation() == HUMAN_DIG;
+        boolean correctLocation = event.location().distanceTo(location) <= DEFAULT_LOCATION_DISTANCE;
 
         return correctAnimation && correctLocation;
     }

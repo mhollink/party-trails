@@ -1,10 +1,13 @@
 package dev.hollink.pmtt;
 
 import com.google.inject.Provides;
+import dev.hollink.pmtt.runetime.events.AnimationEvent;
+import dev.hollink.pmtt.runetime.events.InteractionEvent;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.Player;
 import net.runelite.api.events.AnimationChanged;
+import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
@@ -12,12 +15,10 @@ import net.runelite.client.plugins.PluginDescriptor;
 
 import javax.inject.Inject;
 
+import java.util.Optional;
+
 @Slf4j
-@PluginDescriptor(
-    name = "Party Trails",
-    description = "Create and complete custom player made treasure trails",
-    tags = {"clue", "treasure", "custom"}
-)
+@PluginDescriptor(name = "Party Trails", description = "Create and complete custom player made treasure trails", tags = {"clue", "treasure", "custom"})
 public class TreasureTrailPlugin extends Plugin {
 
     @Inject
@@ -45,8 +46,18 @@ public class TreasureTrailPlugin extends Plugin {
         if (event.getActor() != player || player.getAnimation() == -1) {
             return;
         }
-        log.debug("Passing AnimationChanged event to active trail");
-        trailManager.getActiveTrail().ifPresent(trail -> trail.performAnimation(event));
+
+        AnimationEvent animationEvent = new AnimationEvent(player.getWorldLocation(), player.getAnimation());
+        trailManager.getActiveTrail().ifPresent(trail -> trail.performAnimation(animationEvent));
+    }
+
+    @Subscribe
+    public void onMenuOptionClicked(MenuOptionClicked event) {
+        trailManager.getActiveTrail()
+            .ifPresent(trail -> {
+                InteractionEvent.fromMenuOptionClicked(event, client)
+                    .ifPresent(trail::performInteractionStep);
+            });
     }
 
     @Provides

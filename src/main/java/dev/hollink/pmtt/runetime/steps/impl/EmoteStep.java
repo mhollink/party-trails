@@ -1,7 +1,8 @@
-package dev.hollink.pmtt.runetime.steps;
+package dev.hollink.pmtt.runetime.steps.impl;
 
 import dev.hollink.pmtt.model.Emote;
-import dev.hollink.pmtt.model.TrailStep;
+import dev.hollink.pmtt.runetime.events.AnimationEvent;
+import dev.hollink.pmtt.runetime.steps.AnimationStep;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.ui.overlay.components.ComponentConstants;
 import net.runelite.client.ui.overlay.components.LineComponent;
@@ -14,7 +15,7 @@ import java.awt.Graphics2D;
 
 import static net.runelite.client.plugins.cluescrolls.ClueScrollOverlay.TITLED_CONTENT_COLOR;
 
-public class EmoteStep extends TrailStep implements AnimationStep {
+public class EmoteStep extends AnimationStep {
 
     private final Emote emote;
 
@@ -47,7 +48,8 @@ public class EmoteStep extends TrailStep implements AnimationStep {
     }
 
     @Override
-    public boolean isFulfilled(WorldPoint eventLocation, int animationId) {
-        return emote.getAnimationId() == animationId && location.distanceTo(eventLocation) <= DEFAULT_LOCATION_DISTANCE;
+    public boolean isFulfilled(AnimationEvent event) {
+        return event.animation() == emote.getAnimationId()
+            && event.location().distanceTo(location) <= DEFAULT_LOCATION_DISTANCE;
     }
 }
