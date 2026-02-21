@@ -3,6 +3,7 @@ package dev.hollink.pmtt.runetime.steps.impl;
 import dev.hollink.pmtt.model.Emote;
 import dev.hollink.pmtt.runetime.events.AnimationEvent;
 import dev.hollink.pmtt.runetime.steps.AnimationStep;
+import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.ui.overlay.components.ComponentConstants;
 import net.runelite.client.ui.overlay.components.LineComponent;
@@ -15,7 +16,8 @@ import java.awt.Graphics2D;
 
 import static net.runelite.client.plugins.cluescrolls.ClueScrollOverlay.TITLED_CONTENT_COLOR;
 
-public class EmoteStep extends AnimationStep {
+@Slf4j
+public final class EmoteStep extends AnimationStep {
 
     private final Emote emote;
 

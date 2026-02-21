@@ -27,7 +27,7 @@ public class TrailManager {
     public void startPartyTrails() {
         overlayManager.add(trailOverlay);
 
-        TreasureTrail trail = trailDecoder.decode("not.a.real.encoded.string");
+        TreasureTrail trail = trailDecoder.decode(config.trailString());
         activeTrail = new TrailRuntime(trail);
         trailOverlay.setTrail(activeTrail);
     }

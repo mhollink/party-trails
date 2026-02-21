@@ -1,12 +1,13 @@
 package dev.hollink.pmtt.runetime.steps.impl;
 
 import dev.hollink.pmtt.model.TrailStep;
+import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.ui.overlay.components.PanelComponent;
 
 import java.awt.Graphics2D;
 
-// Play a specific song at x,y
+@Slf4j
 public class MusicStep extends TrailStep {
 
     public MusicStep(WorldPoint location, String hint) {
