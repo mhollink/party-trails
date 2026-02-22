@@ -1,41 +1,39 @@
 package dev.hollink.pmtt.model;
 
 import dev.hollink.pmtt.model.steps.TrailStep;
-import dev.hollink.pmtt.model.trail.Steppable;
-import lombok.AccessLevel;
-import lombok.Getter;
-
 import java.util.List;
 import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
 @Getter
-public final class TreasureTrail {
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+public final class TreasureTrail
+{
 
-    private final int version;
-    private final String trailId;
-    private final String trailName;
-    private final String author;
+	private final int version;
+	private final String trailId;
+	private final String trailName;
+	private final String author;
+	private final List<TrailStep> steps;
 
-    @Getter(AccessLevel.NONE)
-    private final List<TrailStep> steps;
+	public Optional<TrailStep> getStep(int index)
+	{
+		try
+		{
+			return Optional.ofNullable(steps.get(index));
+		}
+		catch (IndexOutOfBoundsException e)
+		{
+			return Optional.empty();
+		}
+	}
 
-    public TreasureTrail(int version, String trailId, String trailName, String author, List<TrailStep> steps) {
-        this.version = version;
-        this.trailId = trailId;
-        this.trailName = trailName;
-        this.author = author;
-        this.steps = steps;
-    }
-
-    public Optional<TrailStep> getStep(int index) {
-        try {
-           return Optional.ofNullable(steps.get(index));
-        } catch (IndexOutOfBoundsException e) {
-            return Optional.empty();
-        }
-    }
-
-    public int getStepCount() {
-        return steps.size();
-    }
+	public int getStepCount()
+	{
+		return steps.size();
+	}
 }

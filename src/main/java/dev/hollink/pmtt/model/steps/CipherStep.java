@@ -1,58 +1,57 @@
 package dev.hollink.pmtt.model.steps;
 
+import static dev.hollink.pmtt.crypto.TrailDecoder.readString;
+import dev.hollink.pmtt.model.InteractionTarget;
 import dev.hollink.pmtt.model.StepTypes;
-import dev.hollink.pmtt.model.trail.ClueContext;
-import dev.hollink.pmtt.model.events.ClueEvent;
-import dev.hollink.pmtt.model.trail.Encodable;
-import dev.hollink.pmtt.model.events.InteractionEvent;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import net.runelite.client.ui.overlay.components.PanelComponent;
-
+import java.awt.Dimension;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.io.DataInput;
-import java.io.DataOutput;
 import java.io.IOException;
+import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.coords.WorldPoint;
+import net.runelite.client.ui.overlay.components.ComponentConstants;
+import net.runelite.client.ui.overlay.components.LineComponent;
+import net.runelite.client.ui.overlay.components.PanelComponent;
+import net.runelite.client.ui.overlay.components.TitleComponent;
 
 @Slf4j
-@RequiredArgsConstructor
-public final class CipherStep implements TrailStep {
+public final class CipherStep extends InteractionStep
+{
 
-    private final String cipherText;
-    private final InteractionEvent target;
+	public CipherStep(String cipherText, InteractionTarget target)
+	{
+		super(cipherText, target);
+	}
 
-    @Override
-    public byte typeId() {
-        return StepTypes.CIPHER_STEP;
-    }
+	@Override
+	public byte typeId()
+	{
+		return StepTypes.CIPHER_STEP;
+	}
 
-    @Override
-    public void drawOverlay(PanelComponent panel, Graphics2D graphics) {
+	@Override
+	public void drawOverlay(PanelComponent panel, Graphics2D graphics)
+	{
+		final FontMetrics fontMetrics = graphics.getFontMetrics();
+		int textWidth = Math.max(ComponentConstants.STANDARD_WIDTH, fontMetrics.stringWidth(cipherText) + 10);
 
-    }
+		panel.setPreferredSize(new Dimension(textWidth, 0));
 
-    @Override
-    public void onActivate(ClueContext context) {
+		panel.getChildren().add(TitleComponent.builder().text("Cipher Clue").build());
+		panel.getChildren().add(LineComponent.builder().left(cipherText).build());
+	}
 
-    }
-
-    @Override
-    public boolean isComplete(ClueEvent event) {
-        if (event instanceof InteractionEvent interactionEvent) {
-            return target.compare(interactionEvent);
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public void encode(DataOutput out) throws IOException {
-
-    }
-
-    @Override
-    public Encodable decode(DataInput in) throws IOException {
-        return null;
-    }
+	public static CipherStep decode(DataInput in) throws IOException
+	{
+		String text = readString(in);
+		int targetId = in.readInt();
+		String targetName = readString(in);
+		String action = readString(in);
+		int x = in.readInt();
+		int y = in.readInt();
+		int plane = in.readInt();
+		return new CipherStep(text, new InteractionTarget(targetId, targetName, action, new WorldPoint(x, y, plane)));
+	}
 
 }

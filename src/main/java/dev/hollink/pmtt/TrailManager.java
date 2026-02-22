@@ -7,40 +7,40 @@ import dev.hollink.pmtt.model.trail.TrailProgress;
 import dev.hollink.pmtt.overlay.TrailOverlay;
 import dev.hollink.pmtt.runetime.EventBus;
 import dev.hollink.pmtt.runetime.TrailRuntime;
+import javax.inject.Inject;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.client.ui.overlay.OverlayManager;
 
-import javax.inject.Inject;
-
-import java.util.Optional;
-
 @Slf4j
 @RequiredArgsConstructor(onConstructor = @__(@Inject))
-public class TrailManager {
+public class TrailManager
+{
 
-    private final Client client;
-    private final TreasureTrailConfig config;
+	private final Client client;
+	private final TreasureTrailConfig config;
 
-    private final OverlayManager overlayManager;
-    private final TrailOverlay trailOverlay;
+	private final OverlayManager overlayManager;
+	private final TrailOverlay trailOverlay;
 
-    @Getter
-    private final EventBus clueEventBus;
-    private final TrailDecoder trailDecoder;
+	@Getter
+	private final EventBus clueEventBus;
+	private final TrailDecoder trailDecoder;
 
-    public void startPartyTrails() {
-        overlayManager.add(trailOverlay);
+	public void startPartyTrails()
+	{
+		overlayManager.add(trailOverlay);
 
-        TreasureTrail trail = trailDecoder.decode(config.trailString());
-        TrailRuntime runtime = new TrailRuntime(clueEventBus, new ClueContext(client, new TrailProgress()));
-        runtime.startTrail(trail);
-        trailOverlay.setTrailRuntime(runtime);
-    }
+		TreasureTrail trail = trailDecoder.decode(config.trailString());
+		TrailRuntime runtime = new TrailRuntime(clueEventBus, new ClueContext(client, new TrailProgress()));
+		runtime.startTrail(trail);
+		trailOverlay.setTrailRuntime(runtime);
+	}
 
-    public void stop() {
-        overlayManager.remove(trailOverlay);
-    }
+	public void stop()
+	{
+		overlayManager.remove(trailOverlay);
+	}
 }

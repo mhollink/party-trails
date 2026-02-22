@@ -1,0 +1,7 @@
+package dev.hollink.pmtt.model.events;
+
+import net.runelite.api.Skill;
+
+public record SkillEvent(Skill skill, int expGained) implements ClueEvent
+{
+}

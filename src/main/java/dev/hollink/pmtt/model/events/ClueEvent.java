@@ -1,4 +1,5 @@
 package dev.hollink.pmtt.model.events;
 
-public interface ClueEvent {
+public sealed interface ClueEvent permits AnimationEvent, InteractionEvent, MusicEvent, SkillEvent
+{
 }

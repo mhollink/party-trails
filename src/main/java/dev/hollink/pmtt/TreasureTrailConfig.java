@@ -7,11 +7,7 @@ import net.runelite.client.config.ConfigItem;
 @ConfigGroup("treasure trail")
 public interface TreasureTrailConfig extends Config
 {
-	@ConfigItem(
-		keyName = "trailString",
-		name = "Trail String",
-		description = "Encoded treasure trail"
-	)
+	@ConfigItem(keyName = "trailString", name = "Trail String", description = "Encoded treasure trail")
 	default String trailString()
 	{
 		return "";
