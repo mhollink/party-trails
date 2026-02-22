@@ -1,10 +1,11 @@
 package dev.hollink.pmtt.crypto;
 
 import dev.hollink.pmtt.model.Emote;
-import dev.hollink.pmtt.model.TrailStep;
 import dev.hollink.pmtt.model.TreasureTrail;
-import dev.hollink.pmtt.runetime.steps.impl.CoordsStep;
-import dev.hollink.pmtt.runetime.steps.impl.EmoteStep;
+import dev.hollink.pmtt.model.steps.CoordsStep;
+import dev.hollink.pmtt.model.steps.EmoteStep;
+import dev.hollink.pmtt.model.steps.TrailStep;
+import dev.hollink.pmtt.model.trail.Steppable;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.coords.WorldPoint;
 
@@ -18,14 +19,14 @@ public class TrailDecoder {
         log.debug("Decoded Trail: {}", encodedTrail);
         List<TrailStep> trailSteps = List.of(
             new EmoteStep(
-                new WorldPoint(3221, 3219, 0),
                 "In front of the Lumbrige Castle.",
+                new WorldPoint(3221, 3219, 0),
                 Emote.WAVE
             ),
             new CoordsStep(
-                new WorldPoint(3201, 3169, 0),
                 "00 degrees 20 minutes south,\n" +
-                    "23 degrees 15 minutes east"
+                    "23 degrees 15 minutes east",
+                new WorldPoint(3201, 3169, 0)
             )
         );
         TreasureTrail treasureTrail = new TreasureTrail(

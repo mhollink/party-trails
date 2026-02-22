@@ -1,4 +1,4 @@
-package dev.hollink.pmtt.runetime.events;
+package dev.hollink.pmtt.model.events;
 
 import net.runelite.api.Client;
 import net.runelite.api.GameObject;
@@ -10,7 +10,7 @@ import net.runelite.api.events.MenuOptionClicked;
 
 import java.util.Optional;
 
-public sealed interface InteractionEvent
+public sealed interface InteractionEvent extends ClueEvent
     permits NpcInteraction, ObjectInteraction {
     String action();
     boolean compare(InteractionEvent event);

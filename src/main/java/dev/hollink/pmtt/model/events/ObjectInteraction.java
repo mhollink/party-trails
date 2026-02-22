@@ -1,8 +1,8 @@
-package dev.hollink.pmtt.runetime.events;
+package dev.hollink.pmtt.model.events;
 
 import net.runelite.api.coords.WorldPoint;
 
-import static dev.hollink.pmtt.model.TrailStep.DEFAULT_LOCATION_DISTANCE;
+import static dev.hollink.pmtt.model.steps.TrailStep.DEFAULT_LOCATION_DISTANCE;
 
 public record ObjectInteraction(
     int objectId,

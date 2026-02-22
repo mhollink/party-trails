@@ -1,8 +1,8 @@
 package dev.hollink.pmtt;
 
 import com.google.inject.Provides;
-import dev.hollink.pmtt.runetime.events.AnimationEvent;
-import dev.hollink.pmtt.runetime.events.InteractionEvent;
+import dev.hollink.pmtt.model.events.AnimationEvent;
+import dev.hollink.pmtt.model.events.InteractionEvent;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.Player;
@@ -14,8 +14,6 @@ import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 
 import javax.inject.Inject;
-
-import java.util.Optional;
 
 @Slf4j
 @PluginDescriptor(name = "Party Trails", description = "Create and complete custom player made treasure trails", tags = {"clue", "treasure", "custom"})
@@ -48,16 +46,13 @@ public class TreasureTrailPlugin extends Plugin {
         }
 
         AnimationEvent animationEvent = new AnimationEvent(player.getWorldLocation(), player.getAnimation());
-        trailManager.getActiveTrail().ifPresent(trail -> trail.performAnimation(animationEvent));
+        trailManager.getClueEventBus().publish(animationEvent);
     }
 
     @Subscribe
     public void onMenuOptionClicked(MenuOptionClicked event) {
-        trailManager.getActiveTrail()
-            .ifPresent(trail -> {
-                InteractionEvent.fromMenuOptionClicked(event, client)
-                    .ifPresent(trail::performInteractionStep);
-            });
+        InteractionEvent.fromMenuOptionClicked(event, client)
+            .ifPresent(interactionEvent -> trailManager.getClueEventBus().publish(interactionEvent));
     }
 
     @Provides

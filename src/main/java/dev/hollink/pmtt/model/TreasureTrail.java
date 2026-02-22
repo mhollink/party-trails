@@ -1,5 +1,7 @@
 package dev.hollink.pmtt.model;
 
+import dev.hollink.pmtt.model.steps.TrailStep;
+import dev.hollink.pmtt.model.trail.Steppable;
 import lombok.AccessLevel;
 import lombok.Getter;
 
@@ -7,11 +9,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Getter
-public class TreasureTrail {
+public final class TreasureTrail {
+
     private final int version;
     private final String trailId;
     private final String trailName;
     private final String author;
+
     @Getter(AccessLevel.NONE)
     private final List<TrailStep> steps;
 

@@ -32,6 +32,7 @@ public enum Emote {
     FLAP("Flap", AnimationID.EMOTE_PANIC_FLAP),
     PUSH_UP("Push up", AnimationID.EMOTE_PUSHUPS_5),
     CRAB_DANCE("Crab Dance", AnimationID.HUMAN_EMOTE_CRABDANCE),
+    XX_DIG("Dig", AnimationID.HUMAN_DIG)
     ;
 
     private final String name;

@@ -1,12 +1,10 @@
 package dev.hollink.pmtt.runetime;
 
 import dev.hollink.pmtt.model.TreasureTrail;
-import dev.hollink.pmtt.runetime.events.AnimationEvent;
-import dev.hollink.pmtt.runetime.events.InteractionEvent;
-import dev.hollink.pmtt.runetime.steps.AnimationStep;
-import dev.hollink.pmtt.runetime.steps.InteractionStep;
+import dev.hollink.pmtt.model.events.ClueEvent;
+import dev.hollink.pmtt.model.steps.TrailStep;
+import dev.hollink.pmtt.model.trail.ClueContext;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.client.ui.overlay.components.PanelComponent;
 
@@ -14,51 +12,76 @@ import java.awt.Graphics2D;
 
 @Slf4j
 @Getter
-@RequiredArgsConstructor
 public class TrailRuntime {
 
-    private final TreasureTrail trail;
-    private int currentStep = 0;
+    private final EventBus bus;
+    private final ClueContext context;
+
+    private TreasureTrail trail;
+    private TrailStep currentStep;
+
+    public TrailRuntime(EventBus bus, ClueContext context) {
+        this.bus = bus;
+        this.context = context;
+        bus.register(this::onEvent);
+    }
 
     public void renderCurrentStep(Graphics2D graphics, PanelComponent panel) {
-        trail.getStep(currentStep)
-            .ifPresent(step -> step.showStepOverlay(panel, graphics));
-    }
-
-    public boolean isFinished() {
-        return currentStep > trail.getStepCount();
-    }
-
-    public void performAnimation(AnimationEvent event) {
-        if (isFinished()) {
+        if (currentStep == null) {
             return;
         }
-
-        trail.getStep(currentStep)
-            .filter(step -> step instanceof AnimationStep)
-            .map(step -> (AnimationStep) step)
-            .map(step -> step.isFulfilled(event))
-            .ifPresent(completedCurrentStep -> {
-                if (completedCurrentStep) {
-                    currentStep++;
-                }
-            });
+        currentStep.drawOverlay(panel, graphics);
     }
 
+    public void startTrail(TreasureTrail trail) {
+        log.info("Starting new trail (length={})", trail.getStepCount());
+        this.trail = trail;
+        this.getContext().getProgress().reset();
+        trail.getStep(this.getContext().getProgress().getCurrentStepIndex())
+            .ifPresentOrElse(
+                this::startStep,
+                this::resetOnStepNotFound);
+    }
 
-    public void performInteractionStep(InteractionEvent event) {
-        if (isFinished()) {
+    public void startStep(TrailStep step) {
+        log.info("Starting new trail step (type={})", step.typeId());
+        this.currentStep = step;
+        step.onActivate(context);
+    }
+
+    private void resetOnStepNotFound() {
+        log.error("Unable to start trail, no step found at index {}", this.getContext().getProgress().getCurrentStepIndex());
+        this.reset();
+    }
+
+    public void reset() {
+        log.info("Resetting active treasure trail");
+        this.trail = null;
+        this.currentStep = null;
+    }
+
+    private void onEvent(ClueEvent event) {
+        if (currentStep == null || !currentStep.isComplete(event)) {
             return;
         }
+        advanceToNextStep();
+    }
 
-        trail.getStep(currentStep)
-            .filter(step -> step instanceof InteractionStep)
-            .map(step -> (InteractionStep) step)
-            .map(step -> step.isFulfilled(event))
-            .ifPresent(completedCurrentStep -> {
-                if (completedCurrentStep) {
-                    currentStep++;
-                }
-            });
+    private void advanceToNextStep() {
+        if (trail == null) {
+            return;
+        }
+        int nextStepIndex = this.context.getProgress().getCurrentStepIndex() + 1;
+        this.context.getProgress().setCurrentStepIndex(nextStepIndex);
+        trail.getStep(nextStepIndex)
+            .ifPresentOrElse(
+                this::startStep,
+                this::completeTrail
+            );
+    }
+
+    private void completeTrail() {
+        log.info("Completing trail...");
+        this.reset();
     }
 }

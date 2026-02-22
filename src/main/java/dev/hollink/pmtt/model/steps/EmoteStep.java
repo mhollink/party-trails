@@ -1,8 +1,12 @@
-package dev.hollink.pmtt.runetime.steps.impl;
+package dev.hollink.pmtt.model.steps;
 
 import dev.hollink.pmtt.model.Emote;
-import dev.hollink.pmtt.runetime.events.AnimationEvent;
-import dev.hollink.pmtt.runetime.steps.AnimationStep;
+import dev.hollink.pmtt.model.StepTypes;
+import dev.hollink.pmtt.model.trail.ClueContext;
+import dev.hollink.pmtt.model.events.ClueEvent;
+import dev.hollink.pmtt.model.trail.Encodable;
+import dev.hollink.pmtt.model.events.AnimationEvent;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.ui.overlay.components.ComponentConstants;
@@ -13,21 +17,27 @@ import net.runelite.client.ui.overlay.components.TitleComponent;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 
 import static net.runelite.client.plugins.cluescrolls.ClueScrollOverlay.TITLED_CONTENT_COLOR;
 
 @Slf4j
-public final class EmoteStep extends AnimationStep {
+@RequiredArgsConstructor
+public final class EmoteStep implements TrailStep {
 
-    private final Emote emote;
+    private final String hint;
+    private final WorldPoint targetLocation;
+    private final Emote targetEmoteOne;
 
-    public EmoteStep(WorldPoint location, String hint, Emote emote) {
-        super(location, hint);
-        this.emote = emote;
+    @Override
+    public byte typeId() {
+        return StepTypes.EMOTE_STEP;
     }
 
     @Override
-    public void showStepOverlay(PanelComponent panel, Graphics2D graphics) {
+    public void drawOverlay(PanelComponent panel, Graphics2D graphics) {
         final FontMetrics fontMetrics = graphics.getFontMetrics();
         int textWidth = Math.max(
             ComponentConstants.STANDARD_WIDTH,
@@ -38,7 +48,7 @@ public final class EmoteStep extends AnimationStep {
         panel.getChildren().add(TitleComponent.builder().text("Emote Clue").build());
         panel.getChildren().add(LineComponent.builder().left("Emotes:").build());
         panel.getChildren().add(LineComponent.builder()
-            .left(emote.getName())
+            .left(targetEmoteOne.getName())
             .leftColor(TITLED_CONTENT_COLOR)
             .build());
 
@@ -50,8 +60,27 @@ public final class EmoteStep extends AnimationStep {
     }
 
     @Override
-    public boolean isFulfilled(AnimationEvent event) {
-        return event.animation() == emote.getAnimationId()
-            && event.location().distanceTo(location) <= DEFAULT_LOCATION_DISTANCE;
+    public void onActivate(ClueContext context) {
+
+    }
+
+    @Override
+    public boolean isComplete(ClueEvent event) {
+        if (event instanceof AnimationEvent animationEvent) {
+            return animationEvent.animationId() == targetEmoteOne.getAnimationId()
+                && animationEvent.location().distanceTo(targetLocation) <= DEFAULT_LOCATION_DISTANCE;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public void encode(DataOutput out) throws IOException {
+
+    }
+
+    @Override
+    public Encodable decode(DataInput in) throws IOException {
+        return null;
     }
 }

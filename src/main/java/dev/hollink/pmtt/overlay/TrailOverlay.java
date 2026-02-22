@@ -25,7 +25,7 @@ public class TrailOverlay extends OverlayPanel {
 
     @Getter
     @Setter
-    private TrailRuntime trail;
+    private TrailRuntime trailRuntime;
 
     @Inject
     public TrailOverlay(Client client, TreasureTrailPlugin plugin, TreasureTrailConfig config) {
@@ -40,11 +40,11 @@ public class TrailOverlay extends OverlayPanel {
 
     @Override
     public Dimension render(Graphics2D graphics) {
-        if (trail == null || trail.isFinished()) {
+        if (trailRuntime == null) {
             return super.render(graphics);
         }
 
-        trail.renderCurrentStep(graphics, this.getPanelComponent());
+        trailRuntime.renderCurrentStep(graphics, this.getPanelComponent());
 
         return super.render(graphics);
     }
