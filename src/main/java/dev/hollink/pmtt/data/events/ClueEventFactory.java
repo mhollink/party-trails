@@ -1,6 +1,7 @@
 package dev.hollink.pmtt.data.events;
 
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.GameObject;
 import net.runelite.api.MenuAction;
@@ -10,7 +11,9 @@ import net.runelite.api.Player;
 import net.runelite.api.Tile;
 import net.runelite.api.events.AnimationChanged;
 import net.runelite.api.events.MenuOptionClicked;
+import net.runelite.api.events.StatChanged;
 
+@Slf4j
 public final class ClueEventFactory
 {
 
@@ -107,5 +110,11 @@ public final class ClueEventFactory
 
 		InteractionEvent event = new InteractionEvent(npc.getId(), npc.getName(), action, npc.getWorldLocation());
 		return Optional.of(event);
+	}
+
+	public static Optional<SkillEvent> fromStatChanged(StatChanged event, Client client)
+	{
+		log.info("[ClueEventFactory] [fromStatChanged] {}", event);
+		return Optional.empty();
 	}
 }

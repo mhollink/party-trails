@@ -1,6 +1,6 @@
 package dev.hollink.pmtt.encoding;
 
-import dev.hollink.pmtt.data.StepTypes;
+import dev.hollink.pmtt.data.StepType;
 import dev.hollink.pmtt.data.TreasureTrail;
 import dev.hollink.pmtt.data.steps.AnagramStep;
 import dev.hollink.pmtt.data.steps.CipherStep;
@@ -20,19 +20,20 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import static java.util.Map.entry;
+import java.util.Optional;
 import java.util.zip.InflaterInputStream;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class TrailDecoder
 {
-	private static final Map<Byte, StepDecoder> DECODERS = Map.ofEntries(
-		entry(StepTypes.EMOTE_STEP, EmoteStep::decode),
-		entry(StepTypes.CIPHER_STEP, CipherStep::decode),
-		entry(StepTypes.COORDINATE_STEP, CoordsStep::decode),
-		entry(StepTypes.CRYPTIC_STEP, CrypticStep::decode),
-		entry(StepTypes.SKILL_STEP, SkillStep::decode),
-		entry(StepTypes.ANAGRAM_STEP, AnagramStep::decode)
+	private static final Map<StepType, StepDecoder> DECODERS = Map.ofEntries(
+		entry(StepType.EMOTE_STEP, EmoteStep::decode),
+		entry(StepType.CIPHER_STEP, CipherStep::decode),
+		entry(StepType.COORDINATE_STEP, CoordsStep::decode),
+		entry(StepType.CRYPTIC_STEP, CrypticStep::decode),
+		entry(StepType.SKILL_STEP, SkillStep::decode),
+		entry(StepType.ANAGRAM_STEP, AnagramStep::decode)
 	);
 
 	public static String readString(DataInput in) throws IOException
@@ -63,7 +64,7 @@ public class TrailDecoder
 		int magic = in.readInt();
 		if (magic != TrailEncoder.MAGIC)
 		{
-			throw new IllegalArgumentException("Invalid trail format");
+			throw new InvalidMagicHeaderException("Encoded trail string was invalid!");
 		}
 	}
 
@@ -84,27 +85,31 @@ public class TrailDecoder
 		List<TrailStep> steps = new ArrayList<>();
 		for (int i = 0; i < stepCount; i++)
 		{
-			TrailStep decodedStep = decodeTrailStep(in);
-			steps.add(decodedStep);
+			decodeTrailStep(in).ifPresent(steps::add);
 		}
 		return steps;
 	}
 
-	private static TrailStep decodeTrailStep(DataInput in) throws IOException
+	private static Optional<TrailStep> decodeTrailStep(DataInput in) throws IOException
 	{
 		byte type = in.readByte();
-		StepDecoder decoder = getStepDecoder(type);
-		return decoder.decode(in);
+		return getStepDecoder(type)
+			.map(decoder -> tryDecode(type, in, decoder));
 	}
 
-	private static StepDecoder getStepDecoder(byte type)
+	private static TrailStep tryDecode(byte type, DataInput in, StepDecoder decoder)
 	{
-		StepDecoder decoder = DECODERS.get(type);
-		if (decoder == null)
-		{
-			throw new IllegalArgumentException("Unknown step type: " + type);
+		try {
+			return decoder.decode(in);
+		} catch (IOException e) {
+			log.error("Unable to parse trail step ({})", StepType.fromByte(type), e);
+			return null;
 		}
-		return decoder;
+	}
+
+	private static Optional<StepDecoder> getStepDecoder(byte type)
+	{
+		return Optional.ofNullable(DECODERS.get(StepType.fromByte(type)));
 	}
 
 	@FunctionalInterface

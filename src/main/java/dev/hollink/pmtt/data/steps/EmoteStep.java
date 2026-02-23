@@ -3,7 +3,7 @@ package dev.hollink.pmtt.data.steps;
 import static dev.hollink.pmtt.encoding.TrailDecoder.readString;
 import static dev.hollink.pmtt.encoding.TrailEncoder.writeString;
 import dev.hollink.pmtt.data.Emote;
-import dev.hollink.pmtt.data.StepTypes;
+import dev.hollink.pmtt.data.StepType;
 import dev.hollink.pmtt.data.events.AnimationEvent;
 import dev.hollink.pmtt.data.events.ClueEvent;
 import dev.hollink.pmtt.data.trail.ClueContext;
@@ -36,9 +36,9 @@ public final class EmoteStep implements TrailStep
 	private final WorldPoint targetLocation;
 
 	@Override
-	public byte typeId()
+	public StepType type()
 	{
-		return StepTypes.EMOTE_STEP;
+		return StepType.EMOTE_STEP;
 	}
 
 	@Override
@@ -68,7 +68,9 @@ public final class EmoteStep implements TrailStep
 	{
 		if (event instanceof AnimationEvent animationEvent)
 		{
-			return animationEvent.animationId() == targetEmoteOne.getAnimationId() && animationEvent.location().distanceTo(targetLocation) <= DEFAULT_LOCATION_DISTANCE;
+			log.info("Validating emote clue step");
+			return animationEvent.animationId() == targetEmoteOne.getAnimationId()
+				&& animationEvent.location().distanceTo(targetLocation) <= DEFAULT_LOCATION_DISTANCE;
 		}
 		else
 		{

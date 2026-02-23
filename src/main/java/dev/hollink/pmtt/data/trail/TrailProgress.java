@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public final class TrailProgress
 {
 	private int currentStepIndex = 0;

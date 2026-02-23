@@ -7,7 +7,7 @@ import net.runelite.api.coords.WorldPoint;
 
 public interface TrailStep extends Steppable, Overlayable, Encodable
 {
-	int DEFAULT_LOCATION_DISTANCE = 3;
+	int DEFAULT_LOCATION_DISTANCE = 2;
 
 	default boolean isInRange(WorldPoint a, WorldPoint b)
 	{

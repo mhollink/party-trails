@@ -55,7 +55,7 @@ public class TrailEncoder
 
 	private static void encodeStep(DataOutputStream out, Encodable step) throws IOException
 	{
-		out.writeByte(step.typeId());
+		out.writeByte(step.type().stepTypeId);
 		step.encode(out);
 	}
 

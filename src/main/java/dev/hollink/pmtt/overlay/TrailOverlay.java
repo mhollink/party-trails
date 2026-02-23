@@ -20,20 +20,21 @@ public class TrailOverlay extends OverlayPanel
 	private final Client client;
 	private final TreasureTrailPlugin plugin;
 	private final TreasureTrailConfig config;
-
-	@Getter
-	@Setter
-	private TrailRuntime trailRuntime;
+	private final TrailRuntime runtime;
 
 	@Inject
 	public TrailOverlay(
-		Client client, TreasureTrailPlugin plugin,
-		TreasureTrailConfig config)
+		Client client,
+		TreasureTrailPlugin plugin,
+		TreasureTrailConfig config,
+		TrailRuntime trailRuntime
+	)
 	{
 		super(plugin);
 		this.plugin = plugin;
 		this.client = client;
 		this.config = config;
+		this.runtime = trailRuntime;
 
 		setPosition(OverlayPosition.TOP_LEFT);
 		addMenuEntry(RUNELITE_OVERLAY_CONFIG, OPTION_CONFIGURE, "Party Trail overlay");
@@ -42,12 +43,12 @@ public class TrailOverlay extends OverlayPanel
 	@Override
 	public Dimension render(Graphics2D graphics)
 	{
-		if (trailRuntime == null)
+		if (runtime == null)
 		{
 			return super.render(graphics);
 		}
 
-		trailRuntime.renderCurrentStep(graphics, this.getPanelComponent());
+		runtime.renderCurrentStep(graphics, this.getPanelComponent());
 
 		return super.render(graphics);
 	}

@@ -21,15 +21,15 @@ import org.junit.Test;
 public class TrailEncoderTest
 {
 	public static final String ENCODED_TRAIL =
-		"eJxNUj1vFDEQHSAkx-qCaKiZhi6JlIQggURxXJYP5T5g7-BovfHc2lqvvbJ9LOkoKShp-" +
-			"CX8ivsTNPwNxitxonjSrGfem4-3y2JyCgA53PPCSteglpAtKUSMXmgDg0Y5Y7StYf8WPFu" +
-			"Jz4TaYlSE0jmPriWrbYVu3b9NNk3ptawIxyJEQ1jreK3InnCLAcDwG-M7x3AbHr0v8g" +
-			"Xms2KExdUMi-noZT7H4sNrHL_59O7jGODhFvYmrgowWIqajsUXYrZnbJPCHbh4gpIqT" +
-			"xTw7Ck22m4ih9b5qLKz013u_HyXIx6K-c8Zf5LGPhyO3uJiPrnE1Xyaz3jIFzBc6UA4N" +
-			"xKnwsLBUpj6ODqmPGD8SrQ92K4UeT6B8LWlEFB63QYsyZKIqr9E6arfX38GDMZ1WPr0f" +
-			"pQtiGo0ulJ8XSUirkn40Jdf82G97Rk3outPKqmN6iQbNY4_Ug1vIwN2fWfj2KG1EQ1v1S" +
-			"UusnsYWPooe6U5TISaqOUMe9MJ3_BgJa0dk4MS0nUBW8GjlzdszoGCwzErsGOBjCH__94l" +
-			"Q6W978LjqbaEF8gq4d9_ENyGpbnJznwuvc-4Yt4PxiXHQ0aWNP4COwi0tA";
+		"eJxNUj1vFDEQHSAkx-qCaKiZhi6JlIQggWiOy_Kh3AfsHRytN55bW-u1V7aPJR0lBSUNv4RfcX-" +
+			"Chr_BeCVOFE-a9cx78_F2WUxOASCHe15Y6RrUErIlhYjRC21g0ChnjLY17N-CZyvxmVBbjIp" +
+			"QOufRtWS1rdCt-7fJpim9lhXhWIRoCGsdrxXZE24xABh-Y3znGG7Do_dFvsB8VoywuJphMR2" +
+			"9zOdYfHiN4zef3n0cAzzcwt7EVQEGS1HTsfhCzPaMbVK4AxdPUFLliQKePcVG203k0DofVXZ" +
+			"2usudn-9yxEMx_znjT9LYh8PRW1zMJ5e4mk_zGQ_5AoYrHQjnRuJUWDhYClMfR8eUB4xfibY" +
+			"H25UizycQvrYUAkqv24AlWRJR9ZcoXfX768-AwbgOS5_ej7IFUY1GV4qvq0TENQkf-vJrPqy" +
+			"3PeNGdP1JJbVRnWSjxvFHquFtZMCu72wcO7Q2ouGtusRFdg8DSx9lrzSHiVATtZxhbzrhGx6" +
+			"spLVjclBCui5gK3j08obNOVBwOGYFdiyQMeT_37tkqLT3XXg81ZbwAlkl_PsPgtuwNDfZmc-" +
+			"l9xlXzPvBuOR4yMiSxl85qLSz";
 
 	public static final TreasureTrail TRAIL = new TreasureTrail(
 		69,
@@ -53,7 +53,7 @@ public class TrailEncoderTest
 			new AnagramStep(
 				"AI SOLD WOMEN",
 				new InteractionTarget(
-					2109,
+					2108,
 					"Wise Old Man",
 					"Talk-to",
 					new WorldPoint(3088, 3255, 0)

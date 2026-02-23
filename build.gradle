@@ -15,6 +15,7 @@ repositories {
 
 def runeLiteVersion = '1.12.18-SNAPSHOT'
 def pluginMainClass = 'dev.hollink.pmtt.TreasureTrailPlugin'
+def pluginSideloadDir = "$System.env.HOME/.runelite/sideloaded-plugins"
 
 dependencies {
 	compileOnly group: 'net.runelite', name:'client', version: runeLiteVersion
@@ -73,6 +74,6 @@ tasks.register("sideload") {
 	dependsOn build
 	copy {
 		from jar
-		into "$System.env.HOME/.runelite/sideloaded-plugins"
+		into pluginSideloadDir
 	}
 }

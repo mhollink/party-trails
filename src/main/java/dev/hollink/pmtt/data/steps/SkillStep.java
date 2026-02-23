@@ -1,7 +1,9 @@
 package dev.hollink.pmtt.data.steps;
 
-import dev.hollink.pmtt.data.StepTypes;
+import dev.hollink.pmtt.data.StepType;
+import dev.hollink.pmtt.data.events.AnimationEvent;
 import dev.hollink.pmtt.data.events.ClueEvent;
+import dev.hollink.pmtt.data.events.SkillEvent;
 import dev.hollink.pmtt.data.trail.ClueContext;
 import static dev.hollink.pmtt.encoding.TrailDecoder.readString;
 import static dev.hollink.pmtt.encoding.TrailEncoder.writeString;
@@ -25,16 +27,18 @@ import net.runelite.client.ui.overlay.components.PanelComponent;
 @RequiredArgsConstructor
 public final class SkillStep implements TrailStep
 {
-
 	private final String hint;
 	private final Skill skill;
 	private final int expRequired;
 	private final WorldArea area;
 
+	private final String skillStateName = "SkillStepState:" + skill.getName();
+	private int startExp;
+
 	@Override
-	public byte typeId()
+	public StepType type()
 	{
-		return StepTypes.SKILL_STEP;
+		return StepType.SKILL_STEP;
 	}
 
 	@Override
@@ -46,13 +50,22 @@ public final class SkillStep implements TrailStep
 	@Override
 	public void onActivate(ClueContext context)
 	{
-
+		// Set the experience of the skill on start
+		startExp = context.getSkillExperience(skill);
+		context.getProgress().getStepState().put(skillStateName, startExp);
 	}
 
 	@Override
 	public boolean isComplete(ClueEvent event)
 	{
-		return false;
+		if (event instanceof SkillEvent skillEvent && skillEvent.skill() == skill)
+		{
+
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	@Override

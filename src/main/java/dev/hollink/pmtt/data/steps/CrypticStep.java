@@ -2,7 +2,7 @@ package dev.hollink.pmtt.data.steps;
 
 import static dev.hollink.pmtt.encoding.TrailDecoder.readString;
 import dev.hollink.pmtt.data.InteractionTarget;
-import dev.hollink.pmtt.data.StepTypes;
+import dev.hollink.pmtt.data.StepType;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
@@ -28,9 +28,9 @@ public final class CrypticStep extends InteractionStep
 	}
 
 	@Override
-	public byte typeId()
+	public StepType type()
 	{
-		return StepTypes.CRYPTIC_STEP;
+		return StepType.CRYPTIC_STEP;
 	}
 
 	@Override

@@ -2,7 +2,7 @@ package dev.hollink.pmtt.data.steps;
 
 import static dev.hollink.pmtt.encoding.TrailDecoder.readString;
 import static dev.hollink.pmtt.encoding.TrailEncoder.writeString;
-import dev.hollink.pmtt.data.StepTypes;
+import dev.hollink.pmtt.data.StepType;
 import dev.hollink.pmtt.data.events.AnimationEvent;
 import dev.hollink.pmtt.data.events.ClueEvent;
 import dev.hollink.pmtt.data.trail.ClueContext;
@@ -32,9 +32,9 @@ public final class CoordsStep implements TrailStep
 	private final WorldPoint targetLocation;
 
 	@Override
-	public byte typeId()
+	public StepType type()
 	{
-		return StepTypes.COORDINATE_STEP;
+		return StepType.COORDINATE_STEP;
 	}
 
 	@Override

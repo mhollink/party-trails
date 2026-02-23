@@ -4,7 +4,9 @@ import dev.hollink.pmtt.data.events.ClueEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import javax.inject.Singleton;
 
+@Singleton
 public final class EventBus
 {
 	private final List<Consumer<ClueEvent>> listeners = new ArrayList<>();

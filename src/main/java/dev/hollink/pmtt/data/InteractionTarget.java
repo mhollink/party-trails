@@ -9,8 +9,8 @@ public record InteractionTarget(int targetId, String targetName, String interact
 	public boolean checkEvent(InteractionEvent event)
 	{
 		return event.objectId() == targetId
-			&& event.objectName().equals(targetName)
-			&& event.action().equals(interactionType)
+			&& event.objectName().equalsIgnoreCase(targetName)
+			&& event.action().equalsIgnoreCase(interactionType)
 			&& event.location().distanceTo(location) <= DEFAULT_LOCATION_DISTANCE;
 	}
 }

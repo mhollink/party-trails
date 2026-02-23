@@ -1,6 +1,7 @@
 package dev.hollink.pmtt.data.trail;
 
 import dev.hollink.pmtt.data.events.ClueEvent;
+import javax.inject.Inject;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import net.runelite.api.Client;
@@ -17,14 +18,21 @@ public final class ClueContext
 
 	private ClueEvent lastEvent;
 
+	@Inject
+	public ClueContext(Client client)
+	{
+		this.client = client;
+		this.progress = new TrailProgress();
+	}
+
 	public WorldPoint getLocation()
 	{
 		return client.getLocalPlayer().getWorldLocation();
 	}
 
-	public int getSkillLevel(Skill skill)
+	public int getSkillExperience(Skill skill)
 	{
-		return client.getRealSkillLevel(skill);
+		return client.getSkillExperience(skill);
 	}
 
 	public boolean isInArea(WorldArea area)
