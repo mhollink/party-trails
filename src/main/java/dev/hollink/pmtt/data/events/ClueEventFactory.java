@@ -114,7 +114,6 @@ public final class ClueEventFactory
 
 	public static Optional<SkillEvent> fromStatChanged(StatChanged event, Client client)
 	{
-		log.info("[ClueEventFactory] [fromStatChanged] {}", event);
-		return Optional.empty();
+		return Optional.of(new SkillEvent(event.getSkill(), event.getXp()));
 	}
 }

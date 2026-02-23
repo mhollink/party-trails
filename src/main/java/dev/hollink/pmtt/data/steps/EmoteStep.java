@@ -1,5 +1,6 @@
 package dev.hollink.pmtt.data.steps;
 
+import dev.hollink.pmtt.data.events.InteractionEvent;
 import static dev.hollink.pmtt.encoding.TrailDecoder.readString;
 import static dev.hollink.pmtt.encoding.TrailEncoder.writeString;
 import dev.hollink.pmtt.data.Emote;
@@ -64,11 +65,17 @@ public final class EmoteStep implements TrailStep
 	}
 
 	@Override
-	public boolean isComplete(ClueEvent event)
+	public boolean handlesEvent(ClueEvent event)
+	{
+		return event instanceof AnimationEvent;
+	}
+
+	@Override
+	public boolean isComplete(ClueContext context, ClueEvent event)
 	{
 		if (event instanceof AnimationEvent animationEvent)
 		{
-			log.info("Validating emote clue step");
+			log.info("Validating emote clue step...");
 			return animationEvent.animationId() == targetEmoteOne.getAnimationId()
 				&& animationEvent.location().distanceTo(targetLocation) <= DEFAULT_LOCATION_DISTANCE;
 		}

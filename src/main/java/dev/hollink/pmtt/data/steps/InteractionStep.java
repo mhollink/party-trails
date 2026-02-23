@@ -10,7 +10,9 @@ import java.io.IOException;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @ToString
 @EqualsAndHashCode
 @RequiredArgsConstructor
@@ -27,10 +29,17 @@ public abstract class InteractionStep implements TrailStep
 	}
 
 	@Override
-	public boolean isComplete(ClueEvent event)
+	public boolean handlesEvent(ClueEvent event)
+	{
+		return event instanceof InteractionEvent;
+	}
+
+	@Override
+	public boolean isComplete(ClueContext context, ClueEvent event)
 	{
 		if (event instanceof InteractionEvent interactionEvent)
 		{
+			log.info("Validating clue step...");
 			return target.checkEvent(interactionEvent);
 		}
 		else

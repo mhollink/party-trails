@@ -68,20 +68,14 @@ public class TrailEncoderTest
 					"Candle seller",
 					"Talk-to",
 					new WorldPoint(3170, 3176, 0)
-				)),
-			new SkillStep(
-				"Mine 5 ores in the south of Lumbridge",
-				Skill.MINING,
-				75,
-				new WorldArea(3220, 3140, 12, 10, 0)
-			)
+				))
 		)
 	);
 
 	@Test
 	public void encode() throws Exception
 	{
-		String encodedTrail = TrailEncoder.encode(TRAIL);
+		String encodedTrail = TrailEncoder.encodeTrail(TRAIL);
 
 		assertThat(encodedTrail, equalTo(ENCODED_TRAIL));
 	}
@@ -89,7 +83,7 @@ public class TrailEncoderTest
 	@Test
 	public void decode() throws Exception
 	{
-		TreasureTrail decodedTrail = TrailDecoder.decode(ENCODED_TRAIL);
+		TreasureTrail decodedTrail = TrailDecoder.decodeTrail(ENCODED_TRAIL);
 
 		assertThat(decodedTrail.getMetadata().version(), equalTo(TRAIL.getMetadata().version()));
 		assertThat(decodedTrail.getMetadata().trailId(), equalTo(TRAIL.getMetadata().trailId()));

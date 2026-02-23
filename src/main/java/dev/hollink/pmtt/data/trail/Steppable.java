@@ -7,5 +7,8 @@ public interface Steppable
 
 	void onActivate(ClueContext context);
 
-	boolean isComplete(ClueEvent event);
+	boolean handlesEvent(ClueEvent event);
+
+	boolean isComplete(ClueContext context, ClueEvent event);
+
 }

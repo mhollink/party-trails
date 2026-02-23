@@ -8,6 +8,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.io.DataInput;
 import java.io.IOException;
+import java.util.Arrays;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
@@ -37,12 +38,18 @@ public final class CrypticStep extends InteractionStep
 	public void drawOverlay(PanelComponent panel, Graphics2D graphics)
 	{
 		final FontMetrics fontMetrics = graphics.getFontMetrics();
-		int textWidth = Math.max(ComponentConstants.STANDARD_WIDTH, fontMetrics.stringWidth(cipherText) + 10);
-
+		String[] parts = cipherText.split("\n");
+		int maxLineWidth = Arrays.stream(parts)
+			.mapToInt(fontMetrics::stringWidth)
+			.max().orElse(0);
+		int textWidth = Math.max(ComponentConstants.STANDARD_WIDTH, maxLineWidth + 10);
 		panel.setPreferredSize(new Dimension(textWidth, 0));
 
 		panel.getChildren().add(TitleComponent.builder().text("Cryptic Clue").build());
-		panel.getChildren().add(LineComponent.builder().left(cipherText).build());
+		for (String part : parts)
+		{
+			panel.getChildren().add(LineComponent.builder().left(part).build());
+		}
 	}
 
 	public static CrypticStep decode(DataInput in)

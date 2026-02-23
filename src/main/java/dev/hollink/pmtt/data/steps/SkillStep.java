@@ -1,12 +1,13 @@
 package dev.hollink.pmtt.data.steps;
 
 import dev.hollink.pmtt.data.StepType;
-import dev.hollink.pmtt.data.events.AnimationEvent;
 import dev.hollink.pmtt.data.events.ClueEvent;
 import dev.hollink.pmtt.data.events.SkillEvent;
 import dev.hollink.pmtt.data.trail.ClueContext;
 import static dev.hollink.pmtt.encoding.TrailDecoder.readString;
 import static dev.hollink.pmtt.encoding.TrailEncoder.writeString;
+import java.awt.Dimension;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -17,7 +18,10 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Skill;
 import net.runelite.api.coords.WorldArea;
+import net.runelite.client.ui.overlay.components.ComponentConstants;
+import net.runelite.client.ui.overlay.components.LineComponent;
 import net.runelite.client.ui.overlay.components.PanelComponent;
+import net.runelite.client.ui.overlay.components.TitleComponent;
 
 
 // TODO: implement this class
@@ -32,9 +36,6 @@ public final class SkillStep implements TrailStep
 	private final int expRequired;
 	private final WorldArea area;
 
-	private final String skillStateName = "SkillStepState:" + skill.getName();
-	private int startExp;
-
 	@Override
 	public StepType type()
 	{
@@ -44,28 +45,55 @@ public final class SkillStep implements TrailStep
 	@Override
 	public void drawOverlay(PanelComponent panel, Graphics2D graphics)
 	{
+		final FontMetrics fontMetrics = graphics.getFontMetrics();
 
+		int textWidth = Math.max(ComponentConstants.STANDARD_WIDTH, fontMetrics.stringWidth(hint) + 10);
+
+		panel.setPreferredSize(new Dimension(textWidth, 0));
+
+		panel.getChildren().add(TitleComponent.builder().text("Skilling clue").build());
+		panel.getChildren().add(LineComponent.builder().left(hint).build());
 	}
 
 	@Override
 	public void onActivate(ClueContext context)
 	{
+		String key = getContextKey(context);
+
 		// Set the experience of the skill on start
-		startExp = context.getSkillExperience(skill);
-		context.getProgress().getStepState().put(skillStateName, startExp);
+		int startExp = context.getSkillExperience(skill);
+		context.getProgress().storeInt(key, startExp);
 	}
 
 	@Override
-	public boolean isComplete(ClueEvent event)
+	public boolean handlesEvent(ClueEvent event)
 	{
-		if (event instanceof SkillEvent skillEvent && skillEvent.skill() == skill)
-		{
+		return event instanceof SkillEvent skillEvent && skillEvent.skill() == skill;
+	}
 
-		}
-		else
+	@Override
+	public boolean isComplete(ClueContext context, ClueEvent event)
+	{
+		if (event instanceof SkillEvent skillEvent && skill == skillEvent.skill())
 		{
-			return false;
+			log.info("Validating clue step...");
+
+			String key = getContextKey(context);
+			int startExp = context.getProgress().getStoredInt(key);
+			int expDiff = skillEvent.xp() - startExp;
+
+			log.info("Progress on skillStep({}): ({}/{})", skill, expDiff, expRequired);
+			return expDiff >= expRequired;
 		}
+
+		return false;
+	}
+
+	private String getContextKey(ClueContext context)
+	{
+		int stepIndex = context.getProgress().getCurrentStepIndex();
+		String skillName = skill.getName().toLowerCase();
+		return "step.%d.%s-experience".formatted(stepIndex, skillName);
 	}
 
 	@Override

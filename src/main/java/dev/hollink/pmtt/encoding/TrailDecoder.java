@@ -10,6 +10,7 @@ import dev.hollink.pmtt.data.steps.EmoteStep;
 import dev.hollink.pmtt.data.steps.SkillStep;
 import dev.hollink.pmtt.data.steps.TrailStep;
 import dev.hollink.pmtt.data.trail.TrailMetadata;
+import dev.hollink.pmtt.data.trail.TrailProgress;
 import java.io.ByteArrayInputStream;
 import java.io.DataInput;
 import java.io.DataInputStream;
@@ -17,6 +18,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import static java.util.Map.entry;
@@ -44,7 +46,7 @@ public class TrailDecoder
 		return new String(bytes, StandardCharsets.UTF_8);
 	}
 
-	public static TreasureTrail decode(String encodedTrail) throws IOException
+	public static TreasureTrail decodeTrail(String encodedTrail) throws IOException
 	{
 		byte[] data = Base64.getUrlDecoder().decode(encodedTrail);
 		ByteArrayInputStream bis = new ByteArrayInputStream(data);
@@ -57,6 +59,29 @@ public class TrailDecoder
 		List<TrailStep> steps = decodeTrailSteps(metadata.stepCount(), in);
 
 		return new TreasureTrail(metadata.version(), metadata.trailId(), metadata.trailName(), metadata.author(), steps);
+	}
+
+	public static TrailProgress decodeProgress(String encoded) throws IOException
+	{
+		byte[] data = Base64.getUrlDecoder().decode(encoded);
+
+		DataInputStream in = new DataInputStream(
+			new ByteArrayInputStream(data));
+
+		String trailId = readString(in);
+		int index = in.readUnsignedShort();
+		boolean completed = in.readBoolean();
+		int stateSize = in.readUnsignedShort();
+
+		Map<String, String> state = new HashMap<>();
+		for (int i = 0; i < stateSize; i++)
+		{
+			String key = readString(in);
+			String value = readString(in);
+			state.put(key, value);
+		}
+
+		return new TrailProgress(trailId, index, completed, state);
 	}
 
 	private static void validateMagicHeader(DataInput in) throws IOException

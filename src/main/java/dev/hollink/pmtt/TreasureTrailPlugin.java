@@ -1,10 +1,7 @@
 package dev.hollink.pmtt;
 
 import com.google.inject.Provides;
-import dev.hollink.pmtt.data.TreasureTrail;
 import dev.hollink.pmtt.data.events.ClueEventFactory;
-import dev.hollink.pmtt.encoding.TrailDecoder;
-import java.io.IOException;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
@@ -16,7 +13,6 @@ import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
-import net.runelite.client.plugins.itemstats.StatsChanges;
 
 @Slf4j
 @PluginDescriptor(name = "Party Trails", description = "Create and complete custom player made treasure trails", tags = {"clue", "treasure", "custom"})
@@ -40,10 +36,7 @@ public class TreasureTrailPlugin extends Plugin
 	{
 		log.info("Treasure Trail plugin started");
 		trailManager.start();
-
-		if (config.trailString() != null && !config.trailString().isBlank()) {
-			trailManager.startTrail(config.trailString());
-		}
+		resumeOrStartTrailFromConfig();
 	}
 
 	@Override
@@ -58,7 +51,7 @@ public class TreasureTrailPlugin extends Plugin
 	{
 		ClueEventFactory.fromAnimationChanged(event, client)
 			.ifPresent(clueEvent -> {
-				log.info("Publishing Animation Event {}", clueEvent);
+				log.debug("Publishing Animation Event {}", clueEvent);
 				trailManager.getClueEventBus().publish(clueEvent);
 			});
 	}
@@ -68,7 +61,7 @@ public class TreasureTrailPlugin extends Plugin
 	{
 		ClueEventFactory.fromMenuOptionClicked(event, client)
 			.ifPresent(clueEvent -> {
-				log.info("Publishing Interaction Event {}", clueEvent);
+				log.debug("Publishing Interaction Event {}", clueEvent);
 				trailManager.getClueEventBus().publish(clueEvent);
 			});
 	}
@@ -78,7 +71,7 @@ public class TreasureTrailPlugin extends Plugin
 	{
 		ClueEventFactory.fromStatChanged(event, client)
 			.ifPresent(clueEvent -> {
-				log.info("Publishing Skill Event {}", clueEvent);
+				log.debug("Publishing Skill Event {}", clueEvent);
 				trailManager.getClueEventBus().publish(clueEvent);
 			});
 	}
@@ -86,14 +79,14 @@ public class TreasureTrailPlugin extends Plugin
 	@Subscribe
 	public void onConfigChanged(ConfigChanged event)
 	{
-		if (!event.getGroup().equals("TreasureTrailPlugin.PlayerConfig"))
+		if (!event.getGroup().equals(TreasureTrailConfig.CONFIG_GROUP))
 		{
 			return;
 		}
 
-		if (event.getKey().equals("trailString"))
+		if (event.getKey().equals(TreasureTrailConfig.TREASURE_TRAIL))
 		{
-			String trailString = configManager.getConfiguration("TreasureTrailPlugin.PlayerConfig", "trailString");
+			String trailString = configManager.getConfiguration(TreasureTrailConfig.CONFIG_GROUP, TreasureTrailConfig.TREASURE_TRAIL);
 			trailManager.startTrail(trailString);
 		}
 	}
@@ -102,5 +95,24 @@ public class TreasureTrailPlugin extends Plugin
 	TreasureTrailConfig provideConfig(ConfigManager configManager)
 	{
 		return configManager.getConfig(TreasureTrailConfig.class);
+	}
+
+	private void resumeOrStartTrailFromConfig()
+	{
+		boolean hasTrailConfig = config.trailString() != null && !config.trailString().isBlank();
+		boolean hasStoredProgress = config.trailProgress() != null && !config.trailProgress().isBlank();
+
+		log.info("Attempting to resume trail from config... (hasTrail={}, hasProgress={})", hasTrailConfig, hasStoredProgress);
+		if (hasTrailConfig)
+		{
+			if (hasStoredProgress)
+			{
+				trailManager.resumeTrail(config.trailString(), config.trailProgress());
+			}
+			else
+			{
+				trailManager.startTrail(config.trailString());
+			}
+		}
 	}
 }

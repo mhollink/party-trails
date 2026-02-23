@@ -3,6 +3,7 @@ package dev.hollink.pmtt.encoding;
 import dev.hollink.pmtt.data.TreasureTrail;
 import dev.hollink.pmtt.data.steps.TrailStep;
 import dev.hollink.pmtt.data.trail.Encodable;
+import dev.hollink.pmtt.data.trail.TrailProgress;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
@@ -10,6 +11,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.DeflaterOutputStream;
 
 public class TrailEncoder
@@ -23,7 +25,7 @@ public class TrailEncoder
 		out.write(bytes);
 	}
 
-	public static String encode(TreasureTrail trail) throws IOException
+	public static String encodeTrail(TreasureTrail trail) throws IOException
 	{
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		DeflaterOutputStream dos = new DeflaterOutputStream(bos);
@@ -34,6 +36,32 @@ public class TrailEncoder
 
 		encodeMetadata(trail, out);
 		encodeSteps(trail, out);
+
+		out.flush();
+		dos.finish();
+
+		return Base64.getUrlEncoder()
+			.withoutPadding()
+			.encodeToString(bos.toByteArray());
+	}
+
+	public static String encodeProgress(TrailProgress progress) throws IOException
+	{
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		DeflaterOutputStream dos = new DeflaterOutputStream(bos);
+		DataOutputStream out = new DataOutputStream(dos);
+
+		writeString(out, progress.getTrailId());
+		out.writeInt(progress.getCurrentStepIndex());
+		out.writeBoolean(progress.isCompleted());
+
+		Map<String, String> state = progress.getStepState();
+		out.writeShort(state.size());
+		for (var entry : state.entrySet())
+		{
+			writeString(out, entry.getKey());
+			writeString(out, entry.getValue());
+		}
 
 		out.flush();
 		dos.finish();

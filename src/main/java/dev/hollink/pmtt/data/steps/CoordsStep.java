@@ -15,6 +15,7 @@ import java.io.IOException;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.coords.WorldPoint;
 import static net.runelite.api.gameval.AnimationID.HUMAN_DIG;
 import net.runelite.client.ui.overlay.components.ComponentConstants;
@@ -22,6 +23,7 @@ import net.runelite.client.ui.overlay.components.LineComponent;
 import net.runelite.client.ui.overlay.components.PanelComponent;
 import net.runelite.client.ui.overlay.components.TitleComponent;
 
+@Slf4j
 @ToString
 @EqualsAndHashCode
 @RequiredArgsConstructor
@@ -59,10 +61,17 @@ public final class CoordsStep implements TrailStep
 	}
 
 	@Override
-	public boolean isComplete(ClueEvent event)
+	public boolean handlesEvent(ClueEvent event)
+	{
+		return event instanceof AnimationEvent;
+	}
+
+	@Override
+	public boolean isComplete(ClueContext context, ClueEvent event)
 	{
 		if (event instanceof AnimationEvent animationEvent)
 		{
+			log.info("Validating clue step...");
 			return animationEvent.animationId() == HUMAN_DIG && isInRange(targetLocation, animationEvent.location());
 		}
 		else
