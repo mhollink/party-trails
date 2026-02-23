@@ -84,6 +84,9 @@ public final class SkillStep implements TrailStep
 		return new SkillStep(hint, skill, exp, new WorldArea(x, y, w, h, plane));
 	}
 
+	/**
+	 * Custom equals method to deep check the world area.
+	 */
 	@Override
 	public boolean equals(Object o)
 	{

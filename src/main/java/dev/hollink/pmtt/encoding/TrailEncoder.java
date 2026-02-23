@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
+import java.util.zip.DeflaterOutputStream;
 
 public class TrailEncoder
 {
@@ -25,7 +26,8 @@ public class TrailEncoder
 	public static String encode(TreasureTrail trail) throws IOException
 	{
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		DataOutputStream out = new DataOutputStream(bos);
+		DeflaterOutputStream dos = new DeflaterOutputStream(bos);
+		DataOutputStream out = new DataOutputStream(dos);
 
 		// Encoding a magic header for input validation, see Decoder#validateMagicHeader
 		out.writeInt(MAGIC);
@@ -34,6 +36,7 @@ public class TrailEncoder
 		encodeSteps(trail, out);
 
 		out.flush();
+		dos.finish();
 
 		return Base64.getUrlEncoder()
 			.withoutPadding()

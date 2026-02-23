@@ -20,6 +20,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import static java.util.Map.entry;
+import java.util.zip.InflaterInputStream;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -45,7 +46,9 @@ public class TrailDecoder
 	public static TreasureTrail decode(String encodedTrail) throws IOException
 	{
 		byte[] data = Base64.getUrlDecoder().decode(encodedTrail);
-		DataInput in = new DataInputStream(new ByteArrayInputStream(data));
+		ByteArrayInputStream bis = new ByteArrayInputStream(data);
+		InflaterInputStream ii = new InflaterInputStream(bis);
+		DataInput in = new DataInputStream(ii);
 
 		validateMagicHeader(in);
 
