@@ -1,14 +1,18 @@
-package dev.hollink.pmtt.model.steps;
+package dev.hollink.pmtt.data.steps;
 
-import static dev.hollink.pmtt.crypto.TrailEncoder.writeString;
-import dev.hollink.pmtt.model.InteractionTarget;
-import dev.hollink.pmtt.model.events.ClueEvent;
-import dev.hollink.pmtt.model.events.InteractionEvent;
-import dev.hollink.pmtt.model.trail.ClueContext;
+import static dev.hollink.pmtt.encoding.TrailEncoder.writeString;
+import dev.hollink.pmtt.data.InteractionTarget;
+import dev.hollink.pmtt.data.events.ClueEvent;
+import dev.hollink.pmtt.data.events.InteractionEvent;
+import dev.hollink.pmtt.data.trail.ClueContext;
 import java.io.DataOutput;
 import java.io.IOException;
+import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
+@ToString
+@EqualsAndHashCode
 @RequiredArgsConstructor
 public abstract class InteractionStep implements TrailStep
 {
@@ -38,7 +42,7 @@ public abstract class InteractionStep implements TrailStep
 	@Override
 	public void encode(DataOutput out) throws IOException
 	{
-		out.writeChars(cipherText);
+		writeString(out, cipherText);
 		out.writeInt(target.targetId());
 		writeString(out, target.targetName());
 		writeString(out, target.interactionType());

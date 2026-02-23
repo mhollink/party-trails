@@ -1,13 +1,15 @@
-package dev.hollink.pmtt.model.steps;
+package dev.hollink.pmtt.data.steps;
 
-import static dev.hollink.pmtt.crypto.TrailDecoder.readString;
-import dev.hollink.pmtt.model.InteractionTarget;
-import dev.hollink.pmtt.model.StepTypes;
+import static dev.hollink.pmtt.encoding.TrailDecoder.readString;
+import dev.hollink.pmtt.data.InteractionTarget;
+import dev.hollink.pmtt.data.StepTypes;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.io.DataInput;
 import java.io.IOException;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.ui.overlay.components.ComponentConstants;
@@ -16,9 +18,11 @@ import net.runelite.client.ui.overlay.components.PanelComponent;
 import net.runelite.client.ui.overlay.components.TitleComponent;
 
 @Slf4j
-public final class CrypticStep extends InteractionStep
+@ToString
+@EqualsAndHashCode(callSuper = true)
+public final class AnagramStep extends InteractionStep
 {
-	public CrypticStep(String cipherText, InteractionTarget target)
+	public AnagramStep(String cipherText, InteractionTarget target)
 	{
 		super(cipherText, target);
 	}
@@ -26,7 +30,7 @@ public final class CrypticStep extends InteractionStep
 	@Override
 	public byte typeId()
 	{
-		return StepTypes.CRYPTIC_STEP;
+		return StepTypes.ANAGRAM_STEP;
 	}
 
 	@Override
@@ -37,12 +41,11 @@ public final class CrypticStep extends InteractionStep
 
 		panel.setPreferredSize(new Dimension(textWidth, 0));
 
-		panel.getChildren().add(TitleComponent.builder().text("Cryptic Clue").build());
+		panel.getChildren().add(TitleComponent.builder().text("Anagram Clue").build());
 		panel.getChildren().add(LineComponent.builder().left(cipherText).build());
 	}
 
-	public static CrypticStep decode(DataInput in)
-		throws IOException
+	public static AnagramStep decode(DataInput in) throws IOException
 	{
 		String text = readString(in);
 		int targetId = in.readInt();
@@ -51,7 +54,8 @@ public final class CrypticStep extends InteractionStep
 		int x = in.readInt();
 		int y = in.readInt();
 		int plane = in.readInt();
-		return new CrypticStep(text, new InteractionTarget(targetId, targetName, action, new WorldPoint(x, y, plane)));
+		return new AnagramStep(text, new InteractionTarget(targetId, targetName, action, new WorldPoint(x, y, plane)));
 	}
 
 }
+

@@ -1,13 +1,15 @@
-package dev.hollink.pmtt.model.steps;
+package dev.hollink.pmtt.data.steps;
 
-import static dev.hollink.pmtt.crypto.TrailDecoder.readString;
-import dev.hollink.pmtt.model.InteractionTarget;
-import dev.hollink.pmtt.model.StepTypes;
+import static dev.hollink.pmtt.encoding.TrailDecoder.readString;
+import dev.hollink.pmtt.data.InteractionTarget;
+import dev.hollink.pmtt.data.StepTypes;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.io.DataInput;
 import java.io.IOException;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.ui.overlay.components.ComponentConstants;
@@ -16,6 +18,8 @@ import net.runelite.client.ui.overlay.components.PanelComponent;
 import net.runelite.client.ui.overlay.components.TitleComponent;
 
 @Slf4j
+@ToString
+@EqualsAndHashCode(callSuper = true)
 public final class CipherStep extends InteractionStep
 {
 

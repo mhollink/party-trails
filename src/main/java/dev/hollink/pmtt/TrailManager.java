@@ -1,9 +1,9 @@
 package dev.hollink.pmtt;
 
-import dev.hollink.pmtt.crypto.TrailDecoder;
-import dev.hollink.pmtt.model.TreasureTrail;
-import dev.hollink.pmtt.model.trail.ClueContext;
-import dev.hollink.pmtt.model.trail.TrailProgress;
+import dev.hollink.pmtt.encoding.TrailDecoder;
+import dev.hollink.pmtt.data.TreasureTrail;
+import dev.hollink.pmtt.data.trail.ClueContext;
+import dev.hollink.pmtt.data.trail.TrailProgress;
 import dev.hollink.pmtt.overlay.TrailOverlay;
 import dev.hollink.pmtt.runetime.EventBus;
 import dev.hollink.pmtt.runetime.TrailRuntime;
@@ -27,15 +27,14 @@ public class TrailManager
 
 	@Getter
 	private final EventBus clueEventBus;
-	private final TrailDecoder trailDecoder;
 
 	public void startPartyTrails()
 	{
 		overlayManager.add(trailOverlay);
 
-		TreasureTrail trail = trailDecoder.decode(config.trailString());
+		// TODO: Fix this codesmell
 		TrailRuntime runtime = new TrailRuntime(clueEventBus, new ClueContext(client, new TrailProgress()));
-		runtime.startTrail(trail);
+
 		trailOverlay.setTrailRuntime(runtime);
 	}
 

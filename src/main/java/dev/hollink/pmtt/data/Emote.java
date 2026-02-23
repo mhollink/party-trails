@@ -1,4 +1,4 @@
-package dev.hollink.pmtt.model;
+package dev.hollink.pmtt.data;
 
 import lombok.Getter;
 import net.runelite.api.gameval.AnimationID;

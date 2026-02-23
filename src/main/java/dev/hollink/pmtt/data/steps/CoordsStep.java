@@ -1,18 +1,20 @@
-package dev.hollink.pmtt.model.steps;
+package dev.hollink.pmtt.data.steps;
 
-import static dev.hollink.pmtt.crypto.TrailDecoder.readString;
-import static dev.hollink.pmtt.crypto.TrailEncoder.writeString;
-import dev.hollink.pmtt.model.StepTypes;
-import dev.hollink.pmtt.model.events.AnimationEvent;
-import dev.hollink.pmtt.model.events.ClueEvent;
-import dev.hollink.pmtt.model.trail.ClueContext;
+import static dev.hollink.pmtt.encoding.TrailDecoder.readString;
+import static dev.hollink.pmtt.encoding.TrailEncoder.writeString;
+import dev.hollink.pmtt.data.StepTypes;
+import dev.hollink.pmtt.data.events.AnimationEvent;
+import dev.hollink.pmtt.data.events.ClueEvent;
+import dev.hollink.pmtt.data.trail.ClueContext;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import net.runelite.api.coords.WorldPoint;
 import static net.runelite.api.gameval.AnimationID.HUMAN_DIG;
 import net.runelite.client.ui.overlay.components.ComponentConstants;
@@ -20,6 +22,8 @@ import net.runelite.client.ui.overlay.components.LineComponent;
 import net.runelite.client.ui.overlay.components.PanelComponent;
 import net.runelite.client.ui.overlay.components.TitleComponent;
 
+@ToString
+@EqualsAndHashCode
 @RequiredArgsConstructor
 public final class CoordsStep implements TrailStep
 {

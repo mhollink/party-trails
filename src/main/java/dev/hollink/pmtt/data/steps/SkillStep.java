@@ -1,12 +1,15 @@
-package dev.hollink.pmtt.model.steps;
+package dev.hollink.pmtt.data.steps;
 
-import dev.hollink.pmtt.model.StepTypes;
-import dev.hollink.pmtt.model.events.ClueEvent;
-import dev.hollink.pmtt.model.trail.ClueContext;
+import dev.hollink.pmtt.data.StepTypes;
+import dev.hollink.pmtt.data.events.ClueEvent;
+import dev.hollink.pmtt.data.trail.ClueContext;
 import java.awt.Graphics2D;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import lombok.EqualsAndHashCode;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.client.ui.overlay.components.PanelComponent;
 
@@ -14,6 +17,9 @@ import net.runelite.client.ui.overlay.components.PanelComponent;
 // TODO: implement this class
 
 @Slf4j
+@ToString
+@EqualsAndHashCode
+@RequiredArgsConstructor
 public final class SkillStep implements TrailStep
 {
 

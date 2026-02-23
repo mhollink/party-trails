@@ -1,4 +1,4 @@
-package dev.hollink.pmtt.model.trail;
+package dev.hollink.pmtt.data.trail;
 
 import java.io.DataOutput;
 import java.io.IOException;

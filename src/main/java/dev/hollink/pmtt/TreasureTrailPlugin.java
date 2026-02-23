@@ -1,8 +1,8 @@
 package dev.hollink.pmtt;
 
 import com.google.inject.Provides;
-import static dev.hollink.pmtt.model.events.ClueEventFactory.fromAnimationChanged;
-import static dev.hollink.pmtt.model.events.ClueEventFactory.fromMenuOptionClicked;
+import static dev.hollink.pmtt.data.events.ClueEventFactory.fromAnimationChanged;
+import static dev.hollink.pmtt.data.events.ClueEventFactory.fromMenuOptionClicked;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;

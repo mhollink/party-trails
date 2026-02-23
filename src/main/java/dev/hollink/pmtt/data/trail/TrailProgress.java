@@ -1,4 +1,4 @@
-package dev.hollink.pmtt.model.trail;
+package dev.hollink.pmtt.data.trail;
 
 import com.google.common.collect.Maps;
 import java.util.Map;

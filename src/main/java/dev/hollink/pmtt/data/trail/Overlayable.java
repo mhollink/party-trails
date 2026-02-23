@@ -1,4 +1,4 @@
-package dev.hollink.pmtt.model.trail;
+package dev.hollink.pmtt.data.trail;
 
 import java.awt.Graphics2D;
 import net.runelite.client.ui.overlay.components.PanelComponent;

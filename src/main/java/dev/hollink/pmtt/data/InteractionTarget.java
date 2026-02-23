@@ -1,7 +1,7 @@
-package dev.hollink.pmtt.model;
+package dev.hollink.pmtt.data;
 
-import dev.hollink.pmtt.model.events.InteractionEvent;
-import static dev.hollink.pmtt.model.steps.TrailStep.DEFAULT_LOCATION_DISTANCE;
+import dev.hollink.pmtt.data.events.InteractionEvent;
+import static dev.hollink.pmtt.data.steps.TrailStep.DEFAULT_LOCATION_DISTANCE;
 import net.runelite.api.coords.WorldPoint;
 
 public record InteractionTarget(int targetId, String targetName, String interactionType, WorldPoint location)

@@ -1,8 +1,8 @@
-package dev.hollink.pmtt.model.steps;
+package dev.hollink.pmtt.data.steps;
 
-import dev.hollink.pmtt.model.trail.Encodable;
-import dev.hollink.pmtt.model.trail.Overlayable;
-import dev.hollink.pmtt.model.trail.Steppable;
+import dev.hollink.pmtt.data.trail.Encodable;
+import dev.hollink.pmtt.data.trail.Overlayable;
+import dev.hollink.pmtt.data.trail.Steppable;
 import net.runelite.api.coords.WorldPoint;
 
 public interface TrailStep extends Steppable, Overlayable, Encodable

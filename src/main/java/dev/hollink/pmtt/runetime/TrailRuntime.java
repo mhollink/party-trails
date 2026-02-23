@@ -1,9 +1,9 @@
 package dev.hollink.pmtt.runetime;
 
-import dev.hollink.pmtt.model.TreasureTrail;
-import dev.hollink.pmtt.model.events.ClueEvent;
-import dev.hollink.pmtt.model.steps.TrailStep;
-import dev.hollink.pmtt.model.trail.ClueContext;
+import dev.hollink.pmtt.data.TreasureTrail;
+import dev.hollink.pmtt.data.events.ClueEvent;
+import dev.hollink.pmtt.data.steps.TrailStep;
+import dev.hollink.pmtt.data.trail.ClueContext;
 import java.awt.Graphics2D;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,6 @@ public class TrailRuntime
 	{
 		this.bus = bus;
 		this.context = context;
-		bus.register(this::onEvent);
 	}
 
 	public void renderCurrentStep(Graphics2D graphics, PanelComponent panel)
@@ -38,7 +37,8 @@ public class TrailRuntime
 
 	public void startTrail(TreasureTrail trail)
 	{
-		log.info("Starting new trail (length={})", trail.getStepCount());
+		log.info("Starting new trail (length={})", trail.getMetadata().stepCount());
+		bus.register(this::onEvent);
 		this.trail = trail;
 		this.getContext().getProgress().reset();
 		trail.getStep(this.getContext().getProgress().getCurrentStepIndex())
@@ -54,9 +54,7 @@ public class TrailRuntime
 
 	private void resetOnStepNotFound()
 	{
-		log.error("Unable to start trail, no step found at index {}", this.getContext()
-			.getProgress()
-			.getCurrentStepIndex());
+		log.error("Unable to start trail, no step found at index {}", this.getContext().getProgress().getCurrentStepIndex());
 		this.reset();
 	}
 
@@ -65,6 +63,7 @@ public class TrailRuntime
 		log.info("Resetting active treasure trail");
 		this.trail = null;
 		this.currentStep = null;
+		this.bus.unregister(this::onEvent);
 	}
 
 	private void onEvent(ClueEvent event)
@@ -82,11 +81,9 @@ public class TrailRuntime
 		{
 			return;
 		}
-		int nextStepIndex = this.context.getProgress()
-			.getCurrentStepIndex() + 1;
+		int nextStepIndex = this.context.getProgress().getCurrentStepIndex() + 1;
 		this.context.getProgress().setCurrentStepIndex(nextStepIndex);
-		trail.getStep(nextStepIndex)
-			.ifPresentOrElse(this::startStep, this::completeTrail);
+		trail.getStep(nextStepIndex).ifPresentOrElse(this::startStep, this::completeTrail);
 	}
 
 	private void completeTrail()

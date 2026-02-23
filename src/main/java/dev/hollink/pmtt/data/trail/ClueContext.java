@@ -1,6 +1,6 @@
-package dev.hollink.pmtt.model.trail;
+package dev.hollink.pmtt.data.trail;
 
-import dev.hollink.pmtt.model.events.ClueEvent;
+import dev.hollink.pmtt.data.events.ClueEvent;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import net.runelite.api.Client;

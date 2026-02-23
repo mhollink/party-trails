@@ -1,6 +1,6 @@
 package dev.hollink.pmtt.runetime;
 
-import dev.hollink.pmtt.model.events.ClueEvent;
+import dev.hollink.pmtt.data.events.ClueEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;

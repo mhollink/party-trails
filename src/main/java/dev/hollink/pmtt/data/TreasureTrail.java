@@ -1,6 +1,7 @@
-package dev.hollink.pmtt.model;
+package dev.hollink.pmtt.data;
 
-import dev.hollink.pmtt.model.steps.TrailStep;
+import dev.hollink.pmtt.data.steps.TrailStep;
+import dev.hollink.pmtt.data.trail.TrailMetadata;
 import java.util.List;
 import java.util.Optional;
 import lombok.AccessLevel;
@@ -9,16 +10,17 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public final class TreasureTrail
 {
-
-	private final int version;
-	private final String trailId;
-	private final String trailName;
-	private final String author;
+	private final TrailMetadata metadata;
 	private final List<TrailStep> steps;
+
+	public TreasureTrail(int version, String id, String name, String author, List<TrailStep> steps)
+	{
+		this.metadata = new TrailMetadata(version, id, name, author, steps.size());
+		this.steps = steps;
+	}
 
 	public Optional<TrailStep> getStep(int index)
 	{
@@ -30,10 +32,5 @@ public final class TreasureTrail
 		{
 			return Optional.empty();
 		}
-	}
-
-	public int getStepCount()
-	{
-		return steps.size();
 	}
 }

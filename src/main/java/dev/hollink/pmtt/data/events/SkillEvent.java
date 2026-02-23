@@ -1,4 +1,4 @@
-package dev.hollink.pmtt.model.events;
+package dev.hollink.pmtt.data.events;
 
 import net.runelite.api.Skill;
 

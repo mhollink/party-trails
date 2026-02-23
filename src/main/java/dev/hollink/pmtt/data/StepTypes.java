@@ -1,4 +1,4 @@
-package dev.hollink.pmtt.model;
+package dev.hollink.pmtt.data;
 
 public final class StepTypes
 {
