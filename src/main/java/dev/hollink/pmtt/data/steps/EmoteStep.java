@@ -8,6 +8,7 @@ import dev.hollink.pmtt.data.StepType;
 import dev.hollink.pmtt.data.events.AnimationEvent;
 import dev.hollink.pmtt.data.events.ClueEvent;
 import dev.hollink.pmtt.data.trail.ClueContext;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
@@ -45,17 +46,12 @@ public final class EmoteStep implements TrailStep
 	@Override
 	public void drawOverlay(PanelComponent panel, Graphics2D graphics)
 	{
-		final FontMetrics fontMetrics = graphics.getFontMetrics();
-		int textWidth = Math.max(ComponentConstants.STANDARD_WIDTH, fontMetrics.stringWidth(hint) + 10);
-
-		panel.setPreferredSize(new Dimension(textWidth, 0));
-
-		panel.getChildren().add(TitleComponent.builder().text("Emote Clue").build());
-		panel.getChildren().add(LineComponent.builder().left("Emotes:").build());
-		panel.getChildren().add(LineComponent.builder().left(targetEmoteOne.getName()).leftColor(TITLED_CONTENT_COLOR).build());
-
-		panel.getChildren().add(LineComponent.builder().left("Location:").build());
-		panel.getChildren().add(LineComponent.builder().left(hint).leftColor(TITLED_CONTENT_COLOR).build());
+		setPanelWidth(hint, panel, graphics);
+		drawTitle("Emote Clue", panel);
+		drawText("Emote:", panel, Color.WHITE);
+		drawText(targetEmoteOne.getName(), panel);
+		drawText("Location:", panel, Color.WHITE);
+		drawText(hint, panel);
 	}
 
 	@Override

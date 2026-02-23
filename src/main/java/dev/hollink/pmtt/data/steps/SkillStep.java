@@ -6,8 +6,6 @@ import dev.hollink.pmtt.data.events.SkillEvent;
 import dev.hollink.pmtt.data.trail.ClueContext;
 import static dev.hollink.pmtt.encoding.TrailDecoder.readString;
 import static dev.hollink.pmtt.encoding.TrailEncoder.writeString;
-import java.awt.Dimension;
-import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -18,10 +16,7 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Skill;
 import net.runelite.api.coords.WorldArea;
-import net.runelite.client.ui.overlay.components.ComponentConstants;
-import net.runelite.client.ui.overlay.components.LineComponent;
 import net.runelite.client.ui.overlay.components.PanelComponent;
-import net.runelite.client.ui.overlay.components.TitleComponent;
 
 
 // TODO: implement this class
@@ -45,14 +40,9 @@ public final class SkillStep implements TrailStep
 	@Override
 	public void drawOverlay(PanelComponent panel, Graphics2D graphics)
 	{
-		final FontMetrics fontMetrics = graphics.getFontMetrics();
-
-		int textWidth = Math.max(ComponentConstants.STANDARD_WIDTH, fontMetrics.stringWidth(hint) + 10);
-
-		panel.setPreferredSize(new Dimension(textWidth, 0));
-
-		panel.getChildren().add(TitleComponent.builder().text("Skilling clue").build());
-		panel.getChildren().add(LineComponent.builder().left(hint).build());
+		setPanelWidth(hint, panel, graphics);
+		drawTitle("Skilling clue", panel);
+		drawText(hint, panel);
 	}
 
 	@Override
@@ -77,6 +67,10 @@ public final class SkillStep implements TrailStep
 		if (event instanceof SkillEvent skillEvent && skill == skillEvent.skill())
 		{
 			log.info("Validating clue step...");
+			if (!context.getClient().getLocalPlayer().getWorldLocation().isInArea(area)) {
+				log.info("Performing skilling action in incorrect area!");
+				return false;
+			}
 
 			String key = getContextKey(context);
 			int startExp = context.getProgress().getStoredInt(key);
