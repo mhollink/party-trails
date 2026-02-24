@@ -6,6 +6,7 @@ import dev.hollink.pmtt.data.events.AnimationEvent;
 import dev.hollink.pmtt.data.events.ClueEvent;
 import dev.hollink.pmtt.data.steps.CoordsStep;
 import dev.hollink.pmtt.data.steps.TrailStep;
+import dev.hollink.pmtt.utils.SextantUtil;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.gameval.AnimationID;
 
@@ -34,17 +35,15 @@ public class CoordinateStepEditor extends StepEditor implements FormHelper
 		return false;
 	}
 
-	private String generateHint(WorldPoint worldPoint)
-	{
-		// TODO: Generate coordinate clue hint
-		return "";
-	}
-
 	@Override
 	public TrailStep toTrailStep()
 	{
 		WorldPoint location = locationSelector.getWorldLocation();
-		String hint = generateHint(location);
-		return new CoordsStep(hint, location);
+		if (location != null) {
+			String hint = SextantUtil.getCoordinates(location);
+			return new CoordsStep(hint, location);
+		} else {
+			return null;
+		}
 	}
 }
