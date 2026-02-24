@@ -1,0 +1,58 @@
+package dev.hollink.pmtt.builder.editors;
+
+import dev.hollink.pmtt.data.events.ClueEvent;
+import dev.hollink.pmtt.data.steps.TrailStep;
+import java.awt.Component;
+import java.awt.Dimension;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JToolTip;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+public abstract class StepEditor extends JPanel
+{
+
+	protected final JButton captureButton;
+	protected boolean captureMode = false;
+
+	public StepEditor()
+	{
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		setMaximumSize(new Dimension(Integer.MAX_VALUE, this.getPreferredSize().height));
+
+		captureButton = new JButton("Capture in game");
+		JToolTip toolTip = captureButton.createToolTip();
+		toolTip.setTipText("Perform the clue action in game to capture the input values");
+		captureButton.addActionListener(e -> {
+			captureMode = true;
+			captureButton.setText("Perform action in game...");
+		});
+		captureButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+		captureButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, captureButton.getPreferredSize().height));
+	}
+
+	public abstract void initForm();
+
+	public void onEvent(ClueEvent event)
+	{
+		if (captureMode)
+		{
+			if (this.onCapture(event))
+			{
+				resetCaptureMode();
+			}
+		}
+	}
+
+	abstract boolean onCapture(ClueEvent event);
+
+	protected void resetCaptureMode()
+	{
+		captureMode = false;
+		captureButton.setText("Capture in game");
+	}
+
+	public abstract TrailStep toTrailStep();
+}

@@ -1,16 +1,13 @@
 package dev.hollink.pmtt.data.steps;
 
-import dev.hollink.pmtt.data.events.InteractionEvent;
-import static dev.hollink.pmtt.encoding.TrailDecoder.readString;
-import static dev.hollink.pmtt.encoding.TrailEncoder.writeString;
 import dev.hollink.pmtt.data.Emote;
 import dev.hollink.pmtt.data.StepType;
 import dev.hollink.pmtt.data.events.AnimationEvent;
 import dev.hollink.pmtt.data.events.ClueEvent;
 import dev.hollink.pmtt.data.trail.ClueContext;
+import static dev.hollink.pmtt.encoding.TrailDecoder.readString;
+import static dev.hollink.pmtt.encoding.TrailEncoder.writeString;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -20,11 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.coords.WorldPoint;
-import static net.runelite.client.plugins.cluescrolls.ClueScrollOverlay.TITLED_CONTENT_COLOR;
-import net.runelite.client.ui.overlay.components.ComponentConstants;
-import net.runelite.client.ui.overlay.components.LineComponent;
 import net.runelite.client.ui.overlay.components.PanelComponent;
-import net.runelite.client.ui.overlay.components.TitleComponent;
 
 @Slf4j
 @ToString

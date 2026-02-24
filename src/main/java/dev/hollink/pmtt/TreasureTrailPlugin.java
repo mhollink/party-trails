@@ -1,12 +1,14 @@
 package dev.hollink.pmtt;
 
 import com.google.inject.Provides;
+import dev.hollink.pmtt.builder.TrailBuilderPanel;
 import dev.hollink.pmtt.data.events.ClueEvent;
 import dev.hollink.pmtt.data.events.ClueEventFactory;
 import dev.hollink.pmtt.data.steps.TrailStep;
 import dev.hollink.pmtt.data.trail.ClueContext;
 import dev.hollink.pmtt.runetime.EventBus;
 import dev.hollink.pmtt.runetime.TrailRuntime;
+import java.awt.image.BufferedImage;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
@@ -18,6 +20,9 @@ import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.ui.ClientToolbar;
+import net.runelite.client.ui.NavigationButton;
+import net.runelite.client.util.ImageUtil;
 
 /**
  * Party Trails is a plugin that allows players to create custom
@@ -57,6 +62,9 @@ public class TreasureTrailPlugin extends Plugin
 	private Client client;
 
 	@Inject
+	private ClientToolbar clientToolbar;
+
+	@Inject
 	private TreasureTrailConfig config;
 
 	@Inject
@@ -65,10 +73,17 @@ public class TreasureTrailPlugin extends Plugin
 	@Inject
 	private TrailManager trailManager;
 
+	@Inject
+	private EventBus eventBus;
+
+	private NavigationButton navButton;
+
 	@Override
 	protected void startUp() throws Exception
 	{
 		log.info("Treasure Trail plugin started");
+		addTrailBuilderPanel();
+
 		trailManager.start();
 		resumeOrStartTrailFromConfig();
 	}
@@ -77,6 +92,7 @@ public class TreasureTrailPlugin extends Plugin
 	protected void shutDown() throws Exception
 	{
 		trailManager.stop();
+		clientToolbar.removeNavigation(navButton);
 		log.info("Treasure Trail plugin stopped");
 	}
 
@@ -85,7 +101,7 @@ public class TreasureTrailPlugin extends Plugin
 	{
 		ClueEventFactory.fromAnimationChanged(event, client).ifPresent(clueEvent -> {
 			log.debug("Publishing Animation Event {}", clueEvent);
-			trailManager.getClueEventBus().publish(clueEvent);
+			eventBus.publish(clueEvent);
 		});
 	}
 
@@ -94,7 +110,7 @@ public class TreasureTrailPlugin extends Plugin
 	{
 		ClueEventFactory.fromMenuOptionClicked(event, client).ifPresent(clueEvent -> {
 			log.debug("Publishing Interaction Event {}", clueEvent);
-			trailManager.getClueEventBus().publish(clueEvent);
+			eventBus.publish(clueEvent);
 		});
 	}
 
@@ -103,7 +119,7 @@ public class TreasureTrailPlugin extends Plugin
 	{
 		ClueEventFactory.fromStatChanged(event, client).ifPresent(clueEvent -> {
 			log.debug("Publishing Skill Event {}", clueEvent);
-			trailManager.getClueEventBus().publish(clueEvent);
+			eventBus.publish(clueEvent);
 		});
 	}
 
@@ -146,4 +162,20 @@ public class TreasureTrailPlugin extends Plugin
 			}
 		}
 	}
+
+	private void addTrailBuilderPanel()
+	{
+		TrailBuilderPanel builderPanel = new TrailBuilderPanel(client, eventBus);
+
+		BufferedImage icon = ImageUtil.loadImageResource(getClass(), "/icon.png");
+		navButton = NavigationButton.builder()
+			.tooltip("Party Trail Builder")
+			.icon(icon)
+			.priority(5)
+			.panel(builderPanel)
+			.build();
+
+		clientToolbar.addNavigation(navButton);
+	}
+
 }

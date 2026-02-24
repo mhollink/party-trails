@@ -2,21 +2,24 @@ package dev.hollink.pmtt.data;
 
 public enum StepType
 {
-	EMOTE_STEP((byte) 1),
-	CIPHER_STEP((byte) 2),
-	COORDINATE_STEP((byte) 3),
-	CRYPTIC_STEP((byte) 4),
-	SKILL_STEP((byte) 5),
-	ANAGRAM_STEP((byte) 6);
+	EMOTE_STEP((byte) 1, "Emote"),
+	CIPHER_STEP((byte) 2, "Cipher"),
+	COORDINATE_STEP((byte) 3, "Coordinate"),
+	CRYPTIC_STEP((byte) 4, "Cryptic"),
+	SKILL_STEP((byte) 5, "Skill"),
+	ANAGRAM_STEP((byte) 6, "Anagram");
 
 	public final byte stepTypeId;
+	public final String stepTypeName;
 
-	StepType(byte stepTypeId)
+	StepType(byte stepTypeId, String stepTypeName)
 	{
 		this.stepTypeId = stepTypeId;
+		this.stepTypeName = stepTypeName;
 	}
 
-	public static StepType fromByte(byte stepTypeId) {
+	public static StepType fromByte(byte stepTypeId)
+	{
 		return switch (stepTypeId)
 		{
 			case 1 -> EMOTE_STEP;

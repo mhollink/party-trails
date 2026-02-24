@@ -1,10 +1,10 @@
 package dev.hollink.pmtt.data.steps;
 
-import static dev.hollink.pmtt.encoding.TrailEncoder.writeString;
 import dev.hollink.pmtt.data.InteractionTarget;
 import dev.hollink.pmtt.data.events.ClueEvent;
 import dev.hollink.pmtt.data.events.InteractionEvent;
 import dev.hollink.pmtt.data.trail.ClueContext;
+import static dev.hollink.pmtt.encoding.TrailEncoder.writeString;
 import java.io.DataOutput;
 import java.io.IOException;
 import lombok.EqualsAndHashCode;

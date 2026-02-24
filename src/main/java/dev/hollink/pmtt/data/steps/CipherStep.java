@@ -1,8 +1,8 @@
 package dev.hollink.pmtt.data.steps;
 
-import static dev.hollink.pmtt.encoding.TrailDecoder.readString;
 import dev.hollink.pmtt.data.InteractionTarget;
 import dev.hollink.pmtt.data.StepType;
+import static dev.hollink.pmtt.encoding.TrailDecoder.readString;
 import java.awt.Graphics2D;
 import java.io.DataInput;
 import java.io.IOException;

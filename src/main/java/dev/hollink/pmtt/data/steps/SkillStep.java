@@ -18,9 +18,6 @@ import net.runelite.api.Skill;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.client.ui.overlay.components.PanelComponent;
 
-
-// TODO: implement this class
-
 @Slf4j
 @ToString
 @RequiredArgsConstructor
@@ -67,7 +64,8 @@ public final class SkillStep implements TrailStep
 		if (event instanceof SkillEvent skillEvent && skill == skillEvent.skill())
 		{
 			log.info("Validating clue step...");
-			if (!context.getClient().getLocalPlayer().getWorldLocation().isInArea(area)) {
+			if (!context.getClient().getLocalPlayer().getWorldLocation().isInArea(area))
+			{
 				log.info("Performing skilling action in incorrect area!");
 				return false;
 			}

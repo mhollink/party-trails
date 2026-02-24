@@ -26,7 +26,8 @@ public interface Overlayable
 		return Math.max(ComponentConstants.STANDARD_WIDTH, maxLineWidth + 10);
 	}
 
-	default void setPanelWidth(String text, PanelComponent panel, Graphics2D graphics) {
+	default void setPanelWidth(String text, PanelComponent panel, Graphics2D graphics)
+	{
 		int textWidth = textWidth(text, graphics);
 		panel.setPreferredSize(new Dimension(textWidth, 0));
 	}

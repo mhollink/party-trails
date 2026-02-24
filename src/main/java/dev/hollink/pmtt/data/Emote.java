@@ -1,5 +1,7 @@
 package dev.hollink.pmtt.data;
 
+import java.util.HashMap;
+import java.util.Map;
 import lombok.Getter;
 import net.runelite.api.gameval.AnimationID;
 
@@ -34,6 +36,16 @@ public enum Emote
 	PUSH_UP("Push up", AnimationID.EMOTE_PUSHUPS_5),
 	CRAB_DANCE("Crab Dance", AnimationID.HUMAN_EMOTE_CRABDANCE);
 
+	private static final Map<Integer, Emote> BY_ANIMATION_ID = new HashMap<>();
+
+	static
+	{
+		for (Emote emote : values())
+		{
+			BY_ANIMATION_ID.put(emote.animationId, emote);
+		}
+	}
+
 	private final String name;
 	private final int animationId;
 
@@ -41,5 +53,10 @@ public enum Emote
 	{
 		this.name = name;
 		this.animationId = emoteId;
+	}
+
+	public static Emote fromAnimationId(int animationId)
+	{
+		return BY_ANIMATION_ID.get(animationId);
 	}
 }

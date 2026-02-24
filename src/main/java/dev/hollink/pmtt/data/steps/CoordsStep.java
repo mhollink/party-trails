@@ -1,11 +1,11 @@
 package dev.hollink.pmtt.data.steps;
 
-import static dev.hollink.pmtt.encoding.TrailDecoder.readString;
-import static dev.hollink.pmtt.encoding.TrailEncoder.writeString;
 import dev.hollink.pmtt.data.StepType;
 import dev.hollink.pmtt.data.events.AnimationEvent;
 import dev.hollink.pmtt.data.events.ClueEvent;
 import dev.hollink.pmtt.data.trail.ClueContext;
+import static dev.hollink.pmtt.encoding.TrailDecoder.readString;
+import static dev.hollink.pmtt.encoding.TrailEncoder.writeString;
 import java.awt.Graphics2D;
 import java.io.DataInput;
 import java.io.DataOutput;

@@ -29,11 +29,13 @@ public final class TrailProgress
 		this.start(null);
 	}
 
-	public void storeInt(String key, int value) {
+	public void storeInt(String key, int value)
+	{
 		stepState.put(key, Integer.toString(value));
 	}
 
-	public int getStoredInt(String key) {
+	public int getStoredInt(String key)
+	{
 		return Integer.parseInt(stepState.getOrDefault(key, String.valueOf(0)));
 	}
 }
