@@ -27,7 +27,7 @@ public abstract class StepEditor extends JPanel
 		toolTip.setTipText("Perform the clue action in game to capture the input values");
 		captureButton.addActionListener(e -> {
 			captureMode = true;
-			captureButton.setText("Perform action in game...");
+			updateButtonText();
 		});
 		captureButton.setAlignmentX(Component.LEFT_ALIGNMENT);
 		captureButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, captureButton.getPreferredSize().height));
@@ -47,6 +47,11 @@ public abstract class StepEditor extends JPanel
 	}
 
 	abstract boolean onCapture(ClueEvent event);
+
+	protected void updateButtonText()
+	{
+		captureButton.setText("Perform action in game...");
+	}
 
 	protected void resetCaptureMode()
 	{

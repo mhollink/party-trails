@@ -25,16 +25,19 @@ public final class SextantUtil
 		);
 	}
 
-	public static String getCoordinates(WorldPoint point) {
+	public static String getCoordinates(WorldPoint point)
+	{
 		return getCoordinates(point.getX(), point.getY());
 	}
 
-	private static Coordinate convertToCoordinate(int point) {
+	private static Coordinate convertToCoordinate(int point)
+	{
 		int absoluteValue = Math.abs(point);
 		int degrees = absoluteValue / 32;
 		int minutes = absoluteValue - degrees * 32;
 
-		if (minutes >= 30) {
+		if (minutes >= 30)
+		{
 			degrees += (minutes / 30);
 			minutes -= (minutes / 30) * 30;
 		}
@@ -42,5 +45,7 @@ public final class SextantUtil
 		return new Coordinate(degrees, minutes * 2);
 	}
 
-	private record Coordinate(int degrees, int minutes) {}
+	private record Coordinate(int degrees, int minutes)
+	{
+	}
 }

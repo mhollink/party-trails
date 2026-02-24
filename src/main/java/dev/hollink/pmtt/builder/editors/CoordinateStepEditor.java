@@ -39,11 +39,20 @@ public class CoordinateStepEditor extends StepEditor implements FormHelper
 	public TrailStep toTrailStep()
 	{
 		WorldPoint location = locationSelector.getWorldLocation();
-		if (location != null) {
+		if (location != null)
+		{
 			String hint = SextantUtil.getCoordinates(location);
 			return new CoordsStep(hint, location);
-		} else {
+		}
+		else
+		{
 			return null;
 		}
+	}
+
+	@Override
+	protected void updateButtonText()
+	{
+		captureButton.setText("Dig to set location!");
 	}
 }

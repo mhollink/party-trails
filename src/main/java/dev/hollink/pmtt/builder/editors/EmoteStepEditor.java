@@ -53,4 +53,10 @@ public class EmoteStepEditor extends StepEditor implements FormHelper
 			locationSelector.getWorldLocation()
 		);
 	}
+
+	@Override
+	protected void updateButtonText()
+	{
+		captureButton.setText("Perform emote to set values!");
+	}
 }
