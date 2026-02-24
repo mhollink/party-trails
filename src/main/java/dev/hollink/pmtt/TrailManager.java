@@ -4,7 +4,6 @@ import dev.hollink.pmtt.data.TreasureTrail;
 import dev.hollink.pmtt.data.trail.TrailProgress;
 import dev.hollink.pmtt.encoding.InvalidMagicHeaderException;
 import dev.hollink.pmtt.encoding.TrailDecoder;
-import dev.hollink.pmtt.encoding.TrailEncoder;
 import dev.hollink.pmtt.overlay.TrailOverlay;
 import dev.hollink.pmtt.runetime.EventBus;
 import dev.hollink.pmtt.runetime.TrailRuntime;
@@ -14,17 +13,25 @@ import javax.inject.Singleton;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.runelite.api.Client;
-import net.runelite.client.config.ConfigManager;
 import net.runelite.client.ui.overlay.OverlayManager;
 
+/**
+ * The TrailManager is in charge of starting or resuming a trail
+ * using the {@link TrailManager#startTrail(String)} and
+ * {@link TrailManager#resumeTrail(String, String)}.
+ * <p>
+ * Taking the encoded binary string as input, it uses the
+ * {@link TrailDecoder} functions to convert it back into a
+ * {@link TreasureTrail} and/or {@link TrailProgress}.
+ * <p>
+ * The decoded trails are passed to the start/resume functions
+ * on the {@link TrailRuntime}.
+ */
 @Slf4j
 @Singleton
 @RequiredArgsConstructor(onConstructor = @__(@Inject))
 public class TrailManager
 {
-	private final Client client;
-	private final TreasureTrailConfig config;
 	private final OverlayManager overlayManager;
 	private final TrailOverlay trailOverlay;
 	private final TrailRuntime trailRuntime;
@@ -66,15 +73,19 @@ public class TrailManager
 		}
 	}
 
-	public void resumeTrail(String encodedTrail, String encodedProgress) {
+	public void resumeTrail(String encodedTrail, String encodedProgress)
+	{
 		try
 		{
 			TreasureTrail treasureTrail = TrailDecoder.decodeTrail(encodedTrail);
 			TrailProgress trailProgress = TrailDecoder.decodeProgress(encodedProgress);
 
-			if (trailProgress.getTrailId().equals(treasureTrail.getMetadata().trailId())) {
+			if (trailProgress.getTrailId().equals(treasureTrail.getMetadata().trailId()))
+			{
 				trailRuntime.resumeTrail(treasureTrail, trailProgress);
-			} else {
+			}
+			else
+			{
 				log.warn("Trail id in progress did not match trail id in treasure trail, cancelling resume...");
 				trailRuntime.startTrail(treasureTrail);
 			}

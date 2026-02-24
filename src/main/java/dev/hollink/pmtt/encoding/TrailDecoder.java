@@ -14,6 +14,7 @@ import dev.hollink.pmtt.data.trail.TrailProgress;
 import java.io.ByteArrayInputStream;
 import java.io.DataInput;
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -24,10 +25,25 @@ import java.util.Map;
 import static java.util.Map.entry;
 import java.util.Optional;
 import java.util.zip.InflaterInputStream;
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * The TrailDecoder decodes compressed, Base64-encoded Treasure Trail data
+ * into domain objects.
+ * <p>
+ * This class reverses the format defined by {@link TrailEncoder}. Encoded
+ * trail definitions are Base64 (URL-safe) strings containing a DEFLATE-
+ * compressed binary stream written via {@link DataOutputStream}. The decoder
+ * validates the magic header, reconstructs metadata, and delegates step
+ * deserialization to registered step decoders.
+ * <p>
+ * Progress decoding restores runtime state such as the current step index,
+ * completion flag, and per-step key/value state.
+ */
 @Slf4j
-public class TrailDecoder
+@UtilityClass
+public final class TrailDecoder
 {
 	private static final Map<StepType, StepDecoder> DECODERS = Map.ofEntries(
 		entry(StepType.EMOTE_STEP, EmoteStep::decode),
@@ -124,9 +140,12 @@ public class TrailDecoder
 
 	private static TrailStep tryDecode(byte type, DataInput in, StepDecoder decoder)
 	{
-		try {
+		try
+		{
 			return decoder.decode(in);
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			log.error("Unable to parse trail step ({})", StepType.fromByte(type), e);
 			return null;
 		}

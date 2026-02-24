@@ -1,7 +1,12 @@
 package dev.hollink.pmtt;
 
 import com.google.inject.Provides;
+import dev.hollink.pmtt.data.events.ClueEvent;
 import dev.hollink.pmtt.data.events.ClueEventFactory;
+import dev.hollink.pmtt.data.steps.TrailStep;
+import dev.hollink.pmtt.data.trail.ClueContext;
+import dev.hollink.pmtt.runetime.EventBus;
+import dev.hollink.pmtt.runetime.TrailRuntime;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
@@ -14,8 +19,37 @@ import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 
+/**
+ * Party Trails is a plugin that allows players to create custom
+ * treasure-trails which consist of multiple different steps. The
+ * plugin converts these steps in a base64 encoded binary string
+ * which can then be shared amongst players.
+ * <p>
+ * Players can enter a trail string into the config. This trail
+ * gets decoded and loaded up in to the client. The current step
+ * descriptions will be shown with the help of overlay panels.
+ * Performing the action required for the step automatically
+ * advances the player to the next step.
+ * <p>
+ * Party trails uses the clients {@link AnimationChanged},
+ * {@link MenuOptionClicked} and {@link StatChanged} events to help
+ * determine if a clue step is finished. These events get converted
+ * to an internal {@link ClueEvent} which is created using the
+ * {@link ClueEventFactory}.
+ * <p>
+ * These events are then passed through the {@link TrailManager},
+ * over the {@link EventBus} to the {@link TrailRuntime}. The runtime
+ * keeps track of the active step and checks if a step is completed using
+ * the {@link TrailStep#isComplete(ClueContext, ClueEvent)}.
+ * <p>
+ * The progress along the active trail gets automatically stored using
+ * the configmanager to ensure players can continue after logging.
+ */
 @Slf4j
-@PluginDescriptor(name = "Party Trails", description = "Create and complete custom player made treasure trails", tags = {"clue", "treasure", "custom"})
+@PluginDescriptor(
+	name = "Party Trails",
+	description = "Create and complete custom player made treasure trails",
+	tags = {"clue", "treasure", "custom"})
 public class TreasureTrailPlugin extends Plugin
 {
 
@@ -49,31 +83,28 @@ public class TreasureTrailPlugin extends Plugin
 	@Subscribe
 	public void onAnimationChanged(AnimationChanged event)
 	{
-		ClueEventFactory.fromAnimationChanged(event, client)
-			.ifPresent(clueEvent -> {
-				log.debug("Publishing Animation Event {}", clueEvent);
-				trailManager.getClueEventBus().publish(clueEvent);
-			});
+		ClueEventFactory.fromAnimationChanged(event, client).ifPresent(clueEvent -> {
+			log.debug("Publishing Animation Event {}", clueEvent);
+			trailManager.getClueEventBus().publish(clueEvent);
+		});
 	}
 
 	@Subscribe
 	public void onMenuOptionClicked(MenuOptionClicked event)
 	{
-		ClueEventFactory.fromMenuOptionClicked(event, client)
-			.ifPresent(clueEvent -> {
-				log.debug("Publishing Interaction Event {}", clueEvent);
-				trailManager.getClueEventBus().publish(clueEvent);
-			});
+		ClueEventFactory.fromMenuOptionClicked(event, client).ifPresent(clueEvent -> {
+			log.debug("Publishing Interaction Event {}", clueEvent);
+			trailManager.getClueEventBus().publish(clueEvent);
+		});
 	}
 
 	@Subscribe
 	public void onStatChanged(StatChanged event)
 	{
-		ClueEventFactory.fromStatChanged(event, client)
-			.ifPresent(clueEvent -> {
-				log.debug("Publishing Skill Event {}", clueEvent);
-				trailManager.getClueEventBus().publish(clueEvent);
-			});
+		ClueEventFactory.fromStatChanged(event, client).ifPresent(clueEvent -> {
+			log.debug("Publishing Skill Event {}", clueEvent);
+			trailManager.getClueEventBus().publish(clueEvent);
+		});
 	}
 
 	@Subscribe

@@ -6,6 +6,13 @@ import java.util.List;
 import java.util.function.Consumer;
 import javax.inject.Singleton;
 
+/**
+ * The EventBus forwards the {@link ClueEvent}'s to all the
+ * interested parties. Classes can register an event listener
+ * on the bus using the {@link EventBus#register(Consumer)}
+ * function. Each time an event gets published, it gets pushed
+ * to *all* the {@link EventBus#listeners}.
+ */
 @Singleton
 public final class EventBus
 {

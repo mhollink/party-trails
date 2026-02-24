@@ -1,39 +1,39 @@
 package dev.hollink.pmtt.overlay;
 
-import dev.hollink.pmtt.TreasureTrailConfig;
 import dev.hollink.pmtt.TreasureTrailPlugin;
+import dev.hollink.pmtt.data.steps.TrailStep;
+import dev.hollink.pmtt.data.trail.Overlayable;
 import dev.hollink.pmtt.runetime.TrailRuntime;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import javax.inject.Inject;
-import lombok.Getter;
-import lombok.Setter;
-import net.runelite.api.Client;
 import static net.runelite.api.MenuAction.RUNELITE_OVERLAY_CONFIG;
 import static net.runelite.client.ui.overlay.OverlayManager.OPTION_CONFIGURE;
 import net.runelite.client.ui.overlay.OverlayPanel;
 import net.runelite.client.ui.overlay.OverlayPosition;
+import net.runelite.client.ui.overlay.components.PanelComponent;
 
+/**
+ * The TrailOverlay renders the current clue step in an
+ * {@link OverlayPanel}. It tells the {@link TrailRuntime}
+ * to render the current trail-step using
+ * {@link TrailRuntime#renderCurrentStep(Graphics2D, PanelComponent)}
+ * <p>
+ * Each {@link TrailStep} implements the {@link Overlayable}.
+ * The overlayable then contains the logic to show the correct
+ * text in the panel.
+ */
 public class TrailOverlay extends OverlayPanel
 {
-
-	private final Client client;
-	private final TreasureTrailPlugin plugin;
-	private final TreasureTrailConfig config;
 	private final TrailRuntime runtime;
 
 	@Inject
 	public TrailOverlay(
-		Client client,
 		TreasureTrailPlugin plugin,
-		TreasureTrailConfig config,
 		TrailRuntime trailRuntime
 	)
 	{
 		super(plugin);
-		this.plugin = plugin;
-		this.client = client;
-		this.config = config;
 		this.runtime = trailRuntime;
 
 		setPosition(OverlayPosition.TOP_LEFT);

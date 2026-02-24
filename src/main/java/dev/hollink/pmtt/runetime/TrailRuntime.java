@@ -17,6 +17,25 @@ import lombok.extern.slf4j.Slf4j;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.ui.overlay.components.PanelComponent;
 
+/**
+ * The TrailRuntime coordinates the runtime execution of an active
+ * {@link TreasureTrail}.
+ * <p>
+ * This class manages the full lifecycle of a trail, including starting,
+ * resuming, advancing steps, handling completion, and resetting state. It
+ * subscribes to {@link ClueEvent}s via the {@link EventBus} and forwards
+ * relevant events to the currently active {@link TrailStep}.
+ * <p>
+ * When a step reports completion, the runtime advances progress and
+ * activates the next step. Progress is persisted after each state change
+ * using {@link TrailEncoder} and stored through {@link ConfigManager}.
+ * <p>
+ * The runtime acts as the orchestration layer between the trail model,
+ * step implementations, UI rendering, and persistent progress storage.
+ * <p>
+ * This class is a singleton and is intended to manage at most one active
+ * trail at a time.
+ */
 @Slf4j
 @Getter
 @Singleton
@@ -53,7 +72,8 @@ public class TrailRuntime
 	private void startStep(TrailStep step)
 	{
 		log.info("Starting new trail step (type={})", step.type().name());
-		this.context.getProgress().getStepState().clear();;
+		this.context.getProgress().getStepState().clear();
+		;
 		this.currentStep = step;
 		step.onActivate(context);
 	}
@@ -70,7 +90,8 @@ public class TrailRuntime
 	private void resumeStep(TrailStep step)
 	{
 		log.info("Resuming trail step (type={})", step.type().name());
-		this.context.getProgress().getStepState().clear();;
+		this.context.getProgress().getStepState().clear();
+		;
 		this.currentStep = step;
 	}
 
@@ -126,8 +147,10 @@ public class TrailRuntime
 		this.bus.unregister(this::onEvent);
 	}
 
-	private void saveProgress() {
-		try {
+	private void saveProgress()
+	{
+		try
+		{
 			TrailProgress progress = context.getProgress();
 			String encoded = TrailEncoder.encodeProgress(progress);
 			configManager.setConfiguration(
@@ -135,7 +158,9 @@ public class TrailRuntime
 				TreasureTrailConfig.TREASURE_TRAIL_PROGRESS,
 				encoded);
 			log.info("Saved treasure trail progress to config file. {}", progress.toString());
-		} catch (IOException e) {
+		}
+		catch (IOException e)
+		{
 			log.error("Error while saving progress!", e);
 		}
 	}

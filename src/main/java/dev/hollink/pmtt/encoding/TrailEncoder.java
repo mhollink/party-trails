@@ -13,8 +13,24 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.DeflaterOutputStream;
+import lombok.experimental.UtilityClass;
 
-public class TrailEncoder
+/**
+ * The TrailEncoder encodes {@link TreasureTrail} definitions and {@link TrailProgress}
+ * instances into a compact, URL-safe string representation.
+ * <p>
+ * The encoder writes a binary format using {@link DataOutputStream}, applies
+ * DEFLATE compression, and finally encodes the result using Base64 (URL-safe,
+ * without padding). The resulting string is suitable for storage in URLs,
+ * databases, or client-side state.
+ * <p>
+ * Trail definitions start with a magic header ({@link #MAGIC}) to allow
+ * validation during decoding. The remainder of the stream consists of
+ * metadata followed by step definitions. Progress encoding contains only
+ * runtime state and does not include the magic header.
+ */
+@UtilityClass
+public final class TrailEncoder
 {
 	public static final int MAGIC = 0x54524C31;
 
