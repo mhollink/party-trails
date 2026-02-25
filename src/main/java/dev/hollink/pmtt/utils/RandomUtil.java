@@ -1,7 +1,9 @@
 package dev.hollink.pmtt.utils;
 
 import java.security.SecureRandom;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public final class RandomUtil
 {
 	private static final String ALPHANUM = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

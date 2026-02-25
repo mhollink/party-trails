@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.coords.WorldPoint;
 
 @Slf4j
-public class EmoteStepEditor extends StepEditor implements FormHelper
+public final class EmoteStepEditor extends StepEditor implements FormHelper
 {
 	private final JComboBox<Emote> emoteIdField = new JComboBox<>(Emote.values());
 	private final JTextArea hintArea = new JTextArea(3, 0);

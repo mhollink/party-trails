@@ -15,7 +15,7 @@ import net.runelite.api.Skill;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.api.gameval.AnimationID;
 
-public class SkillStepEditor extends StepEditor implements FormHelper
+public final class SkillStepEditor extends StepEditor implements FormHelper
 {
 	private final JComboBox<Skill> skillIdField = new JComboBox<>(Skill.values());
 	private final JTextArea hint = new JTextArea(3,0);

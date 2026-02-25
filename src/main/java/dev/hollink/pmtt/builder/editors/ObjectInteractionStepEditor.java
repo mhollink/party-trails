@@ -18,7 +18,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import net.runelite.api.coords.WorldPoint;
 
-public class ObjectInteractionStepEditor extends StepEditor implements FormHelper
+public final class ObjectInteractionStepEditor extends StepEditor implements FormHelper
 {
 	private final JTextArea hintArea = new JTextArea(3, 0);
 	private final JTextField objectId = new JTextField();

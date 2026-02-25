@@ -12,7 +12,7 @@ import java.util.List;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.gameval.AnimationID;
 
-public class CoordinateStepEditor extends StepEditor implements FormHelper
+public final class CoordinateStepEditor extends StepEditor implements FormHelper
 {
 	private final LocationSelector locationSelector = new LocationSelector();
 

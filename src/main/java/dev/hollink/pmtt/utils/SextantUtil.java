@@ -1,7 +1,9 @@
 package dev.hollink.pmtt.utils;
 
+import lombok.experimental.UtilityClass;
 import net.runelite.api.coords.WorldPoint;
 
+@UtilityClass
 public final class SextantUtil
 {
 	public static final int X_ZERO = 2440;

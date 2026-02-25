@@ -1,10 +1,12 @@
 package dev.hollink.pmtt.builder.editors;
 
 import dev.hollink.pmtt.data.StepType;
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class StepEditorFactory
+@UtilityClass
+public final class StepEditorFactory
 {
 	public static StepEditor create(StepType type)
 	{
