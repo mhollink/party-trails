@@ -37,6 +37,14 @@ public interface Overlayable
 		panel.getChildren().add(TitleComponent.builder().text(text).build());
 	}
 
+	default void drawText(String left, String right, PanelComponent panel)
+	{
+		panel.getChildren().add(LineComponent.builder()
+			.left(left).leftColor(Color.WHITE)
+			.right(right).rightColor(TITLED_CONTENT_COLOR)
+			.build());
+	}
+
 	default void drawText(String text, PanelComponent panel, Color color)
 	{
 		String[] parts = text.split("\n");
