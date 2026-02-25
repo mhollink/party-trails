@@ -1,5 +1,6 @@
 package dev.hollink.pmtt.builder;
 
+import dev.hollink.pmtt.builder.editors.StepEditorValidationError;
 import dev.hollink.pmtt.data.TreasureTrail;
 import dev.hollink.pmtt.data.steps.TrailStep;
 import dev.hollink.pmtt.encoding.TrailEncoder;
@@ -11,7 +12,10 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -116,15 +120,33 @@ public final class TrailBuilderPanel extends PluginPanel implements FormHelper
 
 	private void encodeTrail()
 	{
+		if (client.getLocalPlayer() == null) {
+			JOptionPane.showMessageDialog(this, "You must be logged in to encode a trail", "Error", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+
 		if (nameField.getText().isBlank())
 		{
-			JOptionPane.showMessageDialog(this, "Trail name required");
+			JOptionPane.showMessageDialog(this, "Trail name required", "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 
 		if (editors.isEmpty())
 		{
-			JOptionPane.showMessageDialog(this, "Add at least one step");
+			JOptionPane.showMessageDialog(this, "Add at least one step", "Error", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+
+		Set<StepEditorValidationError> errors = editors.stream()
+			.flatMap(editor -> editor.getValidationErrors().stream())
+			.collect(Collectors.toUnmodifiableSet());
+
+		if (!errors.isEmpty())
+		{
+			String message = errors.stream()
+				.sorted(Comparator.comparingInt(StepEditorValidationError::stepIndex))
+				.map(error -> "Step %d: %s".formatted(error.stepIndex(), error.errorMessage())).collect(Collectors.joining("\n"));
+			JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 

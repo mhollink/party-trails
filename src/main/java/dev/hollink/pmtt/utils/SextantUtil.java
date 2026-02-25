@@ -7,6 +7,15 @@ public final class SextantUtil
 	public static final int X_ZERO = 2440;
 	public static final int Y_ZERO = 3161;
 
+	/**
+	 * Converts a point of the OSRS worldmap to a coordinate-clue
+	 * description. Uses the absolute 0-position for the sextant
+	 * which is located in the center of the observatory.
+	 *
+	 * @param x the world point position on the x-axis
+	 * @param y the world point position on the y-axis
+	 * @return A string representation in degrees and minutes of the given x/y coordinate.
+	 */
 	public static String getCoordinates(int x, int y)
 	{
 		int dx = x - X_ZERO;
@@ -25,6 +34,11 @@ public final class SextantUtil
 		);
 	}
 
+	/**
+	 * @param point A point on the 0-plane.
+	 * @return A string representation in degrees and minutes of the given x/y coordinate.
+	 * @see #getCoordinates(int, int)
+	 */
 	public static String getCoordinates(WorldPoint point)
 	{
 		return getCoordinates(point.getX(), point.getY());

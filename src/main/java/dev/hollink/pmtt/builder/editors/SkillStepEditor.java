@@ -6,15 +6,19 @@ import dev.hollink.pmtt.data.events.AnimationEvent;
 import dev.hollink.pmtt.data.events.ClueEvent;
 import dev.hollink.pmtt.data.steps.SkillStep;
 import dev.hollink.pmtt.data.steps.TrailStep;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JComboBox;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import net.runelite.api.Skill;
+import net.runelite.api.coords.WorldArea;
 import net.runelite.api.gameval.AnimationID;
 
 public class SkillStepEditor extends StepEditor implements FormHelper
 {
 	private final JComboBox<Skill> skillIdField = new JComboBox<>(Skill.values());
-	private final JTextField hint = new JTextField();
+	private final JTextArea hint = new JTextArea(3,0);
 	private final JTextField expField = new JTextField();
 	private final RegionSelector regionSelector = new RegionSelector();
 
@@ -32,7 +36,7 @@ public class SkillStepEditor extends StepEditor implements FormHelper
 	}
 
 	@Override
-	boolean onCapture(ClueEvent event)
+	protected boolean onCapture(ClueEvent event)
 	{
 		if (event instanceof AnimationEvent animationEvent && animationEvent.animationId() == AnimationID.HUMAN_DIG)
 		{
@@ -54,6 +58,42 @@ public class SkillStepEditor extends StepEditor implements FormHelper
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public List<StepEditorValidationError> validateUserInput()
+	{
+		List<StepEditorValidationError> errors = new ArrayList<>();
+		if (hint.getText().isBlank())
+		{
+			errors.add(new StepEditorValidationError(stepNumber, "Hint", "A hint is required"));
+		}
+		if (!hasValidExperience())
+		{
+			errors.add(new StepEditorValidationError(stepNumber, "Experience", "Experience must be a positive number"));
+		}
+		WorldArea region = regionSelector.getWorldArea();
+		if (region == null)
+		{
+			errors.add(new StepEditorValidationError(stepNumber, "Location", "Target location is incorrectly formatted"));
+		}
+		else if (region.getWidth() <= 0 || region.getHeight() <= 0)
+		{
+			errors.add(new StepEditorValidationError(stepNumber, "Location", "Width and height must be greater than zero"));
+		}
+		return errors;
+	}
+
+	private boolean hasValidExperience()
+	{
+		try
+		{
+			return Integer.parseInt(expField.getText()) > 0;
+		}
+		catch (NumberFormatException e)
+		{
+			return false;
+		}
 	}
 
 	@Override

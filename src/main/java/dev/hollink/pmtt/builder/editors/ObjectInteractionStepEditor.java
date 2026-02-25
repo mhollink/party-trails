@@ -10,14 +10,20 @@ import dev.hollink.pmtt.data.steps.AnagramStep;
 import dev.hollink.pmtt.data.steps.CipherStep;
 import dev.hollink.pmtt.data.steps.CrypticStep;
 import dev.hollink.pmtt.data.steps.TrailStep;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Stream;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import net.runelite.api.coords.WorldPoint;
 
 public class ObjectInteractionStepEditor extends StepEditor implements FormHelper
 {
-	private final JTextArea hintArea = new JTextArea();
-	private final JTextArea objectId = new JTextArea();
-	private final JTextArea objectName = new JTextArea();
-	private final JTextArea action = new JTextArea();
+	private final JTextArea hintArea = new JTextArea(3, 0);
+	private final JTextField objectId = new JTextField();
+	private final JTextField objectName = new JTextField();
+	private final JTextField action = new JTextField();
 	private final LocationSelector locationSelector = new LocationSelector();
 
 	private final StepType stepType;
@@ -40,7 +46,7 @@ public class ObjectInteractionStepEditor extends StepEditor implements FormHelpe
 	}
 
 	@Override
-	boolean onCapture(ClueEvent event)
+	protected boolean onCapture(ClueEvent event)
 	{
 		if (event instanceof InteractionEvent interactionEvent)
 		{
@@ -51,6 +57,49 @@ public class ObjectInteractionStepEditor extends StepEditor implements FormHelpe
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public List<StepEditorValidationError> validateUserInput()
+	{
+		List<StepEditorValidationError> errors = new ArrayList<>();
+		if (hintArea.getText().isBlank())
+		{
+			errors.add(new StepEditorValidationError(stepNumber, "Hint", "A hint is required"));
+		}
+		if (hasNotCompletedTarget())
+		{
+			errors.add(new StepEditorValidationError(stepNumber, "Target", "Object ID, name and menu entry are required"));
+		}
+		else if (!hasValidTargetId())
+		{
+			errors.add(new StepEditorValidationError(stepNumber, "Target", "Object ID must be a number!"));
+		}
+
+		WorldPoint location = locationSelector.getWorldLocation();
+		if (location == null)
+		{
+			errors.add(new StepEditorValidationError(stepNumber, "Location", "Target location is incorrectly formatted"));
+		}
+		return errors;
+	}
+
+	private boolean hasNotCompletedTarget()
+	{
+		return Stream.of(objectId.getText(), objectName.getText(), action.getText()).anyMatch(String::isBlank);
+	}
+
+	private boolean hasValidTargetId()
+	{
+		try
+		{
+			Integer.parseInt(objectId.getText());
+			return true;
+		}
+		catch (NumberFormatException e)
+		{
+			return false;
+		}
 	}
 
 	@Override

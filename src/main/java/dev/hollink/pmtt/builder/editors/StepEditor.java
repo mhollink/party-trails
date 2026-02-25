@@ -4,10 +4,13 @@ import dev.hollink.pmtt.data.events.ClueEvent;
 import dev.hollink.pmtt.data.steps.TrailStep;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JToolTip;
+import lombok.Data;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -16,6 +19,8 @@ public abstract class StepEditor extends JPanel
 
 	protected final JButton captureButton;
 	protected boolean captureMode = false;
+	@Setter
+	protected int stepNumber = 0;
 
 	public StepEditor()
 	{
@@ -46,7 +51,7 @@ public abstract class StepEditor extends JPanel
 		}
 	}
 
-	abstract boolean onCapture(ClueEvent event);
+	protected abstract boolean onCapture(ClueEvent event);
 
 	protected void updateButtonText()
 	{
@@ -58,6 +63,8 @@ public abstract class StepEditor extends JPanel
 		captureMode = false;
 		captureButton.setText("Capture in game");
 	}
+
+	public abstract List<StepEditorValidationError> validateUserInput();
 
 	public abstract TrailStep toTrailStep();
 }

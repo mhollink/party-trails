@@ -2,10 +2,12 @@ package dev.hollink.pmtt.builder;
 
 import dev.hollink.pmtt.builder.editors.StepEditor;
 import dev.hollink.pmtt.builder.editors.StepEditorFactory;
+import dev.hollink.pmtt.builder.editors.StepEditorValidationError;
 import dev.hollink.pmtt.data.StepType;
 import dev.hollink.pmtt.data.steps.TrailStep;
 import dev.hollink.pmtt.runetime.EventBus;
 import java.awt.Color;
+import java.util.List;
 import java.util.function.Consumer;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -21,6 +23,7 @@ public final class StepEditorPanel extends JPanel implements FormHelper
 
 	private final JComboBox<StepType> typeSelect = new JComboBox<>(StepType.values());
 
+	private int stepNumber = 1;
 	private StepEditor currentStepEditor;
 
 	public StepEditorPanel(EventBus eventBus, Consumer<StepEditorPanel> deleteCallback, Runnable updateCallback)
@@ -35,6 +38,7 @@ public final class StepEditorPanel extends JPanel implements FormHelper
 
 	public void setStepNumber(int number)
 	{
+		this.stepNumber = number;
 		setBorder(BorderFactory.createTitledBorder("Step " + number));
 	}
 
@@ -44,6 +48,7 @@ public final class StepEditorPanel extends JPanel implements FormHelper
 
 		StepType type = (StepType) typeSelect.getSelectedItem();
 		currentStepEditor = StepEditorFactory.create(type);
+		currentStepEditor.setStepNumber(stepNumber);
 		currentStepEditor.initForm();
 
 		eventBus.register(currentStepEditor::onEvent);
@@ -68,6 +73,9 @@ public final class StepEditorPanel extends JPanel implements FormHelper
 		buildEditor(deleteCallback, updateCallback);
 	}
 
+	public List<StepEditorValidationError> getValidationErrors() {
+		return currentStepEditor.validateUserInput();
+	}
 	public TrailStep toTrailStep()
 	{
 		return currentStepEditor.toTrailStep();

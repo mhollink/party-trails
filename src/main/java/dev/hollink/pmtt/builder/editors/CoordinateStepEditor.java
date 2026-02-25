@@ -7,6 +7,8 @@ import dev.hollink.pmtt.data.events.ClueEvent;
 import dev.hollink.pmtt.data.steps.CoordsStep;
 import dev.hollink.pmtt.data.steps.TrailStep;
 import dev.hollink.pmtt.utils.SextantUtil;
+import java.util.ArrayList;
+import java.util.List;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.gameval.AnimationID;
 
@@ -33,6 +35,19 @@ public class CoordinateStepEditor extends StepEditor implements FormHelper
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public List<StepEditorValidationError> validateUserInput()
+	{
+		List<StepEditorValidationError> errors = new ArrayList<StepEditorValidationError>();
+		WorldPoint location = locationSelector.getWorldLocation();
+		if (location == null) {
+			errors.add(new StepEditorValidationError(stepNumber, "Location", "You must specify a valid location"));
+		} else if (location.getPlane() != 0) {
+			errors.add(new StepEditorValidationError(stepNumber, "Location", "The coordinate clue can only be on the Gielinor Surface"));
+		}
+		return errors;
 	}
 
 	@Override
