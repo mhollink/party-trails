@@ -6,7 +6,6 @@ import dev.hollink.pmtt.encoding.InvalidMagicHeaderException;
 import dev.hollink.pmtt.encoding.TrailDecoder;
 import dev.hollink.pmtt.overlay.TrailOverlay;
 import dev.hollink.pmtt.runetime.TrailRuntime;
-import java.io.IOException;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.RequiredArgsConstructor;
@@ -61,9 +60,9 @@ public class TrailManager
 			log.warn("Invalid magic header in treasure trail");
 			trailRuntime.reset();
 		}
-		catch (IOException e)
+		catch (Exception e)
 		{
-			log.error("Error while decoding treasure trail!", e);
+			log.error("Error while decoding treasure trail! {}, {}", e.getClass().getSimpleName(), e.getMessage());
 			trailRuntime.reset();
 		}
 	}
@@ -85,9 +84,9 @@ public class TrailManager
 				trailRuntime.startTrail(treasureTrail);
 			}
 		}
-		catch (IOException e)
+		catch (Exception e)
 		{
-			log.error("Error while decoding treasure trail!", e);
+			log.error("Error while decoding treasure trail! {}, {}", e.getClass().getSimpleName(), e.getMessage());
 		}
 	}
 }

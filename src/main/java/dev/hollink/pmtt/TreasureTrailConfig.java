@@ -4,22 +4,40 @@ import static dev.hollink.pmtt.TreasureTrailConfig.CONFIG_GROUP;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
+import net.runelite.client.config.ConfigSection;
 
 @ConfigGroup(CONFIG_GROUP)
 public interface TreasureTrailConfig extends Config
 {
-	String CONFIG_GROUP = "TreasureTrailPlugin.PlayerConfig";
+	String CONFIG_GROUP = "PlayerMadeTreasureTrail";
 
 	String TREASURE_TRAIL = "TreasureTrail";
-	String TREASURE_TRAIL_PROGRESS = "TreasureTrailEnabled";
+	String TREASURE_TRAIL_PROGRESS = "TreasureTrailProgress";
 
-	@ConfigItem(keyName = TREASURE_TRAIL, name = "Trail String", description = "Encoded treasure trail", section = "Player configuration")
+//	@ConfigSection(
+//		name = "Player",
+//		description = "Player configuration",
+//		position = 0
+//	)
+	String player = "player";
+
+	@ConfigItem(
+		keyName = TREASURE_TRAIL,
+		name = "Active Treasure Trail",
+		description = "Encoded treasure trail string from the clue builder panel.",
+		section = player
+	)
 	default String trailString()
 	{
 		return "";
 	}
 
-	@ConfigItem(keyName = TREASURE_TRAIL_PROGRESS, name = "Trail String", description = "Encoded progress along an trail", hidden = true)
+	@ConfigItem(
+		keyName = TREASURE_TRAIL_PROGRESS,
+		name = "Trail Progress",
+		description = "Encoded progress along the given `trailString`.",
+		section = player,
+		hidden = true)
 	default String trailProgress()
 	{
 		return "";

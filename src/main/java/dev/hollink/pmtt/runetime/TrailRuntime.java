@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.client.config.ConfigManager;
 import static net.runelite.client.plugins.cluescrolls.ClueScrollOverlay.TITLED_CONTENT_COLOR;
+import net.runelite.client.ui.overlay.components.LineComponent;
 import net.runelite.client.ui.overlay.components.PanelComponent;
 import net.runelite.client.ui.overlay.components.TitleComponent;
 
@@ -57,12 +58,12 @@ public class TrailRuntime
 		{
 			return;
 		}
+
 		currentStep.drawOverlay(panel, graphics);
 
-		panel.getChildren().add(TitleComponent.builder()
-			.text("Step %d of %d".formatted(context.getProgress().getCurrentStepIndex() + 1, trail.getSteps().size() + 1))
-			.color(TITLED_CONTENT_COLOR)
-			.build());
+		panel.getChildren().add(LineComponent.builder().build());
+		String stepCounter = "Step %d of %d".formatted(context.getProgress().getCurrentStepIndex() + 1, trail.getSteps().size());
+		panel.getChildren().add(TitleComponent.builder().text(stepCounter).color(TITLED_CONTENT_COLOR).build());
 	}
 
 	public void startTrail(TreasureTrail trail)
@@ -147,7 +148,6 @@ public class TrailRuntime
 	private void completeTrail()
 	{
 		log.info("Completing trail...");
-		this.trail = null;
 		this.currentStep = null;
 		this.context.getProgress().setCompleted(true);
 		this.bus.unregister(this::onEvent);

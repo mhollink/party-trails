@@ -12,6 +12,7 @@ import static net.runelite.client.ui.overlay.OverlayManager.OPTION_CONFIGURE;
 import net.runelite.client.ui.overlay.OverlayPanel;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.components.PanelComponent;
+import net.runelite.client.ui.overlay.components.TitleComponent;
 
 /**
  * The TrailOverlay renders the current clue step in an
@@ -43,13 +44,33 @@ public class TrailOverlay extends OverlayPanel
 	@Override
 	public Dimension render(Graphics2D graphics)
 	{
-		if (runtime == null)
+		if (runtime == null || runtime.getTrail() == null)
 		{
 			return super.render(graphics);
 		}
 
-		runtime.renderCurrentStep(graphics, this.getPanelComponent());
+		renderTrailTitle();
+		if (runtime.getContext().getProgress().isCompleted())
+		{
+			renderCompletionText();
+		}
+		else
+		{
+			runtime.renderCurrentStep(graphics, this.getPanelComponent());
+		}
 
 		return super.render(graphics);
+	}
+
+
+	private void renderCompletionText()
+	{
+		String formatted = "You have completed all %d steps!".formatted(runtime.getTrail().getMetadata().stepCount());
+		this.panelComponent.getChildren().add(TitleComponent.builder().text(formatted).build());
+	}
+
+	private void renderTrailTitle()
+	{
+		this.panelComponent.getChildren().add(TitleComponent.builder().text(runtime.getTrail().getMetadata().trailName()).build());
 	}
 }

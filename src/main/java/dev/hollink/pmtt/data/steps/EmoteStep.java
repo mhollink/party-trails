@@ -41,7 +41,8 @@ public final class EmoteStep implements TrailStep
 	{
 		setPanelWidth(hint, panel, graphics);
 		drawTitle("Emote Clue", panel);
-		drawText("Emote:", targetEmoteOne.getName(), panel);
+		drawText("Emote:", panel, Color.WHITE);
+		drawText(targetEmoteOne.getName(), panel);
 		drawText("Location:", panel, Color.WHITE);
 		drawText(hint, panel);
 	}
