@@ -54,7 +54,7 @@ import net.runelite.client.util.ImageUtil;
 @PluginDescriptor(
 	name = "Party Trails",
 	description = "Create and complete custom player made treasure trails",
-	tags = {"clue", "treasure", "custom"})
+	tags = {"clue", "treasure", "party"})
 public class TreasureTrailPlugin extends Plugin
 {
 
