@@ -18,7 +18,7 @@ import net.runelite.api.gameval.AnimationID;
 public final class SkillStepEditor extends StepEditor implements FormHelper
 {
 	private final JComboBox<Skill> skillIdField = new JComboBox<>(Skill.values());
-	private final JTextArea hint = new JTextArea(3,0);
+	private final JTextArea hint = new JTextArea(3, 0);
 	private final JTextField expField = new JTextField();
 	private final RegionSelector regionSelector = new RegionSelector();
 
@@ -38,22 +38,26 @@ public final class SkillStepEditor extends StepEditor implements FormHelper
 	@Override
 	protected boolean onCapture(ClueEvent event)
 	{
-		if (event instanceof AnimationEvent animationEvent && animationEvent.animationId() == AnimationID.HUMAN_DIG)
+		if (event instanceof AnimationEvent)
 		{
-			if (!waitingForSecondDig)
+			AnimationEvent animationEvent = (AnimationEvent) event;
+			if (animationEvent.getAnimationId() == AnimationID.HUMAN_DIG)
 			{
-				regionSelector.setLocation(animationEvent.location());
-				waitingForSecondDig = true;
-				captureButton.setText("Dig to complete area!");
-				return false;
-			}
-			else
-			{
-				boolean hasBeenSet = regionSelector.setSize(animationEvent.location());
-				if (hasBeenSet)
+				if (!waitingForSecondDig)
 				{
-					waitingForSecondDig = false;
-					return true;
+					regionSelector.setLocation(animationEvent.getLocation());
+					waitingForSecondDig = true;
+					captureButton.setText("Dig to complete area!");
+					return false;
+				}
+				else
+				{
+					boolean hasBeenSet = regionSelector.setSize(animationEvent.getLocation());
+					if (hasBeenSet)
+					{
+						waitingForSecondDig = false;
+						return true;
+					}
 				}
 			}
 		}

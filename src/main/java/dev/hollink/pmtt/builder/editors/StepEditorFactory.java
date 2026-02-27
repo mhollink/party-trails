@@ -10,14 +10,22 @@ public final class StepEditorFactory
 {
 	public static StepEditor create(StepType type)
 	{
-		return switch (type)
+		switch (type)
 		{
-			case EMOTE_STEP -> new EmoteStepEditor();
-			case COORDINATE_STEP -> new CoordinateStepEditor();
-			case SKILL_STEP -> new SkillStepEditor();
-			case CIPHER_STEP -> new ObjectInteractionStepEditor(StepType.CIPHER_STEP);
-			case ANAGRAM_STEP -> new ObjectInteractionStepEditor(StepType.ANAGRAM_STEP);
-			case CRYPTIC_STEP -> new ObjectInteractionStepEditor(StepType.CRYPTIC_STEP);
-		};
+			case EMOTE_STEP:
+				return new EmoteStepEditor();
+			case COORDINATE_STEP:
+				return new CoordinateStepEditor();
+			case SKILL_STEP:
+				return new SkillStepEditor();
+			case CIPHER_STEP:
+				return new ObjectInteractionStepEditor(StepType.CIPHER_STEP);
+			case ANAGRAM_STEP:
+				return new ObjectInteractionStepEditor(StepType.ANAGRAM_STEP);
+			case CRYPTIC_STEP:
+				return new ObjectInteractionStepEditor(StepType.CRYPTIC_STEP);
+			default:
+				throw new IllegalArgumentException("Unknown step type: " + type);
+		}
 	}
 }

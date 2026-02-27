@@ -37,9 +37,9 @@ public abstract class InteractionStep implements TrailStep
 	@Override
 	public boolean isComplete(ClueContext context, ClueEvent event)
 	{
-		if (event instanceof InteractionEvent interactionEvent)
+		if (event instanceof InteractionEvent)
 		{
-			log.info("Validating clue step...");
+			InteractionEvent interactionEvent = (InteractionEvent) event;
 			return target.checkEvent(interactionEvent);
 		}
 		else
@@ -52,11 +52,11 @@ public abstract class InteractionStep implements TrailStep
 	public void encode(DataOutput out) throws IOException
 	{
 		writeString(out, cipherText);
-		out.writeInt(target.targetId());
-		writeString(out, target.targetName());
-		writeString(out, target.interactionType());
-		out.writeInt(target.location().getX());
-		out.writeInt(target.location().getY());
-		out.writeInt(target.location().getPlane());
+		out.writeInt(target.getTargetId());
+		writeString(out, target.getTargetName());
+		writeString(out, target.getInteractionType());
+		out.writeInt(target.getLocation().getX());
+		out.writeInt(target.getLocation().getY());
+		out.writeInt(target.getLocation().getPlane());
 	}
 }

@@ -62,7 +62,7 @@ public class TrailManager
 		}
 		catch (Exception e)
 		{
-			log.error("Error while decoding treasure trail! {}, {}", e.getClass().getSimpleName(), e.getMessage());
+			log.error("Error while decoding treasure trail to start! {}, {}", e.getClass().getSimpleName(), e.getMessage());
 			trailRuntime.reset();
 		}
 	}
@@ -74,7 +74,7 @@ public class TrailManager
 			TreasureTrail treasureTrail = TrailDecoder.decodeTrail(encodedTrail);
 			TrailProgress trailProgress = TrailDecoder.decodeProgress(encodedProgress);
 
-			if (trailProgress.getTrailId().equals(treasureTrail.getMetadata().trailId()))
+			if (trailProgress.getTrailId().equals(treasureTrail.getMetadata().getTrailId()))
 			{
 				trailRuntime.resumeTrail(treasureTrail, trailProgress);
 			}
@@ -86,7 +86,7 @@ public class TrailManager
 		}
 		catch (Exception e)
 		{
-			log.error("Error while decoding treasure trail! {}, {}", e.getClass().getSimpleName(), e.getMessage());
+			log.error("Error while decoding treasure trail to resume! {}, {}", e.getClass().getSimpleName(), e.getMessage());
 		}
 	}
 }

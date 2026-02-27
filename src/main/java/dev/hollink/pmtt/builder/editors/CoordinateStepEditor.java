@@ -25,12 +25,13 @@ public final class CoordinateStepEditor extends StepEditor implements FormHelper
 	@Override
 	public boolean onCapture(ClueEvent event)
 	{
-		if (event instanceof AnimationEvent animationEvent)
+		if (event instanceof AnimationEvent)
 		{
-			if (animationEvent.location().getPlane() == 0 &&
-				animationEvent.animationId() == AnimationID.HUMAN_DIG)
+			AnimationEvent animationEvent = (AnimationEvent) event;
+			if (animationEvent.getLocation().getPlane() == 0 &&
+				animationEvent.getAnimationId() == AnimationID.HUMAN_DIG)
 			{
-				locationSelector.setLocation(animationEvent.location());
+				locationSelector.setLocation(animationEvent.getLocation());
 				return true;
 			}
 		}
@@ -42,9 +43,12 @@ public final class CoordinateStepEditor extends StepEditor implements FormHelper
 	{
 		List<StepEditorValidationError> errors = new ArrayList<StepEditorValidationError>();
 		WorldPoint location = locationSelector.getWorldLocation();
-		if (location == null) {
+		if (location == null)
+		{
 			errors.add(new StepEditorValidationError(stepNumber, "Location", "You must specify a valid location"));
-		} else if (location.getPlane() != 0) {
+		}
+		else if (location.getPlane() != 0)
+		{
 			errors.add(new StepEditorValidationError(stepNumber, "Location", "The coordinate clue can only be on the Gielinor Surface"));
 		}
 		return errors;

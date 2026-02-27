@@ -1,6 +1,7 @@
 package dev.hollink.pmtt.data.events;
 
 import java.util.Optional;
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.GameObject;
@@ -14,9 +15,9 @@ import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.events.StatChanged;
 
 @Slf4j
+@UtilityClass
 public final class ClueEventFactory
 {
-
 	public static Optional<AnimationEvent> fromAnimationChanged(AnimationChanged event, Client client)
 	{
 		Player player = client.getLocalPlayer();

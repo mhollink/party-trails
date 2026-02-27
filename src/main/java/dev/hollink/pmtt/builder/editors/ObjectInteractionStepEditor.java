@@ -11,7 +11,6 @@ import dev.hollink.pmtt.data.steps.CipherStep;
 import dev.hollink.pmtt.data.steps.CrypticStep;
 import dev.hollink.pmtt.data.steps.TrailStep;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 import javax.swing.JTextArea;
@@ -48,12 +47,13 @@ public final class ObjectInteractionStepEditor extends StepEditor implements For
 	@Override
 	protected boolean onCapture(ClueEvent event)
 	{
-		if (event instanceof InteractionEvent interactionEvent)
+		if (event instanceof InteractionEvent)
 		{
-			objectId.setText(String.valueOf(interactionEvent.objectId()));
-			objectName.setText(interactionEvent.objectName());
-			action.setText(interactionEvent.action());
-			locationSelector.setLocation(interactionEvent.location());
+			InteractionEvent interactionEvent = (InteractionEvent) event;
+			objectId.setText(String.valueOf(interactionEvent.getObjectId()));
+			objectName.setText(interactionEvent.getObjectName());
+			action.setText(interactionEvent.getAction());
+			locationSelector.setLocation(interactionEvent.getLocation());
 			return true;
 		}
 		return false;
@@ -106,12 +106,16 @@ public final class ObjectInteractionStepEditor extends StepEditor implements For
 	public TrailStep toTrailStep()
 	{
 		InteractionTarget target = new InteractionTarget(Integer.parseInt(objectId.getText()), objectName.getText(), action.getText(), locationSelector.getWorldLocation());
-		return switch (stepType)
+		switch (stepType)
 		{
-			case CIPHER_STEP -> new CipherStep(hintArea.getText(), target);
-			case CRYPTIC_STEP -> new CrypticStep(hintArea.getText(), target);
-			case ANAGRAM_STEP -> new AnagramStep(hintArea.getText(), target);
-			default -> throw new IllegalStateException("Unexpected value: " + stepType);
-		};
+			case CIPHER_STEP:
+				return new CipherStep(hintArea.getText(), target);
+			case CRYPTIC_STEP:
+				return new CrypticStep(hintArea.getText(), target);
+			case ANAGRAM_STEP:
+				return new AnagramStep(hintArea.getText(), target);
+			default:
+				throw new IllegalStateException("Unexpected value: " + stepType);
+		}
 	}
 }

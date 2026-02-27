@@ -13,12 +13,10 @@ import java.io.IOException;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Skill;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.client.ui.overlay.components.PanelComponent;
 
-@Slf4j
 @ToString
 @RequiredArgsConstructor
 public final class SkillStep implements TrailStep
@@ -55,27 +53,33 @@ public final class SkillStep implements TrailStep
 	@Override
 	public boolean handlesEvent(ClueEvent event)
 	{
-		return event instanceof SkillEvent skillEvent && skillEvent.skill() == skill;
+		if (event instanceof SkillEvent)
+		{
+			SkillEvent skillEvent = (SkillEvent) event;
+			return skillEvent.getSkill() == skill;
+		}
+		return false;
 	}
 
 	@Override
 	public boolean isComplete(ClueContext context, ClueEvent event)
 	{
-		if (event instanceof SkillEvent skillEvent && skill == skillEvent.skill())
+		if (event instanceof SkillEvent)
 		{
-			log.info("Validating clue step...");
-			if (!context.getClient().getLocalPlayer().getWorldLocation().isInArea(area))
+			SkillEvent skillEvent = (SkillEvent) event;
+			if (skill == skillEvent.getSkill())
 			{
-				log.info("Performing skilling action in incorrect area!");
-				return false;
+				if (!context.getClient().getLocalPlayer().getWorldLocation().isInArea(area))
+				{
+					return false;
+				}
+
+				String key = getContextKey(context);
+				int startExp = context.getProgress().getStoredInt(key);
+				int expDiff = skillEvent.getXp() - startExp;
+
+				return expDiff >= expRequired;
 			}
-
-			String key = getContextKey(context);
-			int startExp = context.getProgress().getStoredInt(key);
-			int expDiff = skillEvent.xp() - startExp;
-
-			log.info("Progress on skillStep({}): ({}/{})", skill, expDiff, expRequired);
-			return expDiff >= expRequired;
 		}
 
 		return false;
@@ -85,7 +89,7 @@ public final class SkillStep implements TrailStep
 	{
 		int stepIndex = context.getProgress().getCurrentStepIndex();
 		String skillName = skill.getName().toLowerCase();
-		return "step.%d.%s-experience".formatted(stepIndex, skillName);
+		return String.format("step.%d.%s-experience", stepIndex, skillName);
 	}
 
 	@Override
@@ -123,18 +127,19 @@ public final class SkillStep implements TrailStep
 	@Override
 	public boolean equals(Object o)
 	{
-		if (!(o instanceof SkillStep skillStep))
+		if (o instanceof SkillStep)
 		{
-			return false;
+			SkillStep skillStep = (SkillStep) o;
+			return expRequired == skillStep.expRequired
+				&& Objects.equals(hint, skillStep.hint)
+				&& skill == skillStep.skill
+				&& area.getX() == skillStep.area.getX()
+				&& area.getY() == skillStep.area.getY()
+				&& area.getWidth() == skillStep.area.getWidth()
+				&& area.getHeight() == skillStep.area.getHeight()
+				&& area.getPlane() == skillStep.area.getPlane();
 		}
-		return expRequired == skillStep.expRequired
-			&& Objects.equals(hint, skillStep.hint)
-			&& skill == skillStep.skill
-			&& area.getX() == skillStep.area.getX()
-			&& area.getY() == skillStep.area.getY()
-			&& area.getWidth() == skillStep.area.getWidth()
-			&& area.getHeight() == skillStep.area.getHeight()
-			&& area.getPlane() == skillStep.area.getPlane();
+		return false;
 	}
 
 	@Override

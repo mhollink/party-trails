@@ -4,7 +4,6 @@ import static dev.hollink.pmtt.TreasureTrailConfig.CONFIG_GROUP;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
-import net.runelite.client.config.ConfigSection;
 
 @ConfigGroup(CONFIG_GROUP)
 public interface TreasureTrailConfig extends Config
@@ -14,7 +13,7 @@ public interface TreasureTrailConfig extends Config
 	String TREASURE_TRAIL = "TreasureTrail";
 	String TREASURE_TRAIL_PROGRESS = "TreasureTrailProgress";
 
-//	@ConfigSection(
+	//	@ConfigSection(
 //		name = "Player",
 //		description = "Player configuration",
 //		position = 0

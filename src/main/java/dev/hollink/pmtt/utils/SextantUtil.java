@@ -1,5 +1,6 @@
 package dev.hollink.pmtt.utils;
 
+import lombok.Value;
 import lombok.experimental.UtilityClass;
 import net.runelite.api.coords.WorldPoint;
 
@@ -61,7 +62,10 @@ public final class SextantUtil
 		return new Coordinate(degrees, minutes * 2);
 	}
 
-	private record Coordinate(int degrees, int minutes)
+	@Value
+	private class Coordinate
 	{
+		int degrees;
+		int minutes;
 	}
 }

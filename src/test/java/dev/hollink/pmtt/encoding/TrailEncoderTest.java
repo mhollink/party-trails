@@ -8,11 +8,8 @@ import dev.hollink.pmtt.data.steps.CipherStep;
 import dev.hollink.pmtt.data.steps.CoordsStep;
 import dev.hollink.pmtt.data.steps.CrypticStep;
 import dev.hollink.pmtt.data.steps.EmoteStep;
-import dev.hollink.pmtt.data.steps.SkillStep;
 import dev.hollink.pmtt.data.steps.TrailStep;
 import java.util.List;
-import net.runelite.api.Skill;
-import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
@@ -21,15 +18,16 @@ import org.junit.Test;
 public class TrailEncoderTest
 {
 	public static final String ENCODED_TRAIL =
-		"eJxNUj1vFDEQHSAkx-qCaKiZhi6JlIQggWiOy_Kh3AfsHRytN55bW-u1V7aPJR0lBSUNv4RfcX-" +
-			"Chr_BeCVOFE-a9cx78_F2WUxOASCHe15Y6RrUErIlhYjRC21g0ChnjLY17N-CZyvxmVBbjIp" +
-			"QOufRtWS1rdCt-7fJpim9lhXhWIRoCGsdrxXZE24xABh-Y3znGG7Do_dFvsB8VoywuJphMR2" +
-			"9zOdYfHiN4zef3n0cAzzcwt7EVQEGS1HTsfhCzPaMbVK4AxdPUFLliQKePcVG203k0DofVXZ" +
-			"2usudn-9yxEMx_znjT9LYh8PRW1zMJ5e4mk_zGQ_5AoYrHQjnRuJUWDhYClMfR8eUB4xfibY" +
-			"H25UizycQvrYUAkqv24AlWRJR9ZcoXfX768-AwbgOS5_ej7IFUY1GV4qvq0TENQkf-vJrPqy" +
-			"3PeNGdP1JJbVRnWSjxvFHquFtZMCu72wcO7Q2ouGtusRFdg8DSx9lrzSHiVATtZxhbzrhGx6" +
-			"spLVjclBCui5gK3j08obNOVBwOGYFdiyQMeT_37tkqLT3XXg81ZbwAlkl_PsPgtuwNDfZmc-" +
-			"l9xlXzPvBuOR4yMiSxl85qLSz";
+		"eJxNUUtuFDEQLSCQoZVIbFhTB0giJQEkEJth6CSI-UDPwLCtjmvaVrvtlu2" +
+			"kk12WLLgAJ-EUcwk2XIPqXkQsnlSu8qvPe6tiegwAOTwN5JRv0CjIVh" +
+			"wTpkDGwqjR3lrjanj8AN6s6ZrROEyaUXkf0LfsjKvQb4bc9Kopg1EV4" +
+			"4Risoy1SZea3ZGMGAHs_RD8lBgewosvRb7EfF6Msfg0x2I2fp8vsPh6" +
+			"jpOL75-_TQCeb2Fn6qsIoxXVfEg3LOwg2PYdHsGrl6i4CswRT15jY9x" +
+			"VktD5kHR2cnxfOz29r7EsJfy3gr99jyewP_6Iy8X0A64Xs3wuS76Dvb" +
+			"WJjAurcEYOdldk68PkhfJM8Lun7cB2rTmIBBRqxzGiCqaNWLJjSnpQo" +
+			"vTVn7tfEaP1HZahzx9kS-Yaram0qKsp4YYpxOH7pQgb3MC4pW6QVHGb" +
+			"9FE2brw8-j9yjYrYDZOtF4c2lhq5quu5KO5hlNYH2ZmRsCfUzK1UxJu" +
+			"OQiOLlbzxQo6alO8itiSrl7dizq6G_Yl0EMciW8vh_7tLge7v_geXrqYX";
 
 	public static final TreasureTrail TRAIL = new TreasureTrail(
 		69,
@@ -85,12 +83,12 @@ public class TrailEncoderTest
 	{
 		TreasureTrail decodedTrail = TrailDecoder.decodeTrail(ENCODED_TRAIL);
 
-		assertThat(decodedTrail.getMetadata().version(), equalTo(TRAIL.getMetadata().version()));
-		assertThat(decodedTrail.getMetadata().trailId(), equalTo(TRAIL.getMetadata().trailId()));
-		assertThat(decodedTrail.getMetadata().trailName(), equalTo(TRAIL.getMetadata().trailName()));
-		assertThat(decodedTrail.getMetadata().author(), equalTo(TRAIL.getMetadata().author()));
+		assertThat(decodedTrail.getMetadata().getVersion(), equalTo(TRAIL.getMetadata().getVersion()));
+		assertThat(decodedTrail.getMetadata().getTrailId(), equalTo(TRAIL.getMetadata().getTrailId()));
+		assertThat(decodedTrail.getMetadata().getTrailName(), equalTo(TRAIL.getMetadata().getTrailName()));
+		assertThat(decodedTrail.getMetadata().getAuthor(), equalTo(TRAIL.getMetadata().getAuthor()));
 
-		for (int i = 0; i < TRAIL.getMetadata().stepCount(); i++)
+		for (int i = 0; i < TRAIL.getMetadata().getStepCount(); i++)
 		{
 			TrailStep trailStep = TRAIL.getStep(i).orElseThrow();
 			TrailStep decodedStep = decodedTrail.getStep(i).orElseThrow();

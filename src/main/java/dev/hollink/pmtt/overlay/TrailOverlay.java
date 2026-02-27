@@ -65,12 +65,12 @@ public class TrailOverlay extends OverlayPanel
 
 	private void renderCompletionText()
 	{
-		String formatted = "You have completed all %d steps!".formatted(runtime.getTrail().getMetadata().stepCount());
+		String formatted = String.format("You have completed all %d steps!", runtime.getTrail().getMetadata().getStepCount());
 		this.panelComponent.getChildren().add(TitleComponent.builder().text(formatted).build());
 	}
 
 	private void renderTrailTitle()
 	{
-		this.panelComponent.getChildren().add(TitleComponent.builder().text(runtime.getTrail().getMetadata().trailName()).build());
+		this.panelComponent.getChildren().add(TitleComponent.builder().text(runtime.getTrail().getMetadata().getTrailName()).build());
 	}
 }

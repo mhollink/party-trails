@@ -9,7 +9,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JToolTip;
-import lombok.Data;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 

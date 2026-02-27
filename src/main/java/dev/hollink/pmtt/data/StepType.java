@@ -20,15 +20,22 @@ public enum StepType
 
 	public static StepType fromByte(byte stepTypeId)
 	{
-		return switch (stepTypeId)
+		switch (stepTypeId)
 		{
-			case 1 -> EMOTE_STEP;
-			case 2 -> CIPHER_STEP;
-			case 3 -> COORDINATE_STEP;
-			case 4 -> CRYPTIC_STEP;
-			case 5 -> SKILL_STEP;
-			case 6 -> ANAGRAM_STEP;
-			default -> null;
-		};
+			case 1:
+				return EMOTE_STEP;
+			case 2:
+				return CIPHER_STEP;
+			case 3:
+				return COORDINATE_STEP;
+			case 4:
+				return CRYPTIC_STEP;
+			case 5:
+				return SKILL_STEP;
+			case 6:
+				return ANAGRAM_STEP;
+			default:
+				return null;
+		}
 	}
 }

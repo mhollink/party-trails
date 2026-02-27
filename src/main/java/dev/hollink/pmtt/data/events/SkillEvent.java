@@ -1,7 +1,11 @@
 package dev.hollink.pmtt.data.events;
 
+import lombok.Value;
 import net.runelite.api.Skill;
 
-public record SkillEvent(Skill skill, int xp) implements ClueEvent
+@Value
+public class SkillEvent implements ClueEvent
 {
+	Skill skill;
+	int xp;
 }

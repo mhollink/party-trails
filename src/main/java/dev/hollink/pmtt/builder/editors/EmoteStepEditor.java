@@ -8,7 +8,6 @@ import dev.hollink.pmtt.data.events.ClueEvent;
 import dev.hollink.pmtt.data.steps.EmoteStep;
 import dev.hollink.pmtt.data.steps.TrailStep;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JTextArea;
@@ -34,14 +33,15 @@ public final class EmoteStepEditor extends StepEditor implements FormHelper
 	@Override
 	protected boolean onCapture(ClueEvent event)
 	{
-		if (event instanceof AnimationEvent animationEvent)
+		if (event instanceof AnimationEvent)
 		{
-			int animationId = animationEvent.animationId();
+			AnimationEvent animationEvent = (AnimationEvent) event;
+			int animationId = animationEvent.getAnimationId();
 			Emote emote = Emote.fromAnimationId(animationId);
 			if (emote != null)
 			{
 				emoteIdField.setSelectedItem(emote);
-				locationSelector.setLocation(animationEvent.location());
+				locationSelector.setLocation(animationEvent.getLocation());
 				return true;
 			}
 		}
@@ -52,11 +52,13 @@ public final class EmoteStepEditor extends StepEditor implements FormHelper
 	public List<StepEditorValidationError> validateUserInput()
 	{
 		List<StepEditorValidationError> errors = new ArrayList<>();
-		if (hintArea.getText().isBlank()) {
+		if (hintArea.getText().isBlank())
+		{
 			errors.add(new StepEditorValidationError(stepNumber, "Hint", "A hint is required"));
 		}
 		WorldPoint location = locationSelector.getWorldLocation();
-		if (location == null) {
+		if (location == null)
+		{
 			errors.add(new StepEditorValidationError(stepNumber, "Location", "You must specify a valid location"));
 		}
 		return errors;

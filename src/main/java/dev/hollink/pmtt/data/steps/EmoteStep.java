@@ -15,11 +15,9 @@ import java.io.IOException;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.ui.overlay.components.PanelComponent;
 
-@Slf4j
 @ToString
 @EqualsAndHashCode
 @RequiredArgsConstructor
@@ -62,11 +60,11 @@ public final class EmoteStep implements TrailStep
 	@Override
 	public boolean isComplete(ClueContext context, ClueEvent event)
 	{
-		if (event instanceof AnimationEvent animationEvent)
+		if (event instanceof AnimationEvent)
 		{
-			log.info("Validating emote clue step...");
-			return animationEvent.animationId() == targetEmoteOne.getAnimationId()
-				&& animationEvent.location().distanceTo(targetLocation) <= DEFAULT_LOCATION_DISTANCE;
+			AnimationEvent animationEvent = (AnimationEvent) event;
+			return animationEvent.getAnimationId() == targetEmoteOne.getAnimationId()
+				&& animationEvent.getLocation().distanceTo(targetLocation) <= DEFAULT_LOCATION_DISTANCE;
 		}
 		else
 		{

@@ -120,7 +120,8 @@ public final class TrailBuilderPanel extends PluginPanel implements FormHelper
 
 	private void encodeTrail()
 	{
-		if (client.getLocalPlayer() == null) {
+		if (client.getLocalPlayer() == null)
+		{
 			JOptionPane.showMessageDialog(this, "You must be logged in to encode a trail", "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
@@ -144,15 +145,16 @@ public final class TrailBuilderPanel extends PluginPanel implements FormHelper
 		if (!errors.isEmpty())
 		{
 			String message = errors.stream()
-				.sorted(Comparator.comparingInt(StepEditorValidationError::stepIndex))
-				.map(error -> "Step %d: %s".formatted(error.stepIndex(), error.errorMessage())).collect(Collectors.joining("\n"));
+				.sorted(Comparator.comparingInt(StepEditorValidationError::getStepIndex))
+				.map(error -> String.format("Step %d: %s", error.getStepIndex(), error.getErrorMessage()))
+				.collect(Collectors.joining("\n"));
 			JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 
 		List<TrailStep> steps = editors.stream()
 			.map(StepEditorPanel::toTrailStep)
-			.toList();
+			.collect(Collectors.toList());
 
 		TreasureTrail trail = new TreasureTrail(
 			1,

@@ -105,9 +105,9 @@ public final class TrailEncoder
 
 	private static void encodeMetadata(TreasureTrail trail, DataOutputStream out) throws IOException
 	{
-		out.writeInt(trail.getMetadata().version());
-		writeString(out, trail.getMetadata().trailId());
-		writeString(out, trail.getMetadata().trailName());
-		writeString(out, trail.getMetadata().author());
+		out.writeInt(trail.getMetadata().getVersion());
+		writeString(out, trail.getMetadata().getTrailId());
+		writeString(out, trail.getMetadata().getTrailName());
+		writeString(out, trail.getMetadata().getAuthor());
 	}
 }

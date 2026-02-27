@@ -8,11 +8,9 @@ import java.io.DataInput;
 import java.io.IOException;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.ui.overlay.components.PanelComponent;
 
-@Slf4j
 @ToString
 @EqualsAndHashCode(callSuper = true)
 public final class AnagramStep extends InteractionStep

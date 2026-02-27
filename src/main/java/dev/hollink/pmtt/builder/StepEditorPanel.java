@@ -73,9 +73,11 @@ public final class StepEditorPanel extends JPanel implements FormHelper
 		buildEditor(deleteCallback, updateCallback);
 	}
 
-	public List<StepEditorValidationError> getValidationErrors() {
+	public List<StepEditorValidationError> getValidationErrors()
+	{
 		return currentStepEditor.validateUserInput();
 	}
+
 	public TrailStep toTrailStep()
 	{
 		return currentStepEditor.toTrailStep();

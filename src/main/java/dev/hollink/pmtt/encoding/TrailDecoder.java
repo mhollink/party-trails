@@ -72,9 +72,14 @@ public final class TrailDecoder
 		validateMagicHeader(in);
 
 		TrailMetadata metadata = decodeMetadata(in);
-		List<TrailStep> steps = decodeTrailSteps(metadata.stepCount(), in);
+		List<TrailStep> steps = decodeTrailSteps(metadata.getStepCount(), in);
 
-		return new TreasureTrail(metadata.version(), metadata.trailId(), metadata.trailName(), metadata.author(), steps);
+		return new TreasureTrail(
+			metadata.getVersion(),
+			metadata.getTrailId(),
+			metadata.getTrailName(),
+			metadata.getAuthor(),
+			steps);
 	}
 
 	public static TrailProgress decodeProgress(String encoded) throws IOException

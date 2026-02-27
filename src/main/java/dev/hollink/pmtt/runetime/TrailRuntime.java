@@ -62,16 +62,16 @@ public class TrailRuntime
 		currentStep.drawOverlay(panel, graphics);
 
 		panel.getChildren().add(LineComponent.builder().build());
-		String stepCounter = "Step %d of %d".formatted(context.getProgress().getCurrentStepIndex() + 1, trail.getSteps().size());
+		String stepCounter = String.format("Step %d of %d", context.getProgress().getCurrentStepIndex() + 1, trail.getSteps().size());
 		panel.getChildren().add(TitleComponent.builder().text(stepCounter).color(TITLED_CONTENT_COLOR).build());
 	}
 
 	public void startTrail(TreasureTrail trail)
 	{
-		log.info("Starting new trail (length={})", trail.getMetadata().stepCount());
+		log.info("Starting new trail (length={})", trail.getMetadata().getStepCount());
 		bus.register(this::onEvent);
 		this.trail = trail;
-		this.context.getProgress().start(trail.getMetadata().trailId());
+		this.context.getProgress().start(trail.getMetadata().getTrailId());
 		trail.getStep(this.context.getProgress().getCurrentStepIndex())
 			.ifPresentOrElse(this::startStep, this::resetOnStepNotFound);
 		saveProgress();
@@ -87,7 +87,7 @@ public class TrailRuntime
 
 	public void resumeTrail(TreasureTrail trail, TrailProgress progress)
 	{
-		log.info("Resuming trail (length={}, currentStep={})", trail.getMetadata().stepCount(), progress.getCurrentStepIndex());
+		log.info("Resuming trail (length={}, currentStep={})", trail.getMetadata().getStepCount(), progress.getCurrentStepIndex());
 		bus.register(this::onEvent);
 		this.trail = trail;
 		trail.getStep(this.context.getProgress().getCurrentStepIndex())
