@@ -6,7 +6,7 @@ import dev.hollink.pmtt.data.events.ClueEvent;
 import dev.hollink.pmtt.data.events.ClueEventFactory;
 import dev.hollink.pmtt.data.steps.TrailStep;
 import dev.hollink.pmtt.data.trail.ClueContext;
-import dev.hollink.pmtt.runetime.EventBus;
+import dev.hollink.pmtt.runetime.ClueEventBus;
 import dev.hollink.pmtt.runetime.TrailRuntime;
 import java.awt.image.BufferedImage;
 import javax.inject.Inject;
@@ -43,7 +43,7 @@ import net.runelite.client.util.ImageUtil;
  * {@link ClueEventFactory}.
  * <p>
  * These events are then passed through the {@link TrailManager},
- * over the {@link EventBus} to the {@link TrailRuntime}. The runtime
+ * over the {@link ClueEventBus} to the {@link TrailRuntime}. The runtime
  * keeps track of the active step and checks if a step is completed using
  * the {@link TrailStep#isComplete(ClueContext, ClueEvent)}.
  * <p>
@@ -74,7 +74,7 @@ public class TreasureTrailPlugin extends Plugin
 	private TrailManager trailManager;
 
 	@Inject
-	private EventBus eventBus;
+	private ClueEventBus clueEventBus;
 
 	private NavigationButton navButton;
 
@@ -101,7 +101,7 @@ public class TreasureTrailPlugin extends Plugin
 	{
 		ClueEventFactory.fromAnimationChanged(event, client).ifPresent(clueEvent -> {
 			log.debug("Publishing Animation Event {}", clueEvent);
-			eventBus.publish(clueEvent);
+			clueEventBus.publish(clueEvent);
 		});
 	}
 
@@ -110,7 +110,7 @@ public class TreasureTrailPlugin extends Plugin
 	{
 		ClueEventFactory.fromMenuOptionClicked(event, client).ifPresent(clueEvent -> {
 			log.debug("Publishing Interaction Event {}", clueEvent);
-			eventBus.publish(clueEvent);
+			clueEventBus.publish(clueEvent);
 		});
 	}
 
@@ -119,7 +119,7 @@ public class TreasureTrailPlugin extends Plugin
 	{
 		ClueEventFactory.fromStatChanged(event, client).ifPresent(clueEvent -> {
 			log.debug("Publishing Skill Event {}", clueEvent);
-			eventBus.publish(clueEvent);
+			clueEventBus.publish(clueEvent);
 		});
 	}
 
@@ -165,7 +165,7 @@ public class TreasureTrailPlugin extends Plugin
 
 	private void addTrailBuilderPanel()
 	{
-		TrailBuilderPanel builderPanel = new TrailBuilderPanel(client, eventBus);
+		TrailBuilderPanel builderPanel = new TrailBuilderPanel(client, clueEventBus);
 
 		BufferedImage icon = ImageUtil.loadImageResource(getClass(), "/icon.png");
 		navButton = NavigationButton.builder()

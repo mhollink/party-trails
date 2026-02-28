@@ -26,7 +26,7 @@ import net.runelite.client.ui.overlay.components.TitleComponent;
  * <p>
  * This class manages the full lifecycle of a trail, including starting,
  * resuming, advancing steps, handling completion, and resetting state. It
- * subscribes to {@link ClueEvent}s via the {@link EventBus} and forwards
+ * subscribes to {@link ClueEvent}s via the {@link ClueEventBus} and forwards
  * relevant events to the currently active {@link TrailStep}.
  * <p>
  * When a step reports completion, the runtime advances progress and
@@ -45,7 +45,7 @@ import net.runelite.client.ui.overlay.components.TitleComponent;
 @RequiredArgsConstructor(onConstructor = @__(@Inject))
 public class TrailRuntime
 {
-	private final EventBus bus;
+	private final ClueEventBus bus;
 	private final ConfigManager configManager;
 	private final ClueContext context;
 
@@ -98,7 +98,6 @@ public class TrailRuntime
 	{
 		log.info("Resuming trail step (type={})", step.type().name());
 		this.context.getProgress().getStepState().clear();
-		;
 		this.currentStep = step;
 	}
 

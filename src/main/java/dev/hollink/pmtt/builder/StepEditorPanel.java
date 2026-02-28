@@ -5,7 +5,7 @@ import dev.hollink.pmtt.builder.editors.StepEditorFactory;
 import dev.hollink.pmtt.builder.editors.StepEditorValidationError;
 import dev.hollink.pmtt.data.StepType;
 import dev.hollink.pmtt.data.steps.TrailStep;
-import dev.hollink.pmtt.runetime.EventBus;
+import dev.hollink.pmtt.runetime.ClueEventBus;
 import java.awt.Color;
 import java.util.List;
 import java.util.function.Consumer;
@@ -19,16 +19,16 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public final class StepEditorPanel extends JPanel implements FormHelper
 {
-	private final EventBus eventBus;
+	private final ClueEventBus clueEventBus;
 
 	private final JComboBox<StepType> typeSelect = new JComboBox<>(StepType.values());
 
 	private int stepNumber = 1;
 	private StepEditor currentStepEditor;
 
-	public StepEditorPanel(EventBus eventBus, Consumer<StepEditorPanel> deleteCallback, Runnable updateCallback)
+	public StepEditorPanel(ClueEventBus clueEventBus, Consumer<StepEditorPanel> deleteCallback, Runnable updateCallback)
 	{
-		this.eventBus = eventBus;
+		this.clueEventBus = clueEventBus;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setBorder(BorderFactory.createLineBorder(Color.GRAY));
 		buildEditor(deleteCallback, updateCallback);
@@ -51,7 +51,7 @@ public final class StepEditorPanel extends JPanel implements FormHelper
 		currentStepEditor.setStepNumber(stepNumber);
 		currentStepEditor.initForm();
 
-		eventBus.register(currentStepEditor::onEvent);
+		clueEventBus.register(currentStepEditor::onEvent);
 
 		add(currentStepEditor);
 		add(Box.createVerticalStrut(8));
@@ -67,7 +67,7 @@ public final class StepEditorPanel extends JPanel implements FormHelper
 	{
 		if (currentStepEditor != null)
 		{
-			eventBus.unregister(currentStepEditor::onEvent);
+			clueEventBus.unregister(currentStepEditor::onEvent);
 		}
 		removeAll();
 		buildEditor(deleteCallback, updateCallback);
