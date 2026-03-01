@@ -9,12 +9,12 @@ import javax.inject.Singleton;
 /**
  * The EventBus forwards the {@link ClueEvent}'s to all the
  * interested parties. Classes can register an event listener
- * on the bus using the {@link ClueEventBus#register(Consumer)}
+ * on the bus using the {@link TrailEventBus#register(Consumer)}
  * function. Each time an event gets published, it gets pushed
- * to *all* the {@link ClueEventBus#listeners}.
+ * to *all* the {@link TrailEventBus#listeners}.
  */
 @Singleton
-public final class ClueEventBus
+public final class TrailEventBus
 {
 	private final List<Consumer<ClueEvent>> listeners = new ArrayList<>();
 

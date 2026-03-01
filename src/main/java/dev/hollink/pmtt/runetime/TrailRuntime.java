@@ -4,7 +4,7 @@ import dev.hollink.pmtt.TreasureTrailConfig;
 import dev.hollink.pmtt.data.TreasureTrail;
 import dev.hollink.pmtt.data.events.ClueEvent;
 import dev.hollink.pmtt.data.steps.TrailStep;
-import dev.hollink.pmtt.data.trail.ClueContext;
+import dev.hollink.pmtt.data.trail.TrailContext;
 import dev.hollink.pmtt.data.trail.TrailProgress;
 import dev.hollink.pmtt.encoding.TrailEncoder;
 import java.awt.Graphics2D;
@@ -26,7 +26,7 @@ import net.runelite.client.ui.overlay.components.TitleComponent;
  * <p>
  * This class manages the full lifecycle of a trail, including starting,
  * resuming, advancing steps, handling completion, and resetting state. It
- * subscribes to {@link ClueEvent}s via the {@link ClueEventBus} and forwards
+ * subscribes to {@link ClueEvent}s via the {@link TrailEventBus} and forwards
  * relevant events to the currently active {@link TrailStep}.
  * <p>
  * When a step reports completion, the runtime advances progress and
@@ -45,9 +45,9 @@ import net.runelite.client.ui.overlay.components.TitleComponent;
 @RequiredArgsConstructor(onConstructor = @__(@Inject))
 public class TrailRuntime
 {
-	private final ClueEventBus bus;
+	private final TrailEventBus bus;
 	private final ConfigManager configManager;
-	private final ClueContext context;
+	private final TrailContext context;
 
 	private TreasureTrail trail;
 	private TrailStep currentStep;

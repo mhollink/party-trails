@@ -5,7 +5,7 @@ import dev.hollink.pmtt.builder.editors.StepEditorFactory;
 import dev.hollink.pmtt.builder.editors.StepEditorValidationError;
 import dev.hollink.pmtt.data.StepType;
 import dev.hollink.pmtt.data.steps.TrailStep;
-import dev.hollink.pmtt.runetime.ClueEventBus;
+import dev.hollink.pmtt.runetime.TrailEventBus;
 import java.awt.Color;
 import java.util.List;
 import java.util.function.Consumer;
@@ -19,14 +19,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public final class StepEditorPanel extends JPanel implements FormHelper
 {
-	private final ClueEventBus clueEventBus;
+	private final TrailEventBus clueEventBus;
 
 	private final JComboBox<StepType> typeSelect = new JComboBox<>(StepType.values());
 
 	private int stepNumber = 1;
 	private StepEditor currentStepEditor;
 
-	public StepEditorPanel(ClueEventBus clueEventBus, Consumer<StepEditorPanel> deleteCallback, Runnable updateCallback)
+	public StepEditorPanel(TrailEventBus clueEventBus, Consumer<StepEditorPanel> deleteCallback, Runnable updateCallback)
 	{
 		this.clueEventBus = clueEventBus;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));

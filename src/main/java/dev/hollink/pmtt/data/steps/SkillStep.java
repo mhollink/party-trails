@@ -3,7 +3,7 @@ package dev.hollink.pmtt.data.steps;
 import dev.hollink.pmtt.data.StepType;
 import dev.hollink.pmtt.data.events.ClueEvent;
 import dev.hollink.pmtt.data.events.SkillEvent;
-import dev.hollink.pmtt.data.trail.ClueContext;
+import dev.hollink.pmtt.data.trail.TrailContext;
 import static dev.hollink.pmtt.encoding.TrailDecoder.readString;
 import static dev.hollink.pmtt.encoding.TrailEncoder.writeString;
 import java.awt.Graphics2D;
@@ -41,7 +41,7 @@ public final class SkillStep implements TrailStep
 	}
 
 	@Override
-	public void onActivate(ClueContext context)
+	public void onActivate(TrailContext context)
 	{
 		String key = getContextKey(context);
 
@@ -62,7 +62,7 @@ public final class SkillStep implements TrailStep
 	}
 
 	@Override
-	public boolean isComplete(ClueContext context, ClueEvent event)
+	public boolean isComplete(TrailContext context, ClueEvent event)
 	{
 		if (event instanceof SkillEvent)
 		{
@@ -85,7 +85,7 @@ public final class SkillStep implements TrailStep
 		return false;
 	}
 
-	private String getContextKey(ClueContext context)
+	private String getContextKey(TrailContext context)
 	{
 		int stepIndex = context.getProgress().getCurrentStepIndex();
 		String skillName = skill.getName().toLowerCase();

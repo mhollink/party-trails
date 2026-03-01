@@ -5,8 +5,8 @@ import dev.hollink.pmtt.builder.TrailBuilderPanel;
 import dev.hollink.pmtt.data.events.ClueEvent;
 import dev.hollink.pmtt.data.events.ClueEventFactory;
 import dev.hollink.pmtt.data.steps.TrailStep;
-import dev.hollink.pmtt.data.trail.ClueContext;
-import dev.hollink.pmtt.runetime.ClueEventBus;
+import dev.hollink.pmtt.data.trail.TrailContext;
+import dev.hollink.pmtt.runetime.TrailEventBus;
 import dev.hollink.pmtt.runetime.TrailRuntime;
 import java.awt.image.BufferedImage;
 import javax.inject.Inject;
@@ -43,9 +43,9 @@ import net.runelite.client.util.ImageUtil;
  * {@link ClueEventFactory}.
  * <p>
  * These events are then passed through the {@link TrailManager},
- * over the {@link ClueEventBus} to the {@link TrailRuntime}. The runtime
+ * over the {@link TrailEventBus} to the {@link TrailRuntime}. The runtime
  * keeps track of the active step and checks if a step is completed using
- * the {@link TrailStep#isComplete(ClueContext, ClueEvent)}.
+ * the {@link TrailStep#isComplete(TrailContext, ClueEvent)}.
  * <p>
  * The progress along the active trail gets automatically stored using
  * the configmanager to ensure players can continue after logging.
@@ -74,7 +74,7 @@ public class TreasureTrailPlugin extends Plugin
 	private TrailManager trailManager;
 
 	@Inject
-	private ClueEventBus clueEventBus;
+	private TrailEventBus clueEventBus;
 
 	private NavigationButton navButton;
 

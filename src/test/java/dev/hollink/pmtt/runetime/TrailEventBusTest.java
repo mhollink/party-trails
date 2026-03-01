@@ -12,15 +12,15 @@ import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ClueEventBusTest
+public class TrailEventBusTest
 {
 
-	private ClueEventBus eventBus;
+	private TrailEventBus eventBus;
 
 	@Before
 	public void setUp() throws Exception
 	{
-		eventBus = new ClueEventBus();
+		eventBus = new TrailEventBus();
 	}
 
 	@Test

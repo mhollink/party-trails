@@ -4,7 +4,7 @@ import dev.hollink.pmtt.builder.editors.StepEditorValidationError;
 import dev.hollink.pmtt.data.TreasureTrail;
 import dev.hollink.pmtt.data.steps.TrailStep;
 import dev.hollink.pmtt.encoding.TrailEncoder;
-import dev.hollink.pmtt.runetime.ClueEventBus;
+import dev.hollink.pmtt.runetime.TrailEventBus;
 import dev.hollink.pmtt.utils.RandomUtil;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -30,14 +30,14 @@ import net.runelite.client.ui.PluginPanel;
 public final class TrailBuilderPanel extends PluginPanel implements FormHelper
 {
 	private final Client client;
-	private final ClueEventBus clueEventBus;
+	private final TrailEventBus clueEventBus;
 
 	private final JTextField nameField = new JTextField();
 
 	private final JPanel stepsContainer = new JPanel();
 	private final List<StepEditorPanel> editors = new ArrayList<>();
 
-	public TrailBuilderPanel(Client client, ClueEventBus clueEventBus)
+	public TrailBuilderPanel(Client client, TrailEventBus clueEventBus)
 	{
 		this.client = client;
 		this.clueEventBus = clueEventBus;

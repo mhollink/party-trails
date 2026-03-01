@@ -11,7 +11,7 @@ import net.runelite.api.coords.WorldPoint;
 
 @Data
 @RequiredArgsConstructor
-public final class ClueContext
+public final class TrailContext
 {
 	private final Client client;
 	private final TrailProgress progress;
@@ -19,7 +19,7 @@ public final class ClueContext
 	private ClueEvent lastEvent;
 
 	@Inject
-	public ClueContext(Client client)
+	public TrailContext(Client client)
 	{
 		this.client = client;
 		this.progress = new TrailProgress();
