@@ -7,6 +7,7 @@ import dev.hollink.pmtt.data.events.ClueEventFactory;
 import dev.hollink.pmtt.data.steps.TrailStep;
 import dev.hollink.pmtt.data.trail.TrailContext;
 import dev.hollink.pmtt.runetime.TrailEventBus;
+import dev.hollink.pmtt.runetime.TrailManager;
 import dev.hollink.pmtt.runetime.TrailRuntime;
 import java.awt.image.BufferedImage;
 import javax.inject.Inject;
@@ -81,7 +82,7 @@ public class TreasureTrailPlugin extends Plugin
 	@Override
 	protected void startUp() throws Exception
 	{
-		log.info("Treasure Trail plugin started");
+		log.debug("Treasure Trail plugin started");
 		addTrailBuilderPanel();
 
 		trailManager.start();
@@ -93,7 +94,7 @@ public class TreasureTrailPlugin extends Plugin
 	{
 		trailManager.stop();
 		clientToolbar.removeNavigation(navButton);
-		log.info("Treasure Trail plugin stopped");
+		log.debug("Treasure Trail plugin stopped");
 	}
 
 	@Subscribe
@@ -149,7 +150,7 @@ public class TreasureTrailPlugin extends Plugin
 		boolean hasTrailConfig = config.trailString() != null && !config.trailString().isBlank();
 		boolean hasStoredProgress = config.trailProgress() != null && !config.trailProgress().isBlank();
 
-		log.info("Attempting to resume trail from config... (hasTrail={}, hasProgress={})", hasTrailConfig, hasStoredProgress);
+		log.debug("Attempting to resume trail from config... (hasTrail={}, hasProgress={})", hasTrailConfig, hasStoredProgress);
 		if (hasTrailConfig)
 		{
 			if (hasStoredProgress)

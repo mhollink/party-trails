@@ -1,11 +1,9 @@
-package dev.hollink.pmtt;
+package dev.hollink.pmtt.runetime;
 
 import dev.hollink.pmtt.data.TreasureTrail;
 import dev.hollink.pmtt.data.trail.TrailProgress;
 import dev.hollink.pmtt.encoding.InvalidMagicHeaderException;
 import dev.hollink.pmtt.encoding.TrailDecoder;
-import dev.hollink.pmtt.runetime.TrailOverlay;
-import dev.hollink.pmtt.runetime.TrailRuntime;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.RequiredArgsConstructor;

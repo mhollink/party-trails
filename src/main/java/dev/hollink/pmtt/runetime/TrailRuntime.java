@@ -68,7 +68,7 @@ public class TrailRuntime
 
 	public void startTrail(TreasureTrail trail)
 	{
-		log.info("Starting new trail (length={})", trail.getMetadata().getStepCount());
+		log.debug("Starting new trail (length={})", trail.getMetadata().getStepCount());
 		bus.register(this::onEvent);
 		this.trail = trail;
 		this.context.getProgress().start(trail.getMetadata().getTrailId());
@@ -79,7 +79,7 @@ public class TrailRuntime
 
 	private void startStep(TrailStep step)
 	{
-		log.info("Starting new trail step (type={})", step.type().name());
+		log.debug("Starting new trail step (type={})", step.type().name());
 		this.context.getProgress().getStepState().clear();
 		this.currentStep = step;
 		step.onActivate(context);
@@ -87,7 +87,7 @@ public class TrailRuntime
 
 	public void resumeTrail(TreasureTrail trail, TrailProgress progress)
 	{
-		log.info("Resuming trail (length={}, currentStep={})", trail.getMetadata().getStepCount(), progress.getCurrentStepIndex());
+		log.debug("Resuming trail (length={}, currentStep={})", trail.getMetadata().getStepCount(), progress.getCurrentStepIndex());
 		bus.register(this::onEvent);
 		this.trail = trail;
 		trail.getStep(this.context.getProgress().getCurrentStepIndex())
@@ -96,7 +96,7 @@ public class TrailRuntime
 
 	private void resumeStep(TrailStep step)
 	{
-		log.info("Resuming trail step (type={})", step.type().name());
+		log.debug("Resuming trail step (type={})", step.type().name());
 		this.context.getProgress().getStepState().clear();
 		this.currentStep = step;
 	}
@@ -109,7 +109,7 @@ public class TrailRuntime
 
 	public void reset()
 	{
-		log.info("Resetting active treasure trail");
+		log.debug("Resetting active treasure trail");
 		this.trail = null;
 		this.currentStep = null;
 		this.context.getProgress().reset();
@@ -126,7 +126,7 @@ public class TrailRuntime
 		context.setLastEvent(event);
 		if (currentStep.isComplete(context, event))
 		{
-			log.info("Completed trail step!");
+			log.debug("Completed trail step!");
 			advanceToNextStep();
 		}
 
@@ -146,7 +146,7 @@ public class TrailRuntime
 
 	private void completeTrail()
 	{
-		log.info("Completing trail...");
+		log.debug("Completing trail...");
 		this.currentStep = null;
 		this.context.getProgress().setCompleted(true);
 		this.bus.unregister(this::onEvent);
@@ -162,7 +162,7 @@ public class TrailRuntime
 				TreasureTrailConfig.CONFIG_GROUP,
 				TreasureTrailConfig.TREASURE_TRAIL_PROGRESS,
 				encoded);
-			log.info("Saved treasure trail progress to config file. {}", progress.toString());
+			log.debug("Saved treasure trail progress to config file. {}", progress.toString());
 		}
 		catch (IOException e)
 		{
