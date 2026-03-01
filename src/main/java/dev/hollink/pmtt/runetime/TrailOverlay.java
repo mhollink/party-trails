@@ -1,9 +1,8 @@
-package dev.hollink.pmtt.overlay;
+package dev.hollink.pmtt.runetime;
 
 import dev.hollink.pmtt.TreasureTrailPlugin;
 import dev.hollink.pmtt.data.steps.TrailStep;
 import dev.hollink.pmtt.data.trail.Overlayable;
-import dev.hollink.pmtt.runetime.TrailRuntime;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import javax.inject.Inject;
