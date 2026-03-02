@@ -13,7 +13,7 @@ repositories {
 	mavenCentral()
 }
 
-def runeLiteVersion = '1.12.18-SNAPSHOT'
+def runeLiteVersion = 'latest.release'
 def pluginMainClass = 'dev.hollink.pmtt.TreasureTrailPlugin'
 def pluginSideloadDir = "$System.env.HOME/.runelite/sideloaded-plugins"
 
