@@ -15,7 +15,6 @@ repositories {
 
 def runeLiteVersion = 'latest.release'
 def pluginMainClass = 'dev.hollink.pmtt.TreasureTrailPlugin'
-def pluginSideloadDir = "$System.env.HOME/.runelite/sideloaded-plugins"
 
 dependencies {
 	compileOnly group: 'net.runelite', name:'client', version: runeLiteVersion
@@ -28,7 +27,7 @@ dependencies {
 	testImplementation group: 'net.runelite', name:'jshell', version: runeLiteVersion
 }
 
-group = 'net.runelite.client.plugins.pmtt'
+group = 'dev.hollink.pmtt'
 version = '1.0-SNAPSHOT'
 
 tasks.withType(JavaCompile).configureEach {
@@ -68,12 +67,4 @@ tasks.register('shadowJar', Jar) {
 	group = BasePlugin.BUILD_GROUP
 	archiveClassifier.set('shadow')
 	archiveFileName.set("${rootProject.name}-${project.version}-all.jar")
-}
-
-tasks.register("sideload") {
-	dependsOn build
-	copy {
-		from jar
-		into pluginSideloadDir
-	}
 }
