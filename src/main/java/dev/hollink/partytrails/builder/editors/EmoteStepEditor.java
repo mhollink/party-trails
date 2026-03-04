@@ -4,7 +4,7 @@ import dev.hollink.partytrails.builder.FormHelper;
 import dev.hollink.partytrails.builder.fields.LocationSelector;
 import dev.hollink.partytrails.data.Emote;
 import dev.hollink.partytrails.data.events.AnimationEvent;
-import dev.hollink.partytrails.data.events.ClueEvent;
+import dev.hollink.partytrails.data.events.TrailEvent;
 import dev.hollink.partytrails.data.steps.EmoteStep;
 import dev.hollink.partytrails.data.steps.TrailStep;
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public final class EmoteStepEditor extends StepEditor implements FormHelper
 	}
 
 	@Override
-	protected boolean onCapture(ClueEvent event)
+	protected boolean onCapture(TrailEvent event)
 	{
 		if (event instanceof AnimationEvent)
 		{

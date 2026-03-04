@@ -4,7 +4,7 @@ import lombok.Value;
 import net.runelite.api.coords.WorldPoint;
 
 @Value
-public class InteractionEvent implements ClueEvent
+public class InteractionEvent implements TrailEvent
 {
 	int objectId;
 	String objectName;

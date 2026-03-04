@@ -2,7 +2,7 @@ package dev.hollink.partytrails.runetime;
 
 import dev.hollink.partytrails.PartyTrailsConfig;
 import dev.hollink.partytrails.data.TreasureTrail;
-import dev.hollink.partytrails.data.events.ClueEvent;
+import dev.hollink.partytrails.data.events.TrailEvent;
 import dev.hollink.partytrails.data.steps.TrailStep;
 import dev.hollink.partytrails.data.trail.TrailContext;
 import dev.hollink.partytrails.data.trail.TrailProgress;
@@ -26,7 +26,7 @@ import net.runelite.client.ui.overlay.components.TitleComponent;
  * <p>
  * This class manages the full lifecycle of a trail, including starting,
  * resuming, advancing steps, handling completion, and resetting state. It
- * subscribes to {@link ClueEvent}s via the {@link TrailEventBus} and forwards
+ * subscribes to {@link TrailEvent}s via the {@link TrailEventBus} and forwards
  * relevant events to the currently active {@link TrailStep}.
  * <p>
  * When a step reports completion, the runtime advances progress and
@@ -116,7 +116,7 @@ public class TrailRuntime
 		this.bus.unregister(this::onEvent);
 	}
 
-	private void onEvent(ClueEvent event)
+	private void onEvent(TrailEvent event)
 	{
 		if (currentStep == null || !currentStep.handlesEvent(event))
 		{

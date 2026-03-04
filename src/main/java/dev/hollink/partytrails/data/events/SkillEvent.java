@@ -4,7 +4,7 @@ import lombok.Value;
 import net.runelite.api.Skill;
 
 @Value
-public class SkillEvent implements ClueEvent
+public class SkillEvent implements TrailEvent
 {
 	Skill skill;
 	int xp;

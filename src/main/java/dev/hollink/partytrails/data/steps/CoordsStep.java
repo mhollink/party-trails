@@ -2,7 +2,7 @@ package dev.hollink.partytrails.data.steps;
 
 import dev.hollink.partytrails.data.StepType;
 import dev.hollink.partytrails.data.events.AnimationEvent;
-import dev.hollink.partytrails.data.events.ClueEvent;
+import dev.hollink.partytrails.data.events.TrailEvent;
 import dev.hollink.partytrails.data.trail.TrailContext;
 import static dev.hollink.partytrails.encoding.TrailDecoder.readString;
 import static dev.hollink.partytrails.encoding.TrailEncoder.writeString;
@@ -47,13 +47,13 @@ public final class CoordsStep implements TrailStep
 	}
 
 	@Override
-	public boolean handlesEvent(ClueEvent event)
+	public boolean handlesEvent(TrailEvent event)
 	{
 		return event instanceof AnimationEvent;
 	}
 
 	@Override
-	public boolean isComplete(TrailContext context, ClueEvent event)
+	public boolean isComplete(TrailContext context, TrailEvent event)
 	{
 		if (event instanceof AnimationEvent)
 		{

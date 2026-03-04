@@ -19,11 +19,11 @@ public final class StepEditorFactory
 			case SKILL_STEP:
 				return new SkillStepEditor();
 			case CIPHER_STEP:
-				return new ObjectInteractionStepEditor(StepType.CIPHER_STEP);
+				return new InteractionStepEditor(StepType.CIPHER_STEP);
 			case ANAGRAM_STEP:
-				return new ObjectInteractionStepEditor(StepType.ANAGRAM_STEP);
+				return new InteractionStepEditor(StepType.ANAGRAM_STEP);
 			case CRYPTIC_STEP:
-				return new ObjectInteractionStepEditor(StepType.CRYPTIC_STEP);
+				return new InteractionStepEditor(StepType.CRYPTIC_STEP);
 			default:
 				throw new IllegalArgumentException("Unknown step type: " + type);
 		}

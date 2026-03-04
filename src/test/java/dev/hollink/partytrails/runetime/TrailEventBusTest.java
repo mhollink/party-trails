@@ -1,7 +1,7 @@
 package dev.hollink.partytrails.runetime;
 
 import dev.hollink.partytrails.data.events.AnimationEvent;
-import dev.hollink.partytrails.data.events.ClueEvent;
+import dev.hollink.partytrails.data.events.TrailEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -26,12 +26,12 @@ public class TrailEventBusTest
 	@Test
 	public void shouldDeliverEventToRegisteredListener()
 	{
-		List<ClueEvent> received = new ArrayList<>();
+		List<TrailEvent> received = new ArrayList<>();
 
-		Consumer<ClueEvent> listener = received::add;
+		Consumer<TrailEvent> listener = received::add;
 		eventBus.register(listener);
 
-		ClueEvent event = new AnimationEvent(1, new WorldPoint(10, 10, 0));
+		TrailEvent event = new AnimationEvent(1, new WorldPoint(10, 10, 0));
 		eventBus.publish(event);
 
 		assertThat(received, hasItem(event));
@@ -40,13 +40,13 @@ public class TrailEventBusTest
 	@Test
 	public void shouldNotDeliverEventToUnregisteredListener()
 	{
-		List<ClueEvent> received = new ArrayList<>();
+		List<TrailEvent> received = new ArrayList<>();
 
-		Consumer<ClueEvent> listener = received::add;
+		Consumer<TrailEvent> listener = received::add;
 		eventBus.register(listener);
 		eventBus.unregister(listener);
 
-		ClueEvent event = new AnimationEvent(1, new WorldPoint(10, 10, 0));
+		TrailEvent event = new AnimationEvent(1, new WorldPoint(10, 10, 0));
 		eventBus.publish(event);
 
 		assertThat(received.size(), equalTo(0));
@@ -55,13 +55,13 @@ public class TrailEventBusTest
 	@Test
 	public void shouldDeliverEventToAllRegisteredListeners()
 	{
-		List<ClueEvent> received1 = new ArrayList<>();
-		List<ClueEvent> received2 = new ArrayList<>();
+		List<TrailEvent> received1 = new ArrayList<>();
+		List<TrailEvent> received2 = new ArrayList<>();
 
 		eventBus.register(received1::add);
 		eventBus.register(received2::add);
 
-		ClueEvent event = new AnimationEvent(1, new WorldPoint(10, 10, 0));
+		TrailEvent event = new AnimationEvent(1, new WorldPoint(10, 10, 0));
 		eventBus.publish(event);
 
 		assertThat(received1, hasItem(event));

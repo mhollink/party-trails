@@ -1,7 +1,7 @@
 package dev.hollink.partytrails.data.steps;
 
 import dev.hollink.partytrails.data.StepType;
-import dev.hollink.partytrails.data.events.ClueEvent;
+import dev.hollink.partytrails.data.events.TrailEvent;
 import dev.hollink.partytrails.data.events.SkillEvent;
 import dev.hollink.partytrails.data.trail.TrailContext;
 import static dev.hollink.partytrails.encoding.TrailDecoder.readString;
@@ -51,7 +51,7 @@ public final class SkillStep implements TrailStep
 	}
 
 	@Override
-	public boolean handlesEvent(ClueEvent event)
+	public boolean handlesEvent(TrailEvent event)
 	{
 		if (event instanceof SkillEvent)
 		{
@@ -62,7 +62,7 @@ public final class SkillStep implements TrailStep
 	}
 
 	@Override
-	public boolean isComplete(TrailContext context, ClueEvent event)
+	public boolean isComplete(TrailContext context, TrailEvent event)
 	{
 		if (event instanceof SkillEvent)
 		{
@@ -106,8 +106,7 @@ public final class SkillStep implements TrailStep
 		out.writeInt(area.getPlane());
 	}
 
-	public static SkillStep decode(DataInput in)
-		throws IOException
+	public static SkillStep decode(DataInput in) throws IOException
 	{
 		String hint = readString(in);
 		Skill skill = Skill.values()[in.readInt()];

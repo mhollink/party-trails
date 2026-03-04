@@ -4,11 +4,9 @@ import dev.hollink.partytrails.builder.FormHelper;
 import dev.hollink.partytrails.builder.fields.LocationSelector;
 import dev.hollink.partytrails.data.InteractionTarget;
 import dev.hollink.partytrails.data.StepType;
-import dev.hollink.partytrails.data.events.ClueEvent;
+import dev.hollink.partytrails.data.events.TrailEvent;
 import dev.hollink.partytrails.data.events.InteractionEvent;
-import dev.hollink.partytrails.data.steps.AnagramStep;
-import dev.hollink.partytrails.data.steps.CipherStep;
-import dev.hollink.partytrails.data.steps.CrypticStep;
+import dev.hollink.partytrails.data.steps.InteractionStep;
 import dev.hollink.partytrails.data.steps.TrailStep;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +15,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import net.runelite.api.coords.WorldPoint;
 
-public final class ObjectInteractionStepEditor extends StepEditor implements FormHelper
+public final class InteractionStepEditor extends StepEditor implements FormHelper
 {
 	private final JTextArea hintArea = new JTextArea(3, 0);
 	private final JTextField objectId = new JTextField();
@@ -27,7 +25,7 @@ public final class ObjectInteractionStepEditor extends StepEditor implements For
 
 	private final StepType stepType;
 
-	public ObjectInteractionStepEditor(StepType stepType)
+	public InteractionStepEditor(StepType stepType)
 	{
 		super();
 		this.stepType = stepType;
@@ -45,7 +43,7 @@ public final class ObjectInteractionStepEditor extends StepEditor implements For
 	}
 
 	@Override
-	protected boolean onCapture(ClueEvent event)
+	protected boolean onCapture(TrailEvent event)
 	{
 		if (event instanceof InteractionEvent)
 		{
@@ -106,16 +104,6 @@ public final class ObjectInteractionStepEditor extends StepEditor implements For
 	public TrailStep toTrailStep()
 	{
 		InteractionTarget target = new InteractionTarget(Integer.parseInt(objectId.getText()), objectName.getText(), action.getText(), locationSelector.getWorldLocation());
-		switch (stepType)
-		{
-			case CIPHER_STEP:
-				return new CipherStep(hintArea.getText(), target);
-			case CRYPTIC_STEP:
-				return new CrypticStep(hintArea.getText(), target);
-			case ANAGRAM_STEP:
-				return new AnagramStep(hintArea.getText(), target);
-			default:
-				throw new IllegalStateException("Unexpected value: " + stepType);
-		}
+		return new InteractionStep(stepType, hintArea.getText(), target);
 	}
 }

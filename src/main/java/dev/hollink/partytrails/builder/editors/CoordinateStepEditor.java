@@ -3,7 +3,7 @@ package dev.hollink.partytrails.builder.editors;
 import dev.hollink.partytrails.builder.FormHelper;
 import dev.hollink.partytrails.builder.fields.LocationSelector;
 import dev.hollink.partytrails.data.events.AnimationEvent;
-import dev.hollink.partytrails.data.events.ClueEvent;
+import dev.hollink.partytrails.data.events.TrailEvent;
 import dev.hollink.partytrails.data.steps.CoordsStep;
 import dev.hollink.partytrails.data.steps.TrailStep;
 import dev.hollink.partytrails.utils.SextantUtil;
@@ -23,7 +23,7 @@ public final class CoordinateStepEditor extends StepEditor implements FormHelper
 	}
 
 	@Override
-	public boolean onCapture(ClueEvent event)
+	public boolean onCapture(TrailEvent event)
 	{
 		if (event instanceof AnimationEvent)
 		{

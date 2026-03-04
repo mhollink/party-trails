@@ -2,11 +2,9 @@ package dev.hollink.partytrails.encoding;
 
 import dev.hollink.partytrails.data.StepType;
 import dev.hollink.partytrails.data.TreasureTrail;
-import dev.hollink.partytrails.data.steps.AnagramStep;
-import dev.hollink.partytrails.data.steps.CipherStep;
 import dev.hollink.partytrails.data.steps.CoordsStep;
-import dev.hollink.partytrails.data.steps.CrypticStep;
 import dev.hollink.partytrails.data.steps.EmoteStep;
+import dev.hollink.partytrails.data.steps.InteractionStep;
 import dev.hollink.partytrails.data.steps.SkillStep;
 import dev.hollink.partytrails.data.steps.TrailStep;
 import dev.hollink.partytrails.data.trail.TrailMetadata;
@@ -47,11 +45,11 @@ public final class TrailDecoder
 {
 	private static final Map<StepType, StepDecoder> DECODERS = Map.ofEntries(
 		entry(StepType.EMOTE_STEP, EmoteStep::decode),
-		entry(StepType.CIPHER_STEP, CipherStep::decode),
+		entry(StepType.CIPHER_STEP, InteractionStep.getDecoder(StepType.CIPHER_STEP)),
 		entry(StepType.COORDINATE_STEP, CoordsStep::decode),
-		entry(StepType.CRYPTIC_STEP, CrypticStep::decode),
+		entry(StepType.CRYPTIC_STEP, InteractionStep.getDecoder(StepType.CRYPTIC_STEP)),
 		entry(StepType.SKILL_STEP, SkillStep::decode),
-		entry(StepType.ANAGRAM_STEP, AnagramStep::decode)
+		entry(StepType.ANAGRAM_STEP, InteractionStep.getDecoder(StepType.ANAGRAM_STEP))
 	);
 
 	public static String readString(DataInput in) throws IOException
@@ -162,7 +160,7 @@ public final class TrailDecoder
 	}
 
 	@FunctionalInterface
-	private interface StepDecoder
+	public interface StepDecoder
 	{
 		TrailStep decode(DataInput in) throws IOException;
 	}
