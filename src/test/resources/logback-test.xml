@@ -48,9 +48,11 @@
 		</encoder>
 	</appender>
 
-	<root level="INFO">
+	<logger name="dev.hollink.bankstanding" level="DEBUG" />
+	<logger name="net.runelite" level="WARN"/>
+	<logger name="injected-client" level="WARN"/>
+	<root level="WARN">
 		<appender-ref ref="STDOUT"/>
 		<appender-ref ref="FILE"/>
 	</root>
-	<logger name="com.example" level="DEBUG"/>
 </configuration>
