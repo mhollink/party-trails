@@ -9,9 +9,11 @@ import dev.hollink.partytrails.data.steps.TrailStep;
 import dev.hollink.partytrails.utils.SextantUtil;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.gameval.AnimationID;
 
+@Slf4j
 public final class CoordinateStepEditor extends StepEditor implements FormHelper
 {
 	private final LocationSelector locationSelector = new LocationSelector();
@@ -73,5 +75,18 @@ public final class CoordinateStepEditor extends StepEditor implements FormHelper
 	protected void updateButtonText()
 	{
 		captureButton.setText("Dig to set location!");
+	}
+
+	@Override
+	public void setTrailStep(TrailStep trailStep)
+	{
+		if(trailStep instanceof CoordsStep) {
+			CoordsStep coordsStep = (CoordsStep) trailStep;
+			locationSelector.setLocation(coordsStep.getTargetLocation());
+			log.debug("reloaded coordinate step {}", stepNumber);
+			log.debug(coordsStep.toString());
+		}else {
+			log.warn("Unable to set coordinate step values, given step was of type {}", trailStep.type());
+		}
 	}
 }

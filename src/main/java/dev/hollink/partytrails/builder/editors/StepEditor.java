@@ -8,6 +8,7 @@ import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JToolTip;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -66,4 +67,16 @@ public abstract class StepEditor extends JPanel
 	public abstract List<StepEditorValidationError> validateUserInput();
 
 	public abstract TrailStep toTrailStep();
-}
+
+	public abstract void setTrailStep(TrailStep trailStep);
+
+	protected JTextArea createTextArea() {
+		JTextArea textArea = new JTextArea(3, 0);
+
+		textArea.setMaximumSize(new Dimension(220, textArea.getPreferredSize().height));
+		textArea.setLineWrap(true);
+		textArea.setWrapStyleWord(true);
+
+		return textArea;
+	}
+  }

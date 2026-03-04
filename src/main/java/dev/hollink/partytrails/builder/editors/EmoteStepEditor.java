@@ -18,7 +18,7 @@ import net.runelite.api.coords.WorldPoint;
 public final class EmoteStepEditor extends StepEditor implements FormHelper
 {
 	private final JComboBox<Emote> emoteIdField = new JComboBox<>(Emote.values());
-	private final JTextArea hintArea = new JTextArea(3, 0);
+	private final JTextArea hintArea = createTextArea();
 	private final LocationSelector locationSelector = new LocationSelector();
 
 	@Override
@@ -78,5 +78,23 @@ public final class EmoteStepEditor extends StepEditor implements FormHelper
 	protected void updateButtonText()
 	{
 		captureButton.setText("Perform emote to set values!");
+	}
+
+	@Override
+	public void setTrailStep(TrailStep trailStep)
+	{
+		if (trailStep instanceof EmoteStep)
+		{
+			EmoteStep emoteStep = (EmoteStep) trailStep;
+			emoteIdField.setSelectedItem(emoteStep.getTargetEmoteOne());
+			hintArea.setText(emoteStep.getHint());
+			locationSelector.setLocation(emoteStep.getTargetLocation());
+			log.debug("reloaded emote step {}", stepNumber);
+			log.debug(emoteStep.toString());
+		}
+		else
+		{
+			log.warn("Unable to set emote step values, given step was of type {}", trailStep.type());
+		}
 	}
 }

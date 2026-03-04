@@ -11,14 +11,16 @@ import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Skill;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.api.gameval.AnimationID;
 
+@Slf4j
 public final class SkillStepEditor extends StepEditor implements FormHelper
 {
 	private final JComboBox<Skill> skillIdField = new JComboBox<>(Skill.values());
-	private final JTextArea hint = new JTextArea(3, 0);
+	private final JTextArea hint = createTextArea();
 	private final JTextField expField = new JTextField();
 	private final RegionSelector regionSelector = new RegionSelector();
 
@@ -129,5 +131,24 @@ public final class SkillStepEditor extends StepEditor implements FormHelper
 	{
 		captureMode = false;
 		captureButton.setText("Capture region in game");
+	}
+
+	@Override
+	public void setTrailStep(TrailStep trailStep)
+	{
+		if (trailStep instanceof SkillStep)
+		{
+			SkillStep skillStep = (SkillStep) trailStep;
+			hint.setText(skillStep.getHint());
+			skillIdField.setSelectedItem(skillStep.getSkill());
+			expField.setText(String.valueOf(skillStep.getExpRequired()));
+			regionSelector.setWorldArea(skillStep.getArea());
+			log.debug("reloaded skill step {}", stepNumber);
+			log.debug(skillStep.toString());
+		}
+		else
+		{
+			log.warn("Unable to set skill step values, given step was of type {}", trailStep.type());
+		}
 	}
 }

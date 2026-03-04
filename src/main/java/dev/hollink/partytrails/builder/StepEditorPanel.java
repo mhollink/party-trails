@@ -20,20 +20,24 @@ import lombok.extern.slf4j.Slf4j;
 public final class StepEditorPanel extends JPanel implements FormHelper
 {
 	private final TrailEventBus clueEventBus;
+	private final Consumer<StepEditorPanel> deleteCallback;
+	private final Runnable updateCallback;
 
 	private final JComboBox<StepType> typeSelect = new JComboBox<>(StepType.values());
-
-	private int stepNumber = 1;
 	private StepEditor currentStepEditor;
+	private int stepNumber = 1;
 
 	public StepEditorPanel(TrailEventBus clueEventBus, Consumer<StepEditorPanel> deleteCallback, Runnable updateCallback)
 	{
 		this.clueEventBus = clueEventBus;
+		this.deleteCallback = deleteCallback;
+		this.updateCallback = updateCallback;
+
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setBorder(BorderFactory.createLineBorder(Color.GRAY));
-		buildEditor(deleteCallback, updateCallback);
+		buildEditor();
 
-		typeSelect.addActionListener(e -> rebuildEditor(deleteCallback, updateCallback));
+		typeSelect.addActionListener(e -> rebuildEditor());
 	}
 
 	public void setStepNumber(int number)
@@ -42,7 +46,7 @@ public final class StepEditorPanel extends JPanel implements FormHelper
 		setBorder(BorderFactory.createTitledBorder("Step " + number));
 	}
 
-	private void buildEditor(Consumer<StepEditorPanel> deleteCallback, Runnable updateCallback)
+	private void buildEditor()
 	{
 		add(createRow(typeSelect));
 
@@ -63,14 +67,14 @@ public final class StepEditorPanel extends JPanel implements FormHelper
 		updateCallback.run();
 	}
 
-	private void rebuildEditor(Consumer<StepEditorPanel> deleteCallback, Runnable updateCallback)
+	private void rebuildEditor()
 	{
 		if (currentStepEditor != null)
 		{
 			clueEventBus.unregister(currentStepEditor::onEvent);
 		}
 		removeAll();
-		buildEditor(deleteCallback, updateCallback);
+		buildEditor();
 	}
 
 	public List<StepEditorValidationError> getValidationErrors()
@@ -81,5 +85,11 @@ public final class StepEditorPanel extends JPanel implements FormHelper
 	public TrailStep toTrailStep()
 	{
 		return currentStepEditor.toTrailStep();
+	}
+
+	public void reloadTrailStep(int index, TrailStep trailStep) {
+		typeSelect.setSelectedItem(trailStep.type());
+		rebuildEditor();
+		currentStepEditor.setTrailStep(trailStep);
 	}
 }

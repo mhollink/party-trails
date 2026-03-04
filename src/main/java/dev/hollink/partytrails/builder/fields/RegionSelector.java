@@ -160,4 +160,13 @@ public final class RegionSelector extends JPanel
 
 		return true;
 	}
+
+	public void setWorldArea(WorldArea area)
+	{
+		xField.setText(String.valueOf(area.getX()));
+		yField.setText(String.valueOf(area.getY()));
+		planeField.setText(String.valueOf(area.getPlane()));
+		widthField.setText(String.valueOf(area.getWidth()));
+		heightField.setText(String.valueOf(area.getHeight()));
+	}
 }

@@ -11,6 +11,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import net.runelite.api.coords.WorldPoint;
@@ -19,6 +20,7 @@ import net.runelite.client.ui.overlay.components.PanelComponent;
 
 @ToString
 @EqualsAndHashCode
+@Getter
 @RequiredArgsConstructor
 public final class CoordsStep implements TrailStep
 {

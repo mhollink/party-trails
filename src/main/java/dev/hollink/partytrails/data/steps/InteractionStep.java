@@ -14,12 +14,14 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.util.List;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.ui.overlay.components.PanelComponent;
 
 @Slf4j
+@Getter
 @ToString
 @EqualsAndHashCode
 public final class InteractionStep implements TrailStep

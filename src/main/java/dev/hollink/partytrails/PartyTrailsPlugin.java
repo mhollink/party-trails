@@ -2,8 +2,8 @@ package dev.hollink.partytrails;
 
 import com.google.inject.Provides;
 import dev.hollink.partytrails.builder.TrailBuilderPanel;
-import dev.hollink.partytrails.data.events.TrailEvent;
 import dev.hollink.partytrails.data.events.ClueEventFactory;
+import dev.hollink.partytrails.data.events.TrailEvent;
 import dev.hollink.partytrails.data.steps.TrailStep;
 import dev.hollink.partytrails.data.trail.TrailContext;
 import dev.hollink.partytrails.runetime.TrailEventBus;
@@ -13,7 +13,9 @@ import java.awt.image.BufferedImage;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
+import net.runelite.api.GameState;
 import net.runelite.api.events.AnimationChanged;
+import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.events.StatChanged;
 import net.runelite.client.config.ConfigManager;
@@ -78,6 +80,7 @@ public class PartyTrailsPlugin extends Plugin
 	private TrailEventBus clueEventBus;
 
 	private NavigationButton navButton;
+	private TrailBuilderPanel builderPanel;
 
 	@Override
 	protected void startUp() throws Exception
@@ -95,6 +98,18 @@ public class PartyTrailsPlugin extends Plugin
 		trailManager.stop();
 		clientToolbar.removeNavigation(navButton);
 		log.debug("Treasure Trail plugin stopped");
+	}
+
+	@Subscribe
+	public void onGameStateChanged(GameStateChanged gameStateChanged)
+	{
+		log.debug("Game state changed: {}", gameStateChanged);
+		if (gameStateChanged.getGameState() == GameState.LOGGED_IN)
+		{
+			builderPanel.enableTrailBuilder();
+		} else {
+			builderPanel.disableTrailBuilder();
+		}
 	}
 
 	@Subscribe
@@ -166,7 +181,7 @@ public class PartyTrailsPlugin extends Plugin
 
 	private void addTrailBuilderPanel()
 	{
-		TrailBuilderPanel builderPanel = new TrailBuilderPanel(client, clueEventBus);
+		builderPanel = new TrailBuilderPanel(client, configManager, clueEventBus);
 
 		BufferedImage icon = ImageUtil.loadImageResource(getClass(), "/icon.png");
 		navButton = NavigationButton.builder()

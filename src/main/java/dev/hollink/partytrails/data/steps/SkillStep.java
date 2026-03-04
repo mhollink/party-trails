@@ -11,6 +11,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Objects;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import net.runelite.api.Skill;
@@ -18,6 +19,7 @@ import net.runelite.api.coords.WorldArea;
 import net.runelite.client.ui.overlay.components.PanelComponent;
 
 @ToString
+@Getter
 @RequiredArgsConstructor
 public final class SkillStep implements TrailStep
 {

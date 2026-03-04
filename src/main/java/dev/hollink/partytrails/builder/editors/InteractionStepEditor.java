@@ -13,11 +13,13 @@ import java.util.List;
 import java.util.stream.Stream;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.coords.WorldPoint;
 
+@Slf4j
 public final class InteractionStepEditor extends StepEditor implements FormHelper
 {
-	private final JTextArea hintArea = new JTextArea(3, 0);
+	private final JTextArea hintArea = createTextArea();
 	private final JTextField objectId = new JTextField();
 	private final JTextField objectName = new JTextField();
 	private final JTextField action = new JTextField();
@@ -105,5 +107,23 @@ public final class InteractionStepEditor extends StepEditor implements FormHelpe
 	{
 		InteractionTarget target = new InteractionTarget(Integer.parseInt(objectId.getText()), objectName.getText(), action.getText(), locationSelector.getWorldLocation());
 		return new InteractionStep(stepType, hintArea.getText(), target);
+	}
+
+	@Override
+	public void setTrailStep(TrailStep trailStep)
+	{
+		if(trailStep instanceof InteractionStep) {
+			InteractionStep interactionStep = (InteractionStep) trailStep;
+			InteractionTarget target = interactionStep.getTarget();
+			hintArea.setText(interactionStep.getHint());
+			objectId.setText(String.valueOf(target.getTargetId()));
+			objectName.setText(String.valueOf(target.getTargetName()));
+			action.setText(String.valueOf(target.getInteractionType()));
+			locationSelector.setLocation(target.getLocation());
+			log.debug("reloaded interaction step {}", stepNumber);
+			log.debug(interactionStep.toString());
+		} else {
+			log.warn("Unable to set interaction step values, given step was of type {}", trailStep.type());
+		}
 	}
 }
