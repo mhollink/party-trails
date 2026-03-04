@@ -1,6 +1,6 @@
 package dev.hollink.partytrails.data.trail;
 
-import dev.hollink.partytrails.data.events.ClueEvent;
+import dev.hollink.partytrails.data.events.TrailEvent;
 import javax.inject.Inject;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ public final class TrailContext
 	private final Client client;
 	private final TrailProgress progress;
 
-	private ClueEvent lastEvent;
+	private TrailEvent lastEvent;
 
 	@Inject
 	public TrailContext(Client client)

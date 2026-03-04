@@ -2,12 +2,11 @@ package dev.hollink.partytrails.encoding;
 
 import dev.hollink.partytrails.data.Emote;
 import dev.hollink.partytrails.data.InteractionTarget;
+import dev.hollink.partytrails.data.StepType;
 import dev.hollink.partytrails.data.TreasureTrail;
-import dev.hollink.partytrails.data.steps.AnagramStep;
-import dev.hollink.partytrails.data.steps.CipherStep;
 import dev.hollink.partytrails.data.steps.CoordsStep;
-import dev.hollink.partytrails.data.steps.CrypticStep;
 import dev.hollink.partytrails.data.steps.EmoteStep;
+import dev.hollink.partytrails.data.steps.InteractionStep;
 import dev.hollink.partytrails.data.steps.TrailStep;
 import java.util.List;
 import net.runelite.api.coords.WorldPoint;
@@ -38,7 +37,7 @@ public class TrailEncoderTest
 			new EmoteStep("Wave in the door opening of the Lumbridge Castle kitchen.",
 				Emote.WAVE,
 				new WorldPoint(3208, 3212, 0)),
-			new CipherStep("QRES ENRA RKN RMABEO RUG CHXPVC",
+			new InteractionStep(StepType.CIPHER_STEP, "QRES ENRA RKN RMABEO RUG CHXPVC",
 				new InteractionTarget(
 					5581,
 					"Logs",
@@ -48,7 +47,7 @@ public class TrailEncoderTest
 			new CoordsStep(
 				"4 degrees 26 minutes north\n21 degrees 33 minutes east",
 				new WorldPoint(3130, 3303, 0)),
-			new AnagramStep(
+			new InteractionStep(StepType.ANAGRAM_STEP,
 				"AI SOLD WOMEN",
 				new InteractionTarget(
 					2108,
@@ -56,7 +55,7 @@ public class TrailEncoderTest
 					"Talk-to",
 					new WorldPoint(3088, 3255, 0)
 				)),
-			new CrypticStep(
+			new InteractionStep(StepType.CRYPTIC_STEP,
 				"Where darkness drips beneath the bog’s slow breath,\n" +
 					"Seek light that fears the cavern’s yawning depth.\n" +
 					"Among the reeds where lost flames waver and sigh,\n" +

@@ -2,12 +2,12 @@ package dev.hollink.partytrails.data;
 
 public enum StepType
 {
-	EMOTE_STEP((byte) 1, "Emote"),
-	CIPHER_STEP((byte) 2, "Cipher"),
-	COORDINATE_STEP((byte) 3, "Coordinate"),
-	CRYPTIC_STEP((byte) 4, "Cryptic"),
-	SKILL_STEP((byte) 5, "Skill"),
-	ANAGRAM_STEP((byte) 6, "Anagram");
+	EMOTE_STEP((byte) 1, "Emote clue"),
+	CIPHER_STEP((byte) 2, "Cipher clue"),
+	COORDINATE_STEP((byte) 3, "Coordinate clue"),
+	CRYPTIC_STEP((byte) 4, "Cryptic clue"),
+	SKILL_STEP((byte) 5, "Skill clue"),
+	ANAGRAM_STEP((byte) 6, "Anagram clue");
 
 	public final byte stepTypeId;
 	public final String stepTypeName;

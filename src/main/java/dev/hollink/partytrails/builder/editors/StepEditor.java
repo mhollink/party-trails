@@ -1,6 +1,6 @@
 package dev.hollink.partytrails.builder.editors;
 
-import dev.hollink.partytrails.data.events.ClueEvent;
+import dev.hollink.partytrails.data.events.TrailEvent;
 import dev.hollink.partytrails.data.steps.TrailStep;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -39,7 +39,7 @@ public abstract class StepEditor extends JPanel
 
 	public abstract void initForm();
 
-	public void onEvent(ClueEvent event)
+	public void onEvent(TrailEvent event)
 	{
 		if (captureMode)
 		{
@@ -50,7 +50,7 @@ public abstract class StepEditor extends JPanel
 		}
 	}
 
-	protected abstract boolean onCapture(ClueEvent event);
+	protected abstract boolean onCapture(TrailEvent event);
 
 	protected void updateButtonText()
 	{

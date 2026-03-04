@@ -3,7 +3,7 @@ package dev.hollink.partytrails.builder.editors;
 import dev.hollink.partytrails.builder.FormHelper;
 import dev.hollink.partytrails.builder.fields.RegionSelector;
 import dev.hollink.partytrails.data.events.AnimationEvent;
-import dev.hollink.partytrails.data.events.ClueEvent;
+import dev.hollink.partytrails.data.events.TrailEvent;
 import dev.hollink.partytrails.data.steps.SkillStep;
 import dev.hollink.partytrails.data.steps.TrailStep;
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public final class SkillStepEditor extends StepEditor implements FormHelper
 	}
 
 	@Override
-	protected boolean onCapture(ClueEvent event)
+	protected boolean onCapture(TrailEvent event)
 	{
 		if (event instanceof AnimationEvent)
 		{

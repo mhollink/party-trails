@@ -1,14 +1,14 @@
 package dev.hollink.partytrails.data.trail;
 
-import dev.hollink.partytrails.data.events.ClueEvent;
+import dev.hollink.partytrails.data.events.TrailEvent;
 
 public interface Steppable
 {
 
 	void onActivate(TrailContext context);
 
-	boolean handlesEvent(ClueEvent event);
+	boolean handlesEvent(TrailEvent event);
 
-	boolean isComplete(TrailContext context, ClueEvent event);
+	boolean isComplete(TrailContext context, TrailEvent event);
 
 }

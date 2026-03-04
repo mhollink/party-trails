@@ -2,7 +2,7 @@ package dev.hollink.partytrails;
 
 import com.google.inject.Provides;
 import dev.hollink.partytrails.builder.TrailBuilderPanel;
-import dev.hollink.partytrails.data.events.ClueEvent;
+import dev.hollink.partytrails.data.events.TrailEvent;
 import dev.hollink.partytrails.data.events.ClueEventFactory;
 import dev.hollink.partytrails.data.steps.TrailStep;
 import dev.hollink.partytrails.data.trail.TrailContext;
@@ -40,13 +40,13 @@ import net.runelite.client.util.ImageUtil;
  * Party trails uses the clients {@link AnimationChanged},
  * {@link MenuOptionClicked} and {@link StatChanged} events to help
  * determine if a clue step is finished. These events get converted
- * to an internal {@link ClueEvent} which is created using the
+ * to an internal {@link TrailEvent} which is created using the
  * {@link ClueEventFactory}.
  * <p>
  * These events are then passed through the {@link TrailManager},
  * over the {@link TrailEventBus} to the {@link TrailRuntime}. The runtime
  * keeps track of the active step and checks if a step is completed using
- * the {@link TrailStep#isComplete(TrailContext, ClueEvent)}.
+ * the {@link TrailStep#isComplete(TrailContext, TrailEvent)}.
  * <p>
  * The progress along the active trail gets automatically stored using
  * the configmanager to ensure players can continue after logging.
