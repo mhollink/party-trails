@@ -103,11 +103,17 @@ public class PartyTrailsPlugin extends Plugin
 	@Subscribe
 	public void onGameStateChanged(GameStateChanged gameStateChanged)
 	{
-		log.debug("Game state changed: {}", gameStateChanged);
-		if (gameStateChanged.getGameState() == GameState.LOGGED_IN)
+		if (GameState.LOADING.equals(gameStateChanged.getGameState()))
+		{
+			return;
+		}
+
+		if (GameState.LOGGED_IN.equals(gameStateChanged.getGameState()))
 		{
 			builderPanel.enableTrailBuilder();
-		} else {
+		}
+		else
+		{
 			builderPanel.disableTrailBuilder();
 		}
 	}
