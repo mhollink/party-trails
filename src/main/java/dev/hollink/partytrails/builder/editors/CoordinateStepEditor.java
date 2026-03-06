@@ -9,6 +9,7 @@ import dev.hollink.partytrails.data.steps.TrailStep;
 import dev.hollink.partytrails.utils.SextantUtil;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.Box;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.gameval.AnimationID;
@@ -21,6 +22,7 @@ public final class CoordinateStepEditor extends StepEditor implements FormHelper
 	public void initForm()
 	{
 		add(locationSelector);
+		add(Box.createVerticalStrut(8));
 		add(captureButton);
 	}
 

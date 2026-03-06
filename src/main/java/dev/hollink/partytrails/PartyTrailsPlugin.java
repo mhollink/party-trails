@@ -1,6 +1,7 @@
 package dev.hollink.partytrails;
 
 import com.google.inject.Provides;
+import dev.hollink.partytrails.builder.TrailBuilderOverlay;
 import dev.hollink.partytrails.builder.TrailBuilderPanel;
 import dev.hollink.partytrails.data.events.ClueEventFactory;
 import dev.hollink.partytrails.data.events.TrailEvent;
@@ -8,6 +9,7 @@ import dev.hollink.partytrails.data.steps.TrailStep;
 import dev.hollink.partytrails.data.trail.TrailContext;
 import dev.hollink.partytrails.runetime.TrailEventBus;
 import dev.hollink.partytrails.runetime.TrailManager;
+import dev.hollink.partytrails.runetime.TrailOverlay;
 import dev.hollink.partytrails.runetime.TrailRuntime;
 import java.awt.image.BufferedImage;
 import javax.inject.Inject;
@@ -25,6 +27,7 @@ import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.ClientToolbar;
 import net.runelite.client.ui.NavigationButton;
+import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.util.ImageUtil;
 
 /**
@@ -79,16 +82,29 @@ public class PartyTrailsPlugin extends Plugin
 	@Inject
 	private TrailEventBus clueEventBus;
 
+	@Inject
+	private  OverlayManager overlayManager;
+
+	@Inject
+	private  TrailOverlay trailOverlay;
+
+
 	private NavigationButton navButton;
 	private TrailBuilderPanel builderPanel;
+	private TrailBuilderOverlay builderOverlay;
 
 	@Override
 	protected void startUp() throws Exception
 	{
 		log.debug("Treasure Trail plugin started");
-		addTrailBuilderPanel();
+		builderPanel = new TrailBuilderPanel(client, configManager, clueEventBus);
+		builderOverlay = new TrailBuilderOverlay(client, config, builderPanel);
+		navButton = createNavButton(builderPanel);
+		clientToolbar.addNavigation(navButton);
 
 		trailManager.start();
+		overlayManager.add(trailOverlay);
+		overlayManager.add(builderOverlay);
 		resumeOrStartTrailFromConfig();
 	}
 
@@ -96,6 +112,8 @@ public class PartyTrailsPlugin extends Plugin
 	protected void shutDown() throws Exception
 	{
 		trailManager.stop();
+		overlayManager.remove(trailOverlay);
+		overlayManager.remove(builderOverlay);
 		clientToolbar.removeNavigation(navButton);
 		log.debug("Treasure Trail plugin stopped");
 	}
@@ -185,19 +203,16 @@ public class PartyTrailsPlugin extends Plugin
 		}
 	}
 
-	private void addTrailBuilderPanel()
+	private NavigationButton createNavButton(TrailBuilderPanel builderPanel)
 	{
-		builderPanel = new TrailBuilderPanel(client, configManager, clueEventBus);
-
 		BufferedImage icon = ImageUtil.loadImageResource(getClass(), "/icon.png");
-		navButton = NavigationButton.builder()
+		return NavigationButton.builder()
 			.tooltip("Party Trail Builder")
 			.icon(icon)
 			.priority(5)
-			.panel(builderPanel)
+			.panel(this.builderPanel)
 			.build();
 
-		clientToolbar.addNavigation(navButton);
 	}
 
 }

@@ -21,6 +21,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -29,11 +31,16 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.ui.PluginPanel;
 import net.runelite.client.ui.components.PluginErrorPanel;
 
+@Slf4j
+@Singleton
 public final class TrailBuilderPanel extends PluginPanel implements FormHelper
 {
 	private final Client client;
@@ -43,6 +50,8 @@ public final class TrailBuilderPanel extends PluginPanel implements FormHelper
 	private final JTextField nameField = new JTextField();
 
 	private final JPanel stepsContainer = new JPanel();
+
+	@Getter
 	private final List<StepEditorPanel> editors = new ArrayList<>();
 
 	private final JScrollPane scrollPane;

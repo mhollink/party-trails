@@ -8,6 +8,7 @@ import dev.hollink.partytrails.data.steps.SkillStep;
 import dev.hollink.partytrails.data.steps.TrailStep;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.Box;
 import javax.swing.JComboBox;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -33,6 +34,7 @@ public final class SkillStepEditor extends StepEditor implements FormHelper
 		add(createRow("Skill", skillIdField));
 		add(createRow("Experience", expField));
 		add(regionSelector);
+		add(Box.createVerticalStrut(8));
 		add(captureButton);
 		captureButton.setText("Capture region in game");
 	}
@@ -108,7 +110,7 @@ public final class SkillStepEditor extends StepEditor implements FormHelper
 		return new SkillStep(
 			hint.getText(),
 			(Skill) skillIdField.getSelectedItem(),
-			Integer.parseInt(expField.getText()),
+			expField.getText().isBlank() ? 1 : Integer.parseInt(expField.getText()),
 			regionSelector.getWorldArea()
 		);
 	}

@@ -11,6 +11,7 @@ import dev.hollink.partytrails.data.steps.TrailStep;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
+import javax.swing.Box;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +42,7 @@ public final class InteractionStepEditor extends StepEditor implements FormHelpe
 		add(createRow("Object Name", objectName));
 		add(createRow("Menu entry", action));
 		add(locationSelector);
+		add(Box.createVerticalStrut(8));
 		add(captureButton);
 	}
 

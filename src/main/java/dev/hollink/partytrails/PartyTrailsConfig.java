@@ -1,6 +1,8 @@
 package dev.hollink.partytrails;
 
 import static dev.hollink.partytrails.PartyTrailsConfig.CONFIG_GROUP;
+
+import java.awt.Color;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
@@ -14,6 +16,7 @@ public interface PartyTrailsConfig extends Config
 	String TREASURE_TRAIL = "TreasureTrail";
 	String TREASURE_TRAIL_PROGRESS = "TreasureTrailProgress";
 	String SHOW_BUILDER_OVERLAY = "ShowBuilderOverlay";
+	String BUILDER_OVERLAY_COLOR = "BuilderOverlayColor";
 	String BUILDER_STATE = "SavedBuilderState";
 
 	@ConfigSection(
@@ -49,7 +52,8 @@ public interface PartyTrailsConfig extends Config
 	@ConfigSection(
 		name = "Builder",
 		description = "Builder configuration",
-		position = 1
+		position = 1,
+		closedByDefault = true
 	)
 	String builder = "Builder";
 
@@ -62,6 +66,17 @@ public interface PartyTrailsConfig extends Config
 	default boolean showBuilderOverlay()
 	{
 		return true;
+	}
+
+	@ConfigItem(
+		keyName = BUILDER_OVERLAY_COLOR,
+		name = "Highlight color",
+		description = "The color of the builder overlay",
+		position = 0,
+		section = builder)
+	default Color builderOverlayColor()
+	{
+		return new Color(193, 121, 255);
 	}
 
 	@ConfigItem(

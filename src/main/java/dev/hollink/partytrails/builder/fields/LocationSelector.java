@@ -33,7 +33,6 @@ public class LocationSelector extends JPanel
 		setupFields();
 
 		add(inputPanel);
-		add(Box.createVerticalStrut(8));
 	}
 
 	private void setupFields()

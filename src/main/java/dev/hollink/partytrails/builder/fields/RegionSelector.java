@@ -4,7 +4,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import net.runelite.api.coords.WorldArea;
@@ -12,25 +11,12 @@ import net.runelite.api.coords.WorldPoint;
 
 public final class RegionSelector extends LocationSelector
 {
-	private final JTextField xField = new JTextField();
-	private final JTextField yField = new JTextField();
 	private final JTextField widthField = new JTextField();
 	private final JTextField heightField = new JTextField();
-	private final JTextField planeField = new JTextField("0");
 
 	public RegionSelector()
 	{
-		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
-		JPanel xyPanel = new JPanel();
-		xyPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		xyPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-		xyPanel.add(createRow("X", xField));
-		xyPanel.add(Box.createVerticalStrut(5));
-		xyPanel.add(createRow("Y", yField));
-		xyPanel.add(Box.createVerticalStrut(5));
-		xyPanel.add(createRow("Plane", planeField));
-
+		super();
 		JPanel whPanel = new JPanel();
 		whPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 		whPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -40,18 +26,13 @@ public final class RegionSelector extends LocationSelector
 
 		setupFields();
 
-		add(xyPanel);
 		add(whPanel);
-		add(Box.createVerticalStrut(8));
 	}
 
 	private void setupFields()
 	{
-		xField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 24));
-		yField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 24));
 		widthField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 24));
 		heightField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 24));
-		planeField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 24));
 	}
 
 	public WorldArea getWorldArea()

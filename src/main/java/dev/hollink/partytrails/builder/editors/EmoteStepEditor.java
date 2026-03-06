@@ -9,6 +9,7 @@ import dev.hollink.partytrails.data.steps.EmoteStep;
 import dev.hollink.partytrails.data.steps.TrailStep;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.Box;
 import javax.swing.JComboBox;
 import javax.swing.JTextArea;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,7 @@ public final class EmoteStepEditor extends StepEditor implements FormHelper
 		add(createRow("Hint", hintArea));
 		add(createRow("Emote", emoteIdField));
 		add(locationSelector);
+		add(Box.createVerticalStrut(8));
 		add(captureButton);
 	}
 

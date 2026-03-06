@@ -92,4 +92,9 @@ public final class StepEditorPanel extends JPanel implements FormHelper
 		rebuildEditor();
 		currentStepEditor.setTrailStep(trailStep);
 	}
+
+	public StepType getSelectedStepType()
+	{
+		return (StepType) typeSelect.getSelectedItem();
+	}
 }
