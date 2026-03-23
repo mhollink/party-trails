@@ -1,4 +1,4 @@
-package dev.hollink.partytrails.trial.builder;
+package dev.hollink.partytrails.engine.builder;
 
 import dev.hollink.partytrails.PartyTrailsConfig;
 import dev.hollink.partytrails.data.steps.CoordsStep;

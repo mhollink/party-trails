@@ -1,8 +1,8 @@
-package dev.hollink.partytrails.trial.builder;
+package dev.hollink.partytrails.engine.builder;
 
 import com.formdev.flatlaf.ui.FlatButtonBorder;
 import dev.hollink.partytrails.PartyTrailsConfig;
-import dev.hollink.partytrails.trial.builder.editors.StepEditorValidationError;
+import dev.hollink.partytrails.engine.builder.editors.StepEditorValidationError;
 import dev.hollink.partytrails.codec.TrailCodec;
 import dev.hollink.partytrails.data.TreasureTrail;
 import dev.hollink.partytrails.data.steps.TrailStep;
@@ -52,27 +52,20 @@ public final class TrailBuilderPanel extends PluginPanel implements FormHelper
 	@Getter
 	private final List<StepEditorPanel> editors = new ArrayList<>();
 
-	private final JScrollPane scrollPane;
-
 	public TrailBuilderPanel(Client client, ConfigManager config, TrailEventBus clueEventBus, TrailCodec codec)
 	{
 		this.client = client;
 		this.config = config;
 		this.clueEventBus = clueEventBus;
 		this.codec = codec;
-
-		setLayout(new BorderLayout());
-		scrollPane = createForm();
-
-		// start disabled.
-		disableTrailBuilder();
 	}
 
 	public void enableTrailBuilder()
 	{
 		removeAll();
 
-		add(scrollPane, BorderLayout.CENTER);
+		JScrollPane form = createForm();
+		add(form, BorderLayout.CENTER);
 	}
 
 	public void disableTrailBuilder()
@@ -87,7 +80,6 @@ public final class TrailBuilderPanel extends PluginPanel implements FormHelper
 	private void addMetadataSection(JPanel form)
 	{
 		nameField.setMaximumSize(new Dimension(230, nameField.getPreferredSize().height));
-
 		form.add(createRow("Trail name", nameField));
 	}
 
@@ -99,7 +91,6 @@ public final class TrailBuilderPanel extends PluginPanel implements FormHelper
 
 		stepsContainer.setLayout(new BoxLayout(stepsContainer, BoxLayout.Y_AXIS));
 		form.add(stepsContainer);
-		form.add(Box.createVerticalStrut(8));
 		form.add(addStep);
 	}
 
@@ -135,16 +126,17 @@ public final class TrailBuilderPanel extends PluginPanel implements FormHelper
 
 	private void addButtons(JPanel root)
 	{
-		JButton encode = new JButton("Encode & Copy");
+		JButton encode = new JButton("Copy Trial to clipboard");
 		encode.setMaximumSize(new Dimension(230, encode.getPreferredSize().height));
 		encode.addActionListener(e -> encodeTrail(this::copyTrailToClipboard));
 
-		JButton save = getLoadSaveButton("Save", e -> encodeTrail(this::saveTrailToConfig));
-		JButton load = getLoadSaveButton("Load", e -> reloadSave());
+		JButton save = getLoadSaveButton("Save to plugin config", e -> encodeTrail(this::saveTrailToConfig));
+		JButton load = getLoadSaveButton("Load from plugin config", e -> reloadSave());
 
-		root.add(Box.createVerticalStrut(16));
-		root.add(encode);
 		root.add(Box.createVerticalStrut(8));
+		root.add(encode);
+
+		root.add(Box.createVerticalStrut(32));
 		root.add(save);
 		root.add(Box.createVerticalStrut(8));
 		root.add(load);

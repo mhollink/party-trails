@@ -1,20 +1,23 @@
-package dev.hollink.partytrails.data.trail;
+package dev.hollink.partytrails.data.steps;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.util.Arrays;
-import static net.runelite.client.plugins.cluescrolls.ClueScrollOverlay.TITLED_CONTENT_COLOR;
 import net.runelite.client.ui.overlay.components.ComponentConstants;
 import net.runelite.client.ui.overlay.components.LineComponent;
 import net.runelite.client.ui.overlay.components.PanelComponent;
 import net.runelite.client.ui.overlay.components.TitleComponent;
 
+import static net.runelite.client.plugins.cluescrolls.ClueScrollOverlay.TITLED_CONTENT_COLOR;
+
 public interface Overlayable
 {
 
-	void drawOverlay(PanelComponent panel, Graphics2D graphics);
+	default void drawOverlay(PanelComponent panel, Graphics2D graphics)
+	{
+	}
 
 	default int textWidth(String text, Graphics2D graphics)
 	{

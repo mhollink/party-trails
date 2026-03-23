@@ -18,16 +18,11 @@ import net.runelite.client.ui.overlay.components.PanelComponent;
 @RequiredArgsConstructor
 public final class SkillStep implements TrailStep
 {
+	private final StepType stepType = StepType.SKILL_STEP;
 	private final String hint;
 	private final Skill skill;
 	private final int expRequired;
 	private final WorldArea area;
-
-	@Override
-	public StepType getStepType()
-	{
-		return StepType.SKILL_STEP;
-	}
 
 	@Override
 	public void drawOverlay(PanelComponent panel, Graphics2D graphics)
@@ -35,58 +30,6 @@ public final class SkillStep implements TrailStep
 		setPanelWidth(hint, panel, graphics);
 		drawTitle("Skilling clue", panel);
 		drawText(hint, panel);
-	}
-
-	@Override
-	public void onActivate(TrailContext context)
-	{
-		String key = getContextKey(context);
-
-		// Set the experience of the skill on start
-		int startExp = context.getSkillExperience(skill);
-		context.getProgress().storeInt(key, startExp);
-	}
-
-	@Override
-	public boolean handlesEvent(TrailEvent event)
-	{
-		if (event instanceof SkillEvent)
-		{
-			SkillEvent skillEvent = (SkillEvent) event;
-			return skillEvent.getSkill() == skill;
-		}
-		return false;
-	}
-
-	@Override
-	public boolean isComplete(TrailContext context, TrailEvent event)
-	{
-		if (event instanceof SkillEvent)
-		{
-			SkillEvent skillEvent = (SkillEvent) event;
-			if (skill == skillEvent.getSkill())
-			{
-				if (!context.getClient().getLocalPlayer().getWorldLocation().isInArea(area))
-				{
-					return false;
-				}
-
-				String key = getContextKey(context);
-				int startExp = context.getProgress().getStoredInt(key);
-				int expDiff = skillEvent.getXp() - startExp;
-
-				return expDiff >= expRequired;
-			}
-		}
-
-		return false;
-	}
-
-	private String getContextKey(TrailContext context)
-	{
-		int stepIndex = context.getProgress().getCurrentStepIndex();
-		String skillName = skill.getName().toLowerCase();
-		return String.format("step.%d.%s-experience", stepIndex, skillName);
 	}
 
 	/**

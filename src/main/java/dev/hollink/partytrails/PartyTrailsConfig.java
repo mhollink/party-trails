@@ -15,6 +15,7 @@ public interface PartyTrailsConfig extends Config
 
 	String TREASURE_TRAIL = "TreasureTrail";
 	String TREASURE_TRAIL_PROGRESS = "TreasureTrailProgress";
+	String SHOW_BUILDER_PANEL = "ShowBuilderPanel";
 	String SHOW_BUILDER_OVERLAY = "ShowBuilderOverlay";
 	String BUILDER_OVERLAY_COLOR = "BuilderOverlayColor";
 	String BUILDER_STATE = "SavedBuilderState";
@@ -58,10 +59,21 @@ public interface PartyTrailsConfig extends Config
 	String builder = "Builder";
 
 	@ConfigItem(
+		keyName = SHOW_BUILDER_PANEL,
+		name = "Show builder panel",
+		description = "Add the sidepanel in which you can configure your custom Treasure Trials.",
+		position = 0,
+		section = builder)
+	default boolean showBuilderPanel()
+	{
+		return false;
+	}
+
+	@ConfigItem(
 		keyName = SHOW_BUILDER_OVERLAY,
 		name = "Highlight targets & tiles",
 		description = "Show the targeted tiles, NPCs and areas marked inside the trail builder.",
-		position = 0,
+		position = 1,
 		section = builder)
 	default boolean showBuilderOverlay()
 	{
@@ -72,7 +84,7 @@ public interface PartyTrailsConfig extends Config
 		keyName = BUILDER_OVERLAY_COLOR,
 		name = "Highlight color",
 		description = "The color of the builder overlay",
-		position = 0,
+		position = 2,
 		section = builder)
 	default Color builderOverlayColor()
 	{
@@ -82,8 +94,8 @@ public interface PartyTrailsConfig extends Config
 	@ConfigItem(
 		keyName = BUILDER_STATE,
 		name = "Builder save",
-		description = "Saved form state from the clue builder.",
-		position = 1,
+		description = "Saved form state from the clue builder which can be reloaded.",
+		position = 4,
 		section = builder)
 	default String builderState()
 	{

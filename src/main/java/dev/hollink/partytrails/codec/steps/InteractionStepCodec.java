@@ -1,9 +1,8 @@
 package dev.hollink.partytrails.codec.steps;
 
-import dev.hollink.partytrails.data.InteractionTarget;
+import dev.hollink.partytrails.codec.Codec;
 import dev.hollink.partytrails.data.StepType;
 import dev.hollink.partytrails.data.steps.InteractionStep;
-import dev.hollink.partytrails.codec.Codec;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -38,6 +37,6 @@ public class InteractionStepCodec implements Codec<InteractionStep>
 		int y = in.readInt();
 		int plane = in.readInt();
 
-		return new InteractionStep(stepType, text, new InteractionTarget(targetId, targetName, action, new WorldPoint(x, y, plane)));
+		return new InteractionStep(stepType, text, new InteractionStep.Target(targetId, targetName, action, new WorldPoint(x, y, plane)));
 	}
 }

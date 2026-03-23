@@ -1,7 +1,7 @@
-package dev.hollink.partytrails.trial.builder.editors;
+package dev.hollink.partytrails.engine.builder.editors;
 
-import dev.hollink.partytrails.trial.builder.FormHelper;
-import dev.hollink.partytrails.trial.builder.fields.LocationSelector;
+import dev.hollink.partytrails.engine.builder.FormHelper;
+import dev.hollink.partytrails.engine.builder.fields.LocationSelector;
 import dev.hollink.partytrails.events.events.AnimationEvent;
 import dev.hollink.partytrails.events.events.TrailEvent;
 import dev.hollink.partytrails.data.steps.CoordsStep;

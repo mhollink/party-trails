@@ -1,8 +1,7 @@
-package dev.hollink.partytrails.trial.builder.editors;
+package dev.hollink.partytrails.engine.builder.editors;
 
-import dev.hollink.partytrails.trial.builder.FormHelper;
-import dev.hollink.partytrails.trial.builder.fields.LocationSelector;
-import dev.hollink.partytrails.data.InteractionTarget;
+import dev.hollink.partytrails.engine.builder.FormHelper;
+import dev.hollink.partytrails.engine.builder.fields.LocationSelector;
 import dev.hollink.partytrails.data.StepType;
 import dev.hollink.partytrails.events.events.InteractionEvent;
 import dev.hollink.partytrails.events.events.TrailEvent;
@@ -107,7 +106,7 @@ public final class InteractionStepEditor extends StepEditor implements FormHelpe
 	@Override
 	public TrailStep toTrailStep()
 	{
-		InteractionTarget target = new InteractionTarget(objectId.getText().isBlank() ? -1 : Integer.parseInt(objectId.getText()), objectName.getText(), action.getText(), locationSelector.getWorldLocation());
+		InteractionStep.Target target = new InteractionStep.Target(objectId.getText().isBlank() ? -1 : Integer.parseInt(objectId.getText()), objectName.getText(), action.getText(), locationSelector.getWorldLocation());
 		return new InteractionStep(stepType, hintArea.getText(), target);
 	}
 
@@ -117,7 +116,7 @@ public final class InteractionStepEditor extends StepEditor implements FormHelpe
 		if (trailStep instanceof InteractionStep)
 		{
 			InteractionStep interactionStep = (InteractionStep) trailStep;
-			InteractionTarget target = interactionStep.getTarget();
+			InteractionStep.Target target = interactionStep.getTarget();
 			hintArea.setText(interactionStep.getHint());
 			objectId.setText(String.valueOf(target.getTargetId()));
 			objectName.setText(String.valueOf(target.getTargetName()));

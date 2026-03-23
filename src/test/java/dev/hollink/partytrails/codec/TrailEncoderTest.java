@@ -1,7 +1,6 @@
 package dev.hollink.partytrails.codec;
 
 import dev.hollink.partytrails.data.Emote;
-import dev.hollink.partytrails.data.InteractionTarget;
 import dev.hollink.partytrails.data.StepType;
 import dev.hollink.partytrails.data.TreasureTrail;
 import dev.hollink.partytrails.data.steps.CoordsStep;
@@ -38,7 +37,7 @@ public class TrailEncoderTest
 				Emote.WAVE,
 				new WorldPoint(3208, 3212, 0)),
 			new InteractionStep(StepType.CIPHER_STEP, "QRES ENRA RKN RMABEO RUG CHXPVC",
-				new InteractionTarget(
+				new InteractionStep.Target(
 					5581,
 					"Logs",
 					"Take-axe",
@@ -49,7 +48,7 @@ public class TrailEncoderTest
 				new WorldPoint(3130, 3303, 0)),
 			new InteractionStep(StepType.ANAGRAM_STEP,
 				"AI SOLD WOMEN",
-				new InteractionTarget(
+				new InteractionStep.Target(
 					2108,
 					"Wise Old Man",
 					"Talk-to",
@@ -60,7 +59,7 @@ public class TrailEncoderTest
 					"Seek light that fears the cavern’s yawning depth.\n" +
 					"Among the reeds where lost flames waver and sigh,\n" +
 					"Find the keeper of warmth before shadows pass by.",
-				new InteractionTarget(
+				new InteractionStep.Target(
 					1896,
 					"Candle seller",
 					"Talk-to",

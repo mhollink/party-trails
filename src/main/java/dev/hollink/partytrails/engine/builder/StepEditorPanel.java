@@ -1,10 +1,10 @@
-package dev.hollink.partytrails.trial.builder;
+package dev.hollink.partytrails.engine.builder;
 
 import dev.hollink.partytrails.events.Subscription;
 import dev.hollink.partytrails.events.events.TrailEvent;
-import dev.hollink.partytrails.trial.builder.editors.StepEditor;
-import dev.hollink.partytrails.trial.builder.editors.StepEditorFactory;
-import dev.hollink.partytrails.trial.builder.editors.StepEditorValidationError;
+import dev.hollink.partytrails.engine.builder.editors.StepEditor;
+import dev.hollink.partytrails.engine.builder.editors.StepEditorFactory;
+import dev.hollink.partytrails.engine.builder.editors.StepEditorValidationError;
 import dev.hollink.partytrails.data.StepType;
 import dev.hollink.partytrails.data.steps.TrailStep;
 import dev.hollink.partytrails.events.TrailEventBus;

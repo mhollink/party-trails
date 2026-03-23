@@ -11,7 +11,7 @@ public final class TrailEventBus
 {
 	private final Map<Class<?>, List<EventListener<?>>> listeners = new HashMap<>();
 
-	public <T> Subscription register(Class<T> eventType, EventListener<T> listener)
+	public synchronized <T> Subscription register(Class<T> eventType, EventListener<T> listener)
 	{
 		listeners.computeIfAbsent(eventType, k -> new ArrayList<>()).add(listener);
 
@@ -42,7 +42,7 @@ public final class TrailEventBus
 			Class<?> registeredType = entry.getKey();
 
 			if (registeredType.isAssignableFrom(eventClass)) {
-				for (EventListener<?> listener : entry.getValue()) {
+				for (EventListener<?> listener : List.copyOf(entry.getValue())) {
 					((EventListener<T>) listener).onEvent(event);
 				}
 			}

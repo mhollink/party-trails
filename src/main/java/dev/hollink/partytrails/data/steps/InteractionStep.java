@@ -1,17 +1,19 @@
 package dev.hollink.partytrails.data.steps;
 
-import dev.hollink.partytrails.data.InteractionTarget;
 import dev.hollink.partytrails.data.StepType;
-import dev.hollink.partytrails.events.events.InteractionEvent;
-import dev.hollink.partytrails.events.events.TrailEvent;
-import dev.hollink.partytrails.data.trail.TrailContext;
 import java.awt.Graphics2D;
 import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
+import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.ui.overlay.components.PanelComponent;
+
+import static dev.hollink.partytrails.data.StepType.ANAGRAM_STEP;
+import static dev.hollink.partytrails.data.StepType.CIPHER_STEP;
+import static dev.hollink.partytrails.data.StepType.CRYPTIC_STEP;
 
 @Slf4j
 @Getter
@@ -19,13 +21,14 @@ import net.runelite.client.ui.overlay.components.PanelComponent;
 @EqualsAndHashCode
 public final class InteractionStep implements TrailStep
 {
-	public static final List<StepType> ALLOWED_TYPES = List.of(StepType.ANAGRAM_STEP, StepType.CIPHER_STEP, StepType.CRYPTIC_STEP);
+	public static final List<StepType> ALLOWED_TYPES =
+		List.of(ANAGRAM_STEP, CIPHER_STEP, CRYPTIC_STEP);
 
 	private final StepType stepType;
 	private final String hint;
-	private final InteractionTarget target;
+	private final Target target;
 
-	public InteractionStep(StepType stepType, String hint, InteractionTarget target)
+	public InteractionStep(StepType stepType, String hint, Target target)
 	{
 		if (stepType == null || !ALLOWED_TYPES.contains(stepType))
 		{
@@ -37,11 +40,6 @@ public final class InteractionStep implements TrailStep
 		this.target = target;
 	}
 
-	public StepType getStepType()
-	{
-		return stepType;
-	}
-
 	@Override
 	public void drawOverlay(PanelComponent panel, Graphics2D graphics)
 	{
@@ -50,32 +48,13 @@ public final class InteractionStep implements TrailStep
 		drawText(hint, panel);
 	}
 
-
-	@Override
-	public void onActivate(TrailContext context)
+	@Value
+	public static class Target
 	{
-		// noop
+		int targetId;
+		String targetName;
+		String interactionType;
+		WorldPoint location;
 	}
-
-	@Override
-	public boolean handlesEvent(TrailEvent event)
-	{
-		return event instanceof InteractionEvent;
-	}
-
-	@Override
-	public boolean isComplete(TrailContext context, TrailEvent event)
-	{
-		if (event instanceof InteractionEvent)
-		{
-			InteractionEvent interactionEvent = (InteractionEvent) event;
-			return target.checkEvent(interactionEvent);
-		}
-		else
-		{
-			return false;
-		}
-	}
-
 
 }

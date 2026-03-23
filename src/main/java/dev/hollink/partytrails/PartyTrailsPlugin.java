@@ -1,22 +1,12 @@
 package dev.hollink.partytrails;
 
 import com.google.inject.Provides;
-import dev.hollink.partytrails.trial.builder.TrailBuilderOverlay;
-import dev.hollink.partytrails.trial.builder.TrailBuilderPanel;
-import dev.hollink.partytrails.codec.TrailCodec;
-import dev.hollink.partytrails.events.events.ClueEventFactory;
-import dev.hollink.partytrails.events.events.TrailEvent;
-import dev.hollink.partytrails.data.steps.TrailStep;
-import dev.hollink.partytrails.data.trail.TrailContext;
+import dev.hollink.partytrails.engine.PartyTrailManager;
 import dev.hollink.partytrails.events.TrailEventBus;
-import dev.hollink.partytrails.trial.hunter.TrailManager;
-import dev.hollink.partytrails.trial.hunter.TrailOverlay;
-import dev.hollink.partytrails.trial.hunter.TrailRuntime;
-import java.awt.image.BufferedImage;
+import dev.hollink.partytrails.events.events.ClueEventFactory;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
-import net.runelite.api.GameState;
 import net.runelite.api.events.AnimationChanged;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.MenuOptionClicked;
@@ -26,37 +16,7 @@ import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
-import net.runelite.client.ui.ClientToolbar;
-import net.runelite.client.ui.NavigationButton;
-import net.runelite.client.ui.overlay.OverlayManager;
-import net.runelite.client.util.ImageUtil;
 
-/**
- * Party Trails is a plugin that allows players to create custom
- * treasure-trails which consist of multiple different steps. The
- * plugin converts these steps in a base64 encoded binary string
- * which can then be shared amongst players.
- * <p>
- * Players can enter a trail string into the config. This trail
- * gets decoded and loaded up in to the client. The current step
- * descriptions will be shown with the help of overlay panels.
- * Performing the action required for the step automatically
- * advances the player to the next step.
- * <p>
- * Party trails uses the clients {@link AnimationChanged},
- * {@link MenuOptionClicked} and {@link StatChanged} events to help
- * determine if a clue step is finished. These events get converted
- * to an internal {@link TrailEvent} which is created using the
- * {@link ClueEventFactory}.
- * <p>
- * These events are then passed through the {@link TrailManager},
- * over the {@link TrailEventBus} to the {@link TrailRuntime}. The runtime
- * keeps track of the active step and checks if a step is completed using
- * the {@link TrailStep#isComplete(TrailContext, TrailEvent)}.
- * <p>
- * The progress along the active trail gets automatically stored using
- * the configmanager to ensure players can continue after logging.
- */
 @Slf4j
 @PluginDescriptor(
 	name = "Party Trails",
@@ -69,74 +29,21 @@ public class PartyTrailsPlugin extends Plugin
 	private Client client;
 
 	@Inject
-	private ClientToolbar clientToolbar;
-
-	@Inject
-	private PartyTrailsConfig config;
-
-	@Inject
-	private ConfigManager configManager;
-
-	@Inject
-	private TrailManager trailManager;
+	private PartyTrailManager party;
 
 	@Inject
 	private TrailEventBus clueEventBus;
 
-	@Inject
-	private  OverlayManager overlayManager;
-
-	@Inject
-	private  TrailOverlay trailOverlay;
-
-	@Inject
-	private TrailCodec trailCodec;
-	
-	private NavigationButton navButton;
-	private TrailBuilderPanel builderPanel;
-	private TrailBuilderOverlay builderOverlay;
-
 	@Override
 	protected void startUp() throws Exception
 	{
-		log.debug("Treasure Trail plugin started");
-		builderPanel = new TrailBuilderPanel(client, configManager, clueEventBus, trailCodec);
-		builderOverlay = new TrailBuilderOverlay(client, config, builderPanel);
-		navButton = createNavButton(builderPanel);
-		clientToolbar.addNavigation(navButton);
-
-		trailManager.start();
-		overlayManager.add(trailOverlay);
-		overlayManager.add(builderOverlay);
-		resumeOrStartTrailFromConfig();
+		party.start();
 	}
 
 	@Override
 	protected void shutDown() throws Exception
 	{
-		trailManager.stop();
-		overlayManager.remove(trailOverlay);
-		overlayManager.remove(builderOverlay);
-		clientToolbar.removeNavigation(navButton);
-		log.debug("Treasure Trail plugin stopped");
-	}
-
-	@Subscribe
-	public void onGameStateChanged(GameStateChanged gameStateChanged)
-	{
-		if (GameState.LOADING.equals(gameStateChanged.getGameState()))
-		{
-			return;
-		}
-
-		if (GameState.LOGGED_IN.equals(gameStateChanged.getGameState()))
-		{
-			builderPanel.enableTrailBuilder();
-		}
-		else
-		{
-			builderPanel.disableTrailBuilder();
-		}
+		party.stop();
 	}
 
 	@Subscribe
@@ -176,9 +83,19 @@ public class PartyTrailsPlugin extends Plugin
 
 		if (event.getKey().equals(PartyTrailsConfig.TREASURE_TRAIL))
 		{
-			String trailString = configManager.getConfiguration(PartyTrailsConfig.CONFIG_GROUP, PartyTrailsConfig.TREASURE_TRAIL);
-			trailManager.startTrail(trailString);
+			party.resumeOrStartTrailFromConfig();
 		}
+
+		if (event.getKey().equals(PartyTrailsConfig.SHOW_BUILDER_PANEL))
+		{
+			party.updateBuilderPanelVisibility();
+		}
+	}
+
+	@Subscribe
+	public void onGameStateChanged(GameStateChanged gameStateChanged)
+	{
+		party.onGamestateChanged(gameStateChanged.getGameState());
 	}
 
 	@Provides
@@ -186,35 +103,4 @@ public class PartyTrailsPlugin extends Plugin
 	{
 		return configManager.getConfig(PartyTrailsConfig.class);
 	}
-
-	private void resumeOrStartTrailFromConfig()
-	{
-		boolean hasTrailConfig = config.trailString() != null && !config.trailString().isBlank();
-		boolean hasStoredProgress = config.trailProgress() != null && !config.trailProgress().isBlank();
-
-		log.debug("Attempting to resume trail from config... (hasTrail={}, hasProgress={})", hasTrailConfig, hasStoredProgress);
-		if (hasTrailConfig)
-		{
-			if (hasStoredProgress)
-			{
-				trailManager.resumeTrail(config.trailString(), config.trailProgress());
-			}
-			else
-			{
-				trailManager.startTrail(config.trailString());
-			}
-		}
-	}
-
-	private NavigationButton createNavButton(TrailBuilderPanel builderPanel)
-	{
-		BufferedImage icon = ImageUtil.loadImageResource(getClass(), "/icon.png");
-		return NavigationButton.builder()
-			.tooltip("Party Trail Builder")
-			.icon(icon)
-			.priority(5)
-			.panel(this.builderPanel)
-			.build();
-	}
-
 }

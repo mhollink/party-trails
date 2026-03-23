@@ -1,4 +1,4 @@
-package dev.hollink.partytrails.trial.builder.editors;
+package dev.hollink.partytrails.engine.builder.editors;
 
 import dev.hollink.partytrails.events.events.TrailEvent;
 import dev.hollink.partytrails.data.steps.TrailStep;
