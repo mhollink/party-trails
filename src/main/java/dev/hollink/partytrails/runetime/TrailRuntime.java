@@ -1,12 +1,12 @@
 package dev.hollink.partytrails.runetime;
 
 import dev.hollink.partytrails.PartyTrailsConfig;
+import dev.hollink.partytrails.codec.TrailProgressCodec;
 import dev.hollink.partytrails.data.TreasureTrail;
 import dev.hollink.partytrails.data.events.TrailEvent;
 import dev.hollink.partytrails.data.steps.TrailStep;
 import dev.hollink.partytrails.data.trail.TrailContext;
 import dev.hollink.partytrails.data.trail.TrailProgress;
-import dev.hollink.partytrails.encoding.TrailEncoder;
 import java.awt.Graphics2D;
 import java.io.IOException;
 import javax.inject.Inject;
@@ -15,30 +15,12 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.client.config.ConfigManager;
-import static net.runelite.client.plugins.cluescrolls.ClueScrollOverlay.TITLED_CONTENT_COLOR;
 import net.runelite.client.ui.overlay.components.LineComponent;
 import net.runelite.client.ui.overlay.components.PanelComponent;
 import net.runelite.client.ui.overlay.components.TitleComponent;
 
-/**
- * The TrailRuntime coordinates the runtime execution of an active
- * {@link TreasureTrail}.
- * <p>
- * This class manages the full lifecycle of a trail, including starting,
- * resuming, advancing steps, handling completion, and resetting state. It
- * subscribes to {@link TrailEvent}s via the {@link TrailEventBus} and forwards
- * relevant events to the currently active {@link TrailStep}.
- * <p>
- * When a step reports completion, the runtime advances progress and
- * activates the next step. Progress is persisted after each state change
- * using {@link TrailEncoder} and stored through {@link ConfigManager}.
- * <p>
- * The runtime acts as the orchestration layer between the trail model,
- * step implementations, UI rendering, and persistent progress storage.
- * <p>
- * This class is a singleton and is intended to manage at most one active
- * trail at a time.
- */
+import static net.runelite.client.plugins.cluescrolls.ClueScrollOverlay.TITLED_CONTENT_COLOR;
+
 @Slf4j
 @Getter
 @Singleton
@@ -48,6 +30,7 @@ public class TrailRuntime
 	private final TrailEventBus bus;
 	private final ConfigManager configManager;
 	private final TrailContext context;
+	private final TrailProgressCodec progressCodec;
 
 	private TreasureTrail trail;
 	private TrailStep currentStep;
@@ -79,7 +62,7 @@ public class TrailRuntime
 
 	private void startStep(TrailStep step)
 	{
-		log.debug("Starting new trail step (type={})", step.type().name());
+		log.debug("Starting new trail step (type={})", step.getStepType().name());
 		this.context.getProgress().getStepState().clear();
 		this.currentStep = step;
 		step.onActivate(context);
@@ -96,7 +79,7 @@ public class TrailRuntime
 
 	private void resumeStep(TrailStep step)
 	{
-		log.debug("Resuming trail step (type={})", step.type().name());
+		log.debug("Resuming trail step (type={})", step.getStepType().name());
 		this.context.getProgress().getStepState().clear();
 		this.currentStep = step;
 	}
@@ -157,7 +140,7 @@ public class TrailRuntime
 		try
 		{
 			TrailProgress progress = context.getProgress();
-			String encoded = TrailEncoder.encodeProgress(progress);
+			String encoded = progressCodec.encodeToString(progress);
 			configManager.setConfiguration(
 				PartyTrailsConfig.CONFIG_GROUP,
 				PartyTrailsConfig.TREASURE_TRAIL_PROGRESS,

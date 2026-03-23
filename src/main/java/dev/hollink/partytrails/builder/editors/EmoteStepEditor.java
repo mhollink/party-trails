@@ -95,7 +95,7 @@ public final class EmoteStepEditor extends StepEditor implements FormHelper
 		}
 		else
 		{
-			log.debug("Unable to set emote step values, given step was of type {}", trailStep.type());
+			log.debug("Unable to set emote step values, given step was of type {}", trailStep.getStepType());
 		}
 	}
 }

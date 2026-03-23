@@ -3,10 +3,9 @@ package dev.hollink.partytrails.builder;
 import com.formdev.flatlaf.ui.FlatButtonBorder;
 import dev.hollink.partytrails.PartyTrailsConfig;
 import dev.hollink.partytrails.builder.editors.StepEditorValidationError;
+import dev.hollink.partytrails.codec.TrailCodec;
 import dev.hollink.partytrails.data.TreasureTrail;
 import dev.hollink.partytrails.data.steps.TrailStep;
-import dev.hollink.partytrails.encoding.TrailDecoder;
-import dev.hollink.partytrails.encoding.TrailEncoder;
 import dev.hollink.partytrails.runetime.TrailEventBus;
 import dev.hollink.partytrails.utils.RandomUtil;
 import java.awt.BorderLayout;
@@ -21,7 +20,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
-import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -32,7 +30,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.client.config.ConfigManager;
@@ -46,6 +43,7 @@ public final class TrailBuilderPanel extends PluginPanel implements FormHelper
 	private final Client client;
 	private final ConfigManager config;
 	private final TrailEventBus clueEventBus;
+	private final TrailCodec codec;
 
 	private final JTextField nameField = new JTextField();
 
@@ -56,11 +54,12 @@ public final class TrailBuilderPanel extends PluginPanel implements FormHelper
 
 	private final JScrollPane scrollPane;
 
-	public TrailBuilderPanel(Client client, ConfigManager config, TrailEventBus clueEventBus)
+	public TrailBuilderPanel(Client client, ConfigManager config, TrailEventBus clueEventBus, TrailCodec codec)
 	{
 		this.client = client;
 		this.config = config;
 		this.clueEventBus = clueEventBus;
+		this.codec = codec;
 
 		setLayout(new BorderLayout());
 		scrollPane = createForm();
@@ -173,7 +172,7 @@ public final class TrailBuilderPanel extends PluginPanel implements FormHelper
 		try
 		{
 			TreasureTrail trail = generateTrailFromBuilderInput();
-			String encodeTrail = TrailEncoder.encodeTrail(trail);
+			String encodeTrail = codec.encodeToString(trail);
 			callback.accept(encodeTrail);
 		}
 		catch (IOException e)
@@ -283,7 +282,7 @@ public final class TrailBuilderPanel extends PluginPanel implements FormHelper
 		TreasureTrail treasureTrail = null;
 		try
 		{
-			treasureTrail = TrailDecoder.decodeTrail(configuredSave);
+			treasureTrail = codec.decode(configuredSave);
 		}
 		catch (Exception e)
 		{

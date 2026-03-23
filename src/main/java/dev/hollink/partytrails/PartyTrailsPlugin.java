@@ -3,6 +3,7 @@ package dev.hollink.partytrails;
 import com.google.inject.Provides;
 import dev.hollink.partytrails.builder.TrailBuilderOverlay;
 import dev.hollink.partytrails.builder.TrailBuilderPanel;
+import dev.hollink.partytrails.codec.TrailCodec;
 import dev.hollink.partytrails.data.events.ClueEventFactory;
 import dev.hollink.partytrails.data.events.TrailEvent;
 import dev.hollink.partytrails.data.steps.TrailStep;
@@ -88,6 +89,9 @@ public class PartyTrailsPlugin extends Plugin
 	@Inject
 	private  TrailOverlay trailOverlay;
 
+	@Inject
+	private TrailCodec trailCodec;
+
 
 	private NavigationButton navButton;
 	private TrailBuilderPanel builderPanel;
@@ -97,7 +101,7 @@ public class PartyTrailsPlugin extends Plugin
 	protected void startUp() throws Exception
 	{
 		log.debug("Treasure Trail plugin started");
-		builderPanel = new TrailBuilderPanel(client, configManager, clueEventBus);
+		builderPanel = new TrailBuilderPanel(client, configManager, clueEventBus, trailCodec);
 		builderOverlay = new TrailBuilderOverlay(client, config, builderPanel);
 		navButton = createNavButton(builderPanel);
 		clientToolbar.addNavigation(navButton);

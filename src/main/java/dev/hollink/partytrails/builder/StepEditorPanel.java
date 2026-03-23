@@ -88,7 +88,7 @@ public final class StepEditorPanel extends JPanel implements FormHelper
 	}
 
 	public void reloadTrailStep(int index, TrailStep trailStep) {
-		typeSelect.setSelectedItem(trailStep.type());
+		typeSelect.setSelectedItem(trailStep.getStepType());
 		rebuildEditor();
 		currentStepEditor.setTrailStep(trailStep);
 	}

@@ -1,27 +1,16 @@
 package dev.hollink.partytrails.runetime;
 
+import dev.hollink.partytrails.codec.TrailCodec;
+import dev.hollink.partytrails.codec.TrailProgressCodec;
+import dev.hollink.partytrails.codec.exceptions.InvalidMagicHeaderException;
 import dev.hollink.partytrails.data.TreasureTrail;
 import dev.hollink.partytrails.data.trail.TrailProgress;
-import dev.hollink.partytrails.encoding.InvalidMagicHeaderException;
-import dev.hollink.partytrails.encoding.TrailDecoder;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.client.ui.overlay.OverlayManager;
 
-/**
- * The TrailManager is in charge of starting or resuming a trail
- * using the {@link TrailManager#startTrail(String)} and
- * {@link TrailManager#resumeTrail(String, String)}.
- * <p>
- * Taking the encoded binary string as input, it uses the
- * {@link TrailDecoder} functions to convert it back into a
- * {@link TreasureTrail} and/or {@link TrailProgress}.
- * <p>
- * The decoded trails are passed to the start/resume functions
- * on the {@link TrailRuntime}.
- */
 @Slf4j
 @Singleton
 @RequiredArgsConstructor(onConstructor = @__(@Inject))
@@ -30,6 +19,8 @@ public class TrailManager
 	private final OverlayManager overlayManager;
 	private final TrailOverlay trailOverlay;
 	private final TrailRuntime trailRuntime;
+	private final TrailCodec trailCodec;
+	private final TrailProgressCodec progressCodec;
 
 	public void start()
 	{
@@ -50,7 +41,7 @@ public class TrailManager
 
 		try
 		{
-			TreasureTrail treasureTrail = TrailDecoder.decodeTrail(encodedTrail);
+			TreasureTrail treasureTrail = trailCodec.decode(encodedTrail);
 			trailRuntime.startTrail(treasureTrail);
 		}
 		catch (InvalidMagicHeaderException e)
@@ -69,8 +60,8 @@ public class TrailManager
 	{
 		try
 		{
-			TreasureTrail treasureTrail = TrailDecoder.decodeTrail(encodedTrail);
-			TrailProgress trailProgress = TrailDecoder.decodeProgress(encodedProgress);
+			TreasureTrail treasureTrail = trailCodec.decode(encodedTrail);
+			TrailProgress trailProgress = progressCodec.decode(encodedProgress);
 
 			if (trailProgress.getTrailId().equals(treasureTrail.getMetadata().getTrailId()))
 			{

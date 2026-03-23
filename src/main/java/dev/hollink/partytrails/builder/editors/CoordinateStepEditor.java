@@ -87,7 +87,7 @@ public final class CoordinateStepEditor extends StepEditor implements FormHelper
 			locationSelector.setLocation(coordsStep.getTargetLocation());
 			log.debug("reloaded coordinate step {}", stepNumber);
 		}else {
-			log.debug("Unable to set coordinate step values, given step was of type {}", trailStep.type());
+			log.debug("Unable to set coordinate step values, given step was of type {}", trailStep.getStepType());
 		}
 	}
 }

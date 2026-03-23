@@ -1,15 +1,10 @@
 package dev.hollink.partytrails.data.steps;
 
 import dev.hollink.partytrails.data.StepType;
-import dev.hollink.partytrails.data.events.TrailEvent;
 import dev.hollink.partytrails.data.events.SkillEvent;
+import dev.hollink.partytrails.data.events.TrailEvent;
 import dev.hollink.partytrails.data.trail.TrailContext;
-import static dev.hollink.partytrails.encoding.TrailDecoder.readString;
-import static dev.hollink.partytrails.encoding.TrailEncoder.writeString;
 import java.awt.Graphics2D;
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
 import java.util.Objects;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +24,7 @@ public final class SkillStep implements TrailStep
 	private final WorldArea area;
 
 	@Override
-	public StepType type()
+	public StepType getStepType()
 	{
 		return StepType.SKILL_STEP;
 	}
@@ -92,34 +87,6 @@ public final class SkillStep implements TrailStep
 		int stepIndex = context.getProgress().getCurrentStepIndex();
 		String skillName = skill.getName().toLowerCase();
 		return String.format("step.%d.%s-experience", stepIndex, skillName);
-	}
-
-	@Override
-	public void encode(DataOutput out)
-		throws IOException
-	{
-		writeString(out, hint);
-		out.writeInt(skill.ordinal());
-		out.writeInt(expRequired);
-		out.writeInt(area.getX());
-		out.writeInt(area.getY());
-		out.writeInt(area.getWidth());
-		out.writeInt(area.getHeight());
-		out.writeInt(area.getPlane());
-	}
-
-	public static SkillStep decode(DataInput in) throws IOException
-	{
-		String hint = readString(in);
-		Skill skill = Skill.values()[in.readInt()];
-		int exp = in.readInt();
-		int x = in.readInt();
-		int y = in.readInt();
-		int w = in.readInt();
-		int h = in.readInt();
-		int plane = in.readInt();
-
-		return new SkillStep(hint, skill, exp, new WorldArea(x, y, w, h, plane));
 	}
 
 	/**

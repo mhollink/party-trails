@@ -1,4 +1,4 @@
-package dev.hollink.partytrails.encoding;
+package dev.hollink.partytrails.codec;
 
 import dev.hollink.partytrails.data.Emote;
 import dev.hollink.partytrails.data.InteractionTarget;
@@ -72,7 +72,9 @@ public class TrailEncoderTest
 	@Test
 	public void encode() throws Exception
 	{
-		String encodedTrail = TrailEncoder.encodeTrail(TRAIL);
+		TrailCodec codec = new TrailCodec();
+
+		String encodedTrail = codec.encodeToString(TRAIL);
 
 		assertThat(encodedTrail, equalTo(ENCODED_TRAIL));
 	}
@@ -80,7 +82,9 @@ public class TrailEncoderTest
 	@Test
 	public void decode() throws Exception
 	{
-		TreasureTrail decodedTrail = TrailDecoder.decodeTrail(ENCODED_TRAIL);
+		TrailCodec codec = new TrailCodec();
+
+		TreasureTrail decodedTrail = codec.decode(ENCODED_TRAIL);
 
 		assertThat(decodedTrail.getMetadata().getVersion(), equalTo(TRAIL.getMetadata().getVersion()));
 		assertThat(decodedTrail.getMetadata().getTrailId(), equalTo(TRAIL.getMetadata().getTrailId()));
